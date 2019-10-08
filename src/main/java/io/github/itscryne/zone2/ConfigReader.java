@@ -32,13 +32,25 @@ public class ConfigReader {
             JsonWriter playerZoneListWriter = new JsonWriter(new FileWriter(this.playerZonesFile));
             gson.toJson(playerZoneList, playerZoneListType, playerZoneListWriter);
         }
+
+        this.serverZonesFile = new File(dataDir.getAbsolutePath() + "/serverZones.json");
+        serverZonesFile.createNewFile();
+        if (serverZonesFile.length() == 0) { //writing empty List<ServerZone> to JSON file so we can access it later
+            Type serverZoneListType = new TypeToken<List<ServerZone>>() {}.getType();
+            List<ServerZone> serverZoneList = new ArrayList<>();
+
+            Gson gson = new Gson();
+
+            JsonWriter serverZoneListWriter = new JsonWriter(new FileWriter(this.serverZonesFile));
+            gson.toJson(serverZoneList, serverZoneListType, serverZoneListWriter);
+        }
     }
 
     public List<PlayerZone> getPlayerZoneList() throws FileNotFoundException {
         Gson gson = new Gson();
         JsonReader playerZoneListReader = new JsonReader(new FileReader(this.playerZonesFile));
 
-        Type playerZoneListType = new TypeToken<List<ServerZone>>() {}.getType();
+        Type playerZoneListType = new TypeToken<List<PlayerZone>>() {}.getType();
         return gson.fromJson(playerZoneListReader, playerZoneListType);
     }
 

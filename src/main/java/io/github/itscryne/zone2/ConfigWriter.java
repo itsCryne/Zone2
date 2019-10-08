@@ -2,9 +2,9 @@ package io.github.itscryne.zone2;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
 import org.bukkit.Location;
 
 import java.io.*;
@@ -22,7 +22,6 @@ public class ConfigWriter {
 
     public ConfigWriter(Zone2 plugin) throws IOException {
         GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(Location.class, new LocationAdapter());
         Gson gson = builder.setPrettyPrinting().create();;
 
         this.plugin = plugin;
@@ -30,8 +29,8 @@ public class ConfigWriter {
         dataDir.mkdir();
 
         String dataDirPath = dataDir.getAbsolutePath();
-        this.serverZonePath = dataDirPath + "/serverZones.json";
-        this.playerZonePath = dataDirPath + "/playerZones.json";
+        this.serverZonePath = dataDirPath.concat("/serverZones.json");
+        this.playerZonePath = dataDirPath.concat("/playerZones.json");
 
         this.playerZonesFile = new File(playerZonePath);
         playerZonesFile.createNewFile();
@@ -39,8 +38,12 @@ public class ConfigWriter {
             List<PlayerZone> playerZoneList = new ArrayList<>();
             Type playerZoneListType = new TypeToken<List<PlayerZone>>(){}.getType();
 
-            JsonWriter playerZoneListWriter = new JsonWriter(new FileWriter(this.playerZonesFile));
-            gson.toJson(playerZoneList, playerZoneListType, playerZoneListWriter);
+            //JsonWriter playerZoneListWriter = new JsonWriter(new FileWriter(this.playerZonesFile));
+            //gson.toJson(playerZoneList, playerZoneListType, playerZoneListWriter);
+            Writer fw = new FileWriter(playerZonePath);
+            gson.toJson(playerZoneList, fw);
+            fw.flush();
+            fw.close();
         }
 
         this.serverZonesFile = new File(serverZonePath);
@@ -49,14 +52,17 @@ public class ConfigWriter {
             List<ServerZone> serverZoneList = new ArrayList<>();
             Type serverZoneListType = new TypeToken<List<ServerZone>>(){}.getType();
 
-            JsonWriter serverZoneListWriter = new JsonWriter(new FileWriter(this.serverZonesFile));
-            gson.toJson(serverZoneList, serverZoneListType, serverZoneListWriter);
+            //JsonWriter serverZoneListWriter = new JsonWriter(new FileWriter(this.serverZonesFile));
+            //gson.toJson(serverZoneList, serverZoneListType, serverZoneListWriter);
+            Writer fw = new FileWriter(serverZonePath);
+            gson.toJson(serverZoneList, fw);
+            fw.flush();
+            fw.close();
         }
     }
 
     public void writePlayerZone(PlayerZone zone) throws IOException {
         GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(Location.class, new LocationAdapter());
         Gson gson = builder.setPrettyPrinting().create();;
 
         JsonReader playerZoneListReader = new JsonReader(new FileReader(this.playerZonesFile));
@@ -64,13 +70,20 @@ public class ConfigWriter {
         List<PlayerZone> playerZoneList = gson.fromJson(playerZoneListReader, playerZoneListType);
         playerZoneList.add(zone);
 
-        JsonWriter playerZoneListWriter = new JsonWriter(new FileWriter(this.playerZonesFile));
-        gson.toJson(playerZoneList, playerZoneListType, playerZoneListWriter);
+        //JsonWriter playerZoneListWriter = new JsonWriter(new FileWriter(this.playerZonesFile));
+        //gson.toJson(playerZoneList, playerZoneListType, playerZoneListWriter);
+        Writer fw = new FileWriter(playerZonePath);
+        try {
+            gson.toJson(playerZoneList, fw);
+        } catch(StackOverflowError e){
+            System.out.println("ERWISCHT!");
+        }
+        fw.flush();
+        fw.close();
     }
 
     public void writeServerZone(ServerZone zone) throws IOException {
         GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(Location.class, new LocationAdapter());
         Gson gson = builder.setPrettyPrinting().create();;
 
         JsonReader serverZoneListReader = new JsonReader(new FileReader(this.serverZonesFile));
@@ -79,8 +92,12 @@ public class ConfigWriter {
         List<ServerZone> serverZoneList = gson.fromJson(serverZoneListReader, serverZoneListType);
         serverZoneList.add(zone);
 
-        JsonWriter serverZoneListWriter = new JsonWriter(new FileWriter(this.serverZonesFile));
-        gson.toJson(serverZoneList, serverZoneListType, serverZoneListWriter);
+        //JsonWriter serverZoneListWriter = new JsonWriter(new FileWriter(this.serverZonesFile));
+        //gson.toJson(serverZoneList, serverZoneListType, serverZoneListWriter);
+        Writer fw = new FileWriter(serverZonePath);
+        gson.toJson(serverZoneList, fw);
+        fw.flush();
+        fw.close();
     }
 
     private int findPlayerZoneIndexById(List<PlayerZone> playerZoneList, int id){
@@ -94,7 +111,6 @@ public class ConfigWriter {
 
     public void deletePlayerZone(int id) throws IOException {
         GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(Location.class, new LocationAdapter());
         Gson gson = builder.setPrettyPrinting().create();;
 
         JsonReader playerZoneListReader = new JsonReader(new FileReader(this.serverZonesFile));
@@ -109,8 +125,12 @@ public class ConfigWriter {
             playerZoneList.remove(indexToDelete);
         }
 
-        JsonWriter playerZoneListWriter = new JsonWriter(new FileWriter(this.playerZonesFile));
-        gson.toJson(playerZoneList, playerZoneListType, playerZoneListWriter);
+        //JsonWriter playerZoneListWriter = new JsonWriter(new FileWriter(this.playerZonesFile));
+        //gson.toJson(playerZoneList, playerZoneListType, playerZoneListWriter);
+        Writer fw = new FileWriter(playerZonePath);
+        gson.toJson(playerZoneList, fw);
+        fw.flush();
+        fw.close();
     }
 
     private int findServerZoneIndexById(List<ServerZone> serverZoneList, int id){
@@ -124,7 +144,6 @@ public class ConfigWriter {
 
     public void deleteServerZone(int id) throws IOException {
         GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(Location.class, new LocationAdapter());
         Gson gson = builder.setPrettyPrinting().create();;
 
         JsonReader serverZoneListReader = new JsonReader(new FileReader(this.serverZonesFile));
@@ -139,7 +158,11 @@ public class ConfigWriter {
             serverZoneList.remove(indexToDelete);
         }
 
-        JsonWriter serverZoneListWriter = new JsonWriter(new FileWriter(this.serverZonesFile));
-        gson.toJson(serverZoneList, serverZoneListType, serverZoneListWriter);
+        Writer fw = new FileWriter(serverZonePath);
+        gson.toJson(serverZoneList, fw);
+        fw.flush();
+        fw.close();
+        //JsonWriter serverZoneListWriter = new JsonWriter(new FileWriter(this.serverZonesFile));
+        //gson.toJson(serverZoneList, serverZoneListType, serverZoneListWriter);
     }
 }
