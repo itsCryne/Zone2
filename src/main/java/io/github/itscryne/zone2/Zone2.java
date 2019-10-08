@@ -1,14 +1,24 @@
 package io.github.itscryne.zone2;
 
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class Zone2 extends JavaPlugin {
+import java.io.Serializable;
+
+/**
+ * @author Patrick Longer
+ * @version 1.0-SNAPSHOT
+ */
+public final class Zone2 extends JavaPlugin implements Serializable {
 
     @Override
     public void onEnable() {
         // Plugin startup logic
-        this.getCommand("test").setExecutor(new Zone2CommandExecutor(this));
+        this.getCommand("createPlayerZone").setExecutor(new Zone2CommandExecutor(this));
+        this.getCommand("getPlayerZone").setExecutor(new Zone2CommandExecutor(this));
+        this.getCommand("deletePlayerZone").setExecutor(new Zone2CommandExecutor(this));
+        this.getCommand("createServerZone").setExecutor(new Zone2CommandExecutor(this));
+        this.getCommand("getServerZone").setExecutor(new Zone2CommandExecutor(this));
+        this.getCommand("deleteServerZone").setExecutor(new Zone2CommandExecutor(this));
 
     }
 

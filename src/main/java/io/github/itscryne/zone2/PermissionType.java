@@ -1,9 +1,10 @@
 package io.github.itscryne.zone2;
 
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import java.io.Serializable;
 
-import java.util.Map;
-
-public enum PermissionType{
+/**
+ * @serial JSON
+ */
+public enum PermissionType implements Serializable {
     BREAK, PLACE, REDSTONE, DOORS, CONTAINER, ADMINISTRATE;
 }

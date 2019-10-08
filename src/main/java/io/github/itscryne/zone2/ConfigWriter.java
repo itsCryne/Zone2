@@ -2,10 +2,8 @@ package io.github.itscryne.zone2;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializer;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
-import org.bukkit.Location;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -29,8 +27,8 @@ public class ConfigWriter {
         dataDir.mkdir();
 
         String dataDirPath = dataDir.getAbsolutePath();
-        this.serverZonePath = dataDirPath.concat("/serverZones.json");
-        this.playerZonePath = dataDirPath.concat("/playerZones.json");
+        this.serverZonePath = dataDirPath.concat(File.separator).concat("serverZones.json");
+        this.playerZonePath = dataDirPath.concat(File.separator).concat("playerZones.json");
 
         this.playerZonesFile = new File(playerZonePath);
         playerZonesFile.createNewFile();
@@ -113,7 +111,7 @@ public class ConfigWriter {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.setPrettyPrinting().create();;
 
-        JsonReader playerZoneListReader = new JsonReader(new FileReader(this.serverZonesFile));
+        JsonReader playerZoneListReader = new JsonReader(new FileReader(this.playerZonesFile));
 
         Type playerZoneListType = new TypeToken<List<PlayerZone>>() {}.getType();
         List<PlayerZone> playerZoneList = gson.fromJson(playerZoneListReader, playerZoneListType);

@@ -21,7 +21,7 @@ public class ConfigReader {
         this.plugin = plugin;
         this.dataDir = this.plugin.getDataFolder();
 
-        this.playerZonesFile = new File(dataDir.getAbsolutePath() + "/playerZones.json");
+        this.playerZonesFile = new File(dataDir.getAbsolutePath().concat(File.separator).concat("playerZones.json"));
         playerZonesFile.createNewFile();
         if (playerZonesFile.length() == 0) { //writing empty List<PlayerZone> to JSON file so we can access it later
             Type playerZoneListType = new TypeToken<List<PlayerZone>>() {}.getType();
@@ -33,7 +33,7 @@ public class ConfigReader {
             gson.toJson(playerZoneList, playerZoneListType, playerZoneListWriter);
         }
 
-        this.serverZonesFile = new File(dataDir.getAbsolutePath() + "/serverZones.json");
+        this.serverZonesFile = new File(dataDir.getAbsolutePath().concat(File.separator).concat("serverZones.json"));
         serverZonesFile.createNewFile();
         if (serverZonesFile.length() == 0) { //writing empty List<ServerZone> to JSON file so we can access it later
             Type serverZoneListType = new TypeToken<List<ServerZone>>() {}.getType();

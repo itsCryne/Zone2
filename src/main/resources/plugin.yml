@@ -3,6 +3,16 @@ version: ${project.version}
 main: io.github.itscryne.zone2.Zone2
 api-version: 1.13
 commands:
-  test:
-    usage: /test
-    description: Testcommand
+  createPlayerZone:
+    usage: /createPlayerZone
+  getPlayerZone:
+    usage: /getPlayerZone
+  deletePlayerZone:
+    usage: /deletPlayerZone
+
+  createServerZone:
+    usage: /createServerZone
+  getServerZone:
+    usage: /getServerZone
+  deleteServerZone:
+    usage: /deleteServerZone
