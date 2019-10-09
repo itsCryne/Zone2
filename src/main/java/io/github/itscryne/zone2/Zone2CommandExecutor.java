@@ -7,12 +7,14 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class Zone2CommandExecutor implements CommandExecutor{
+    private final Logger logger = Logger.getLogger(Zone2CommandExecutor.class.getName());
+
     private Zone2 plugin;
 
     public Zone2CommandExecutor(Zone2 plugin){
@@ -40,66 +42,42 @@ public class Zone2CommandExecutor implements CommandExecutor{
 
 
         try{
-            writer = new ConfigWriter(this.plugin);
-            reader = new ConfigReader(this.plugin);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            writer = ConfigWriter.getInstance(this.plugin);
+            reader = ConfigReader.getInstance(this.plugin);
 
-        switch (command.getName().toLowerCase()){
+        switch (command.getName().toLowerCase()) {
             case ("createplayerzone"):
                 PlayerZone playerZone = new PlayerZone(l1, l2, 1, 1, "PlayerZone", ((Player) sender).getUniqueId(), permissions);
-                try {
-                    writer.writePlayerZone(playerZone);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                writer.writePlayerZone(playerZone);
                 break;
             case ("getplayerzone"):
-                try {
-                    List<PlayerZone> playerZoneList = reader.getPlayerZoneList();
-                    for (PlayerZone i : playerZoneList){
-                        System.out.println(i);
-                    }
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+                List<PlayerZone> playerZoneList = reader.getPlayerZoneList();
+                for (PlayerZone i : playerZoneList) {
+                    logger.info(i.toString());
                 }
-                break;
-            case ("deleteplayerzone"):
-                try {
-                    writer.deletePlayerZone(1);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                break;
+                    break;
+                    case ("deleteplayerzone"):
+                        writer.deletePlayerZone(1);
+                        break;
 
-            case ("createserverzone"):
-                ServerZone serverZone = new ServerZone(l1, l2, 1, 1, "ServerZone");
-                try {
-                    writer.writeServerZone(serverZone);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    case ("createserverzone"):
+                        ServerZone serverZone = new ServerZone(l1, l2, 1, 1, "ServerZone");
+                        writer.writeServerZone(serverZone);
+                        break;
+                    case ("getserverzone"):
+                        List<ServerZone> serverZoneList = reader.getServerZoneList();
+                        for (ServerZone i : serverZoneList) {
+                            logger.info(i.toString());
+                        }
+                        break;
+                    case ("deleteserverzone"):
+                        writer.deleteServerZone(1);
+                        break;
+                    default:
+                        return false;
                 }
-                break;
-            case ("getserverzone"):
-                try {
-                    List<ServerZone> serverZoneList = reader.getServerZoneList();
-                    for (ServerZone i : serverZoneList){
-                        System.out.println(i);
-                    }
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                break;
-            case ("deleteserverzone"):
-                try {
-                    writer.deleteServerZone(1);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                break;
-            default:
-                return false;
+        } catch (IOException e) {
+            this.logger.severe(e.toString());
         }
         return true;
     }

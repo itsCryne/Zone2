@@ -1,5 +1,6 @@
 package io.github.itscryne.zone2;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.Serializable;
@@ -19,6 +20,8 @@ public final class Zone2 extends JavaPlugin implements Serializable {
         this.getCommand("createServerZone").setExecutor(new Zone2CommandExecutor(this));
         this.getCommand("getServerZone").setExecutor(new Zone2CommandExecutor(this));
         this.getCommand("deleteServerZone").setExecutor(new Zone2CommandExecutor(this));
+
+        Bukkit.getPluginManager().registerEvents(new Zone2EventListener(), this);
 
     }
 

@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConfigWriter {
+    private static ConfigWriter instance;
+
     private final String playerZonePath;
     private final String serverZonePath;
     private Zone2 plugin;
@@ -18,7 +20,14 @@ public class ConfigWriter {
     private File playerZonesFile;
     private File serverZonesFile;
 
-    public ConfigWriter(Zone2 plugin) throws IOException {
+    public static ConfigWriter getInstance(Zone2 plugin) throws IOException {
+        if(instance == null){
+            instance = new ConfigWriter(plugin);
+        }
+        return instance;
+    }
+
+    private ConfigWriter(Zone2 plugin) throws IOException {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.setPrettyPrinting().create();;
 
@@ -34,10 +43,7 @@ public class ConfigWriter {
         playerZonesFile.createNewFile();
         if (playerZonesFile.length() == 0){ //writing empty List<PlayerZone> to JSON file so we can access it later
             List<PlayerZone> playerZoneList = new ArrayList<>();
-            Type playerZoneListType = new TypeToken<List<PlayerZone>>(){}.getType();
 
-            //JsonWriter playerZoneListWriter = new JsonWriter(new FileWriter(this.playerZonesFile));
-            //gson.toJson(playerZoneList, playerZoneListType, playerZoneListWriter);
             Writer fw = new FileWriter(playerZonePath);
             gson.toJson(playerZoneList, fw);
             fw.flush();
@@ -48,10 +54,7 @@ public class ConfigWriter {
         serverZonesFile.createNewFile();
         if (serverZonesFile.length() == 0){ //writing empty List<ServerZone> to JSON file so we can access it later
             List<ServerZone> serverZoneList = new ArrayList<>();
-            Type serverZoneListType = new TypeToken<List<ServerZone>>(){}.getType();
 
-            //JsonWriter serverZoneListWriter = new JsonWriter(new FileWriter(this.serverZonesFile));
-            //gson.toJson(serverZoneList, serverZoneListType, serverZoneListWriter);
             Writer fw = new FileWriter(serverZonePath);
             gson.toJson(serverZoneList, fw);
             fw.flush();
@@ -68,8 +71,6 @@ public class ConfigWriter {
         List<PlayerZone> playerZoneList = gson.fromJson(playerZoneListReader, playerZoneListType);
         playerZoneList.add(zone);
 
-        //JsonWriter playerZoneListWriter = new JsonWriter(new FileWriter(this.playerZonesFile));
-        //gson.toJson(playerZoneList, playerZoneListType, playerZoneListWriter);
         Writer fw = new FileWriter(playerZonePath);
         try {
             gson.toJson(playerZoneList, fw);
@@ -90,8 +91,6 @@ public class ConfigWriter {
         List<ServerZone> serverZoneList = gson.fromJson(serverZoneListReader, serverZoneListType);
         serverZoneList.add(zone);
 
-        //JsonWriter serverZoneListWriter = new JsonWriter(new FileWriter(this.serverZonesFile));
-        //gson.toJson(serverZoneList, serverZoneListType, serverZoneListWriter);
         Writer fw = new FileWriter(serverZonePath);
         gson.toJson(serverZoneList, fw);
         fw.flush();
@@ -123,8 +122,6 @@ public class ConfigWriter {
             playerZoneList.remove(indexToDelete);
         }
 
-        //JsonWriter playerZoneListWriter = new JsonWriter(new FileWriter(this.playerZonesFile));
-        //gson.toJson(playerZoneList, playerZoneListType, playerZoneListWriter);
         Writer fw = new FileWriter(playerZonePath);
         gson.toJson(playerZoneList, fw);
         fw.flush();
@@ -160,7 +157,5 @@ public class ConfigWriter {
         gson.toJson(serverZoneList, fw);
         fw.flush();
         fw.close();
-        //JsonWriter serverZoneListWriter = new JsonWriter(new FileWriter(this.serverZonesFile));
-        //gson.toJson(serverZoneList, serverZoneListType, serverZoneListWriter);
     }
 }

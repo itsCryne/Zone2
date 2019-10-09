@@ -11,13 +11,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConfigReader {
+    private static ConfigReader instance;
+
     private Zone2 plugin;
     private File dataDir;
     private File playerZonesFile;
     private File serverZonesFile;
 
-    public ConfigReader(Zone2 plugin) throws IOException {
+    public static ConfigReader getInstance(Zone2 plugin) throws IOException {
+        if (instance == null){
+            instance = new ConfigReader(plugin);
+        }
+        return instance;
+    }
 
+    private ConfigReader(Zone2 plugin) throws IOException {
         this.plugin = plugin;
         this.dataDir = this.plugin.getDataFolder();
 
