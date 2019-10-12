@@ -1,4 +1,4 @@
-package io.github.itscryne.zone2;
+package io.github.itscryne.zone2.perms;
 
 import org.bukkit.entity.Player;
 
@@ -14,31 +14,33 @@ public class Permission implements Serializable {
     private PermissionType perm;
 
     /**
-     *
-     * @param p Player the permission belongs to
+     * @param p    Player the permission belongs to
      * @param perm Type of the permission
      */
-    public Permission(Player p, PermissionType perm){
+    public Permission(Player p, PermissionType perm) {
         this.p = p;
         this.playerUuid = p.getUniqueId();
         this.perm = perm;
     }
 
     /**
-     *
      * @return Type of the permission
      */
-    public PermissionType getPerm() { return this.perm; }
+    public PermissionType getPerm() {
+        return this.perm;
+    }
 
     /**
-     *
      * @return UUID of the player the permission belongs to
      */
-    public UUID getPlayerUuid() { return playerUuid; }
+    public UUID getPlayerUuid() {
+        return playerUuid;
+    }
 
     /**
-     *
      * @return Player the permission belongs to
      */
-    public Player getP() { return p; }
+    public Player getP() {
+        return p;
+    }
 }

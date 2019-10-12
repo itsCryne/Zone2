@@ -1,9 +1,12 @@
-package io.github.itscryne.zone2;
+package io.github.itscryne.zone2.config;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import io.github.itscryne.zone2.Zone2;
+import io.github.itscryne.zone2.spaces.PlayerZone;
+import io.github.itscryne.zone2.spaces.ServerZone;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -18,21 +21,16 @@ public class ConfigReader {
     private File playerZonesFile;
     private File serverZonesFile;
 
-    public static ConfigReader getInstance(Zone2 plugin) throws IOException {
-        if (instance == null){
-            instance = new ConfigReader(plugin);
-        }
-        return instance;
-    }
-
     private ConfigReader(Zone2 plugin) throws IOException {
         this.plugin = plugin;
         this.dataDir = this.plugin.getDataFolder();
+        dataDir.mkdir();
 
         this.playerZonesFile = new File(dataDir.getAbsolutePath().concat(File.separator).concat("playerZones.json"));
         playerZonesFile.createNewFile();
         if (playerZonesFile.length() == 0) { //writing empty List<PlayerZone> to JSON file so we can access it later
-            Type playerZoneListType = new TypeToken<List<PlayerZone>>() {}.getType();
+            Type playerZoneListType = new TypeToken<List<PlayerZone>>() {
+            }.getType();
             List<PlayerZone> playerZoneList = new ArrayList<>();
 
             Gson gson = new Gson();
@@ -44,7 +42,8 @@ public class ConfigReader {
         this.serverZonesFile = new File(dataDir.getAbsolutePath().concat(File.separator).concat("serverZones.json"));
         serverZonesFile.createNewFile();
         if (serverZonesFile.length() == 0) { //writing empty List<ServerZone> to JSON file so we can access it later
-            Type serverZoneListType = new TypeToken<List<ServerZone>>() {}.getType();
+            Type serverZoneListType = new TypeToken<List<ServerZone>>() {
+            }.getType();
             List<ServerZone> serverZoneList = new ArrayList<>();
 
             Gson gson = new Gson();
@@ -54,11 +53,23 @@ public class ConfigReader {
         }
     }
 
+    public static ConfigReader getInstance(Zone2 plugin) throws IOException {
+        if (instance == null) {
+            instance = new ConfigReader(plugin);
+        }
+        return instance;
+    }
+
+    public void destroy() {
+        instance = null;
+    }
+
     public List<PlayerZone> getPlayerZoneList() throws FileNotFoundException {
         Gson gson = new Gson();
         JsonReader playerZoneListReader = new JsonReader(new FileReader(this.playerZonesFile));
 
-        Type playerZoneListType = new TypeToken<List<PlayerZone>>() {}.getType();
+        Type playerZoneListType = new TypeToken<List<PlayerZone>>() {
+        }.getType();
         return gson.fromJson(playerZoneListReader, playerZoneListType);
     }
 
@@ -66,7 +77,8 @@ public class ConfigReader {
         Gson gson = new Gson();
         JsonReader serverZoneListReader = new JsonReader(new FileReader(this.serverZonesFile));
 
-        Type serverZoneListType = new TypeToken<List<ServerZone>>() {}.getType();
+        Type serverZoneListType = new TypeToken<List<ServerZone>>() {
+        }.getType();
         return gson.fromJson(serverZoneListReader, serverZoneListType);
     }
 }

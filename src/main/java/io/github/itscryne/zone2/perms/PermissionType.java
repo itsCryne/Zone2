@@ -1,4 +1,4 @@
-package io.github.itscryne.zone2;
+package io.github.itscryne.zone2.perms;
 
 import java.io.Serializable;
 
@@ -6,5 +6,5 @@ import java.io.Serializable;
  * @serial JSON
  */
 public enum PermissionType implements Serializable {
-    BREAK, PLACE, REDSTONE, DOORS, CONTAINER, ADMINISTRATE;
+    BREAK, PLACE, REDSTONE, DOORS, CONTAINER, ADMINISTRATE
 }

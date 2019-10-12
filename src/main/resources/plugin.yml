@@ -3,16 +3,7 @@ version: ${project.version}
 main: io.github.itscryne.zone2.Zone2
 api-version: 1.13
 commands:
-  createPlayerZone:
-    usage: /createPlayerZone
-  getPlayerZone:
-    usage: /getPlayerZone
-  deletePlayerZone:
-    usage: /deletPlayerZone
-
-  createServerZone:
-    usage: /createServerZone
-  getServerZone:
-    usage: /getServerZone
-  deleteServerZone:
-    usage: /deleteServerZone
+  createzone:
+    usage: /createzone <hx lx hz lz>
+  createserverzone:
+    usage: /createserverzone <hx lx hy ly hz lz world priority name>
