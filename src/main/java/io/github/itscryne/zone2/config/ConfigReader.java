@@ -21,6 +21,11 @@ public class ConfigReader {
     private File playerZonesFile;
     private File serverZonesFile;
 
+    /**
+     * ConfigReader constructor - access via {@link #getInstance(Zone2)} method.
+     * @param plugin the plugin
+     * @throws IOException if it cant access the files et al
+     */
     private ConfigReader(Zone2 plugin) throws IOException {
         this.plugin = plugin;
         this.dataDir = this.plugin.getDataFolder();
@@ -53,6 +58,12 @@ public class ConfigReader {
         }
     }
 
+    /**
+     * Gets a instance of {@link ConfigReader}
+     * @param plugin the plugin
+     * @return a ConfigReader instance
+     * @throws IOException if it cant access the files et al
+     */
     public static ConfigReader getInstance(Zone2 plugin) throws IOException {
         if (instance == null) {
             instance = new ConfigReader(plugin);
@@ -60,10 +71,18 @@ public class ConfigReader {
         return instance;
     }
 
+    /**
+     * Destroys the ConfigReader instance
+     */
     public void destroy() {
         instance = null;
     }
 
+    /**
+     *
+     * @return a list of all PlayerZones saved in the json file
+     * @throws FileNotFoundException if the file is not found
+     */
     public List<PlayerZone> getPlayerZoneList() throws FileNotFoundException {
         Gson gson = new Gson();
         JsonReader playerZoneListReader = new JsonReader(new FileReader(this.playerZonesFile));
@@ -73,6 +92,11 @@ public class ConfigReader {
         return gson.fromJson(playerZoneListReader, playerZoneListType);
     }
 
+    /**
+     *
+     * @return a list of all ServerZones saved in the json file
+     * @throws FileNotFoundException if the file is not found
+     */
     public List<ServerZone> getServerZoneList() throws FileNotFoundException {
         Gson gson = new Gson();
         JsonReader serverZoneListReader = new JsonReader(new FileReader(this.serverZonesFile));

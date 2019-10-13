@@ -16,6 +16,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Zone2ParentEventListener {
+    /**
+     *
+     * @param l Location to check
+     * @param p Player to chekc
+     * @param t PermissionType to check
+     * @param plugin the plugin
+     * @return wether the player is allowed to do the action
+     * @throws IOException if it cant access a file et al
+     */
     protected static boolean isAllowed(Location l, Player p, PermissionType t, Zone2 plugin) throws IOException {
         boolean inPlayerZone = false;
         boolean inServerZone = false;

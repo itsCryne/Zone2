@@ -18,6 +18,7 @@ public class ServerZone extends Zone implements Serializable {
     private String name;
 
     /**
+     * Constructor for locations
      * @param l1       First Location (higher coordinates)
      * @param l2       Second Location (lower coordinates)
      * @param priority Priority of the Zone
@@ -30,6 +31,7 @@ public class ServerZone extends Zone implements Serializable {
     }
 
     /**
+     * Constructor for raw coordinates
      * @param hx       Hgher x coordinate
      * @param lx       Lower x coordinate
      * @param hy       Higher y coordinate
@@ -47,6 +49,12 @@ public class ServerZone extends Zone implements Serializable {
         this.name = name;
     }
 
+    /**
+     * Checks wether the instance Zone collides with any other Zone
+     * @param plugin the plugin
+     * @return wether the instance collides
+     * @throws IOException if it cant find a file et al
+     */
     public boolean collidesWithAnyZone(Zone2 plugin) throws IOException {
         ConfigReader reader = ConfigReader.getInstance(plugin);
         List<PlayerZone> playerZoneList = reader.getPlayerZoneList();
@@ -86,6 +94,12 @@ public class ServerZone extends Zone implements Serializable {
         return false;
     }
 
+    /**
+     * Returns the next available ID
+     * @param plugin the plugin
+     * @return the ID
+     * @throws IOException if it cant find a file et al
+     */
     public static int getNextId(Zone2 plugin) throws IOException {
         ConfigReader reader = ConfigReader.getInstance(plugin);
         List<ServerZone> serverZoneList = reader.getServerZoneList();

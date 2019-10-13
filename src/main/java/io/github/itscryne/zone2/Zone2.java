@@ -14,6 +14,9 @@ import java.io.Serializable;
  */
 public final class Zone2 extends JavaPlugin implements Serializable {
 
+    /**
+     * Called when this plugin is enabled
+     */
     @Override
     public void onEnable() {
         // Plugin startup logic
@@ -24,6 +27,9 @@ public final class Zone2 extends JavaPlugin implements Serializable {
 
     }
 
+    /**
+     * Called when this plugin is disabled
+     */
     @Override
     public void onDisable() {
         // Plugin shutdown logic

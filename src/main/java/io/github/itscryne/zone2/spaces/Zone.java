@@ -42,6 +42,11 @@ public class Zone extends Area implements Serializable {
         this.priority = priority;
     }
 
+    /**
+     *
+     * @param zoneList The List to search in
+     * @return the ServerZone with the highest ID
+     */
     public static ServerZone getHighestServerZonePriority(List<ServerZone> zoneList) {
         if (zoneList.isEmpty()) {
             throw new RuntimeException("The zoneList must not be empty");
@@ -60,6 +65,11 @@ public class Zone extends Area implements Serializable {
         return highestPriorityZone;
     }
 
+    /**
+     *
+     * @param zoneList The List to search in
+     * @return the PlayerZone with the highest ID
+     */
     public static PlayerZone getHighestPlayerZonePriority(List<PlayerZone> zoneList) {
         if (zoneList.isEmpty()) {
             throw new RuntimeException("The zoneList must not be empty");
@@ -78,6 +88,12 @@ public class Zone extends Area implements Serializable {
         return highestPriorityZone;
     }
 
+    /**
+     *
+     * @param playerZoneList The playerZoneList to search in
+     * @param serverZoneList The serverZoneList to search in
+     * @return the Zone with the highest ID
+     */
     public static Zone getHighestPriorityZone(List<PlayerZone> playerZoneList, List<ServerZone> serverZoneList) {
         if (playerZoneList.isEmpty() && serverZoneList.isEmpty()) {
             throw new RuntimeException("Both Lists are empty. This is forbidden");

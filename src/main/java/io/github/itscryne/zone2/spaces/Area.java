@@ -105,6 +105,10 @@ public class Area implements Serializable {
         return this.l1;
     }
 
+    /**
+     *
+     * @param l1 The location to set
+     */
     public void setL1(Location l1) {
         this.l1 = l1;
     }
@@ -116,14 +120,26 @@ public class Area implements Serializable {
         return this.l2;
     }
 
+    /**
+     *
+     * @param l2 The Location to set
+     */
     public void setL2(Location l2) {
         this.l2 = l2;
     }
 
+    /**
+     *
+     * @return the serialized L1
+     */
     public Map<String, Object> getSerL1() {
         return serL1;
     }
 
+    /**
+     *
+     * @return the serialized L2
+     */
     public Map<String, Object> getSerL2() {
         return serL2;
     }

@@ -23,6 +23,11 @@ public class ConfigWriter {
     private File playerZonesFile;
     private File serverZonesFile;
 
+    /**
+     * ConfigWriter constructor - access via {@link #getInstance(Zone2)} method.
+     * @param plugin the plugin
+     * @throws IOException if it cant access the files et al
+     */
     private ConfigWriter(Zone2 plugin) throws IOException {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.setPrettyPrinting().create();
@@ -58,6 +63,12 @@ public class ConfigWriter {
         }
     }
 
+    /**
+     * Gets a instance of {@link ConfigReader}
+     * @param plugin the plugin
+     * @return a ConfigReader instance
+     * @throws IOException if it cant access the files et al
+     */
     public static ConfigWriter getInstance(Zone2 plugin) throws IOException {
         if (instance == null) {
             instance = new ConfigWriter(plugin);
@@ -65,6 +76,11 @@ public class ConfigWriter {
         return instance;
     }
 
+    /**
+     * Serializes a PlayerZone
+     * @param zone the PlayerZone to write
+     * @throws IOException if it cant access the file et al
+     */
     public void writePlayerZone(PlayerZone zone) throws IOException {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.setPrettyPrinting().create();
@@ -85,6 +101,11 @@ public class ConfigWriter {
         fw.close();
     }
 
+    /**
+     * Serializes a ServerZone
+     * @param zone the ServerZone to write
+     * @throws IOException if it cant access the file et al
+     */
     public void writeServerZone(ServerZone zone) throws IOException {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.setPrettyPrinting().create();
@@ -102,6 +123,12 @@ public class ConfigWriter {
         fw.close();
     }
 
+    /**
+     * Helper function
+     * @param playerZoneList List to search in
+     * @param id The id to search for
+     * @return the index of the id
+     */
     private int findPlayerZoneIndexById(List<PlayerZone> playerZoneList, int id) {
         for (PlayerZone p : playerZoneList) {
             if (p.getId() == id) {
@@ -111,6 +138,11 @@ public class ConfigWriter {
         return -1;
     }
 
+    /**
+     * Deletes a serialized PlayerZone
+     * @param id ID of the PlayerZone to delete
+     * @throws IOException if it cant access the file et al
+     */
     public void deletePlayerZone(int id) throws IOException {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.setPrettyPrinting().create();
@@ -134,6 +166,12 @@ public class ConfigWriter {
         fw.close();
     }
 
+    /**
+     * Helper function
+     * @param serverZoneList List to search in
+     * @param id The id to search for
+     * @return the index of the id
+     */
     private int findServerZoneIndexById(List<ServerZone> serverZoneList, int id) {
         for (ServerZone p : serverZoneList) {
             if (p.getId() == id) {
@@ -143,6 +181,11 @@ public class ConfigWriter {
         return -1;
     }
 
+    /**
+     * Deletes a serialized ServerZone
+     * @param id ID of the ServerZone to delete
+     * @throws IOException if it cant access the file et al
+     */
     public void deleteServerZone(int id) throws IOException {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.setPrettyPrinting().create();
@@ -165,7 +208,9 @@ public class ConfigWriter {
         fw.flush();
         fw.close();
     }
-
+    /**
+     * Destroys the ConfigWriter instance
+     */
     public void destroy() {
         instance = null;
     }

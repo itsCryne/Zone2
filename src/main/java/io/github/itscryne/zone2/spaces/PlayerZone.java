@@ -61,7 +61,14 @@ public class PlayerZone extends Zone implements Serializable {
         this.perms = perms;
     }
 
-    public static boolean canCreate(Player p, Zone2 plugin) throws IOException {
+    /**
+     * Function to check, wether the player already has a Zone
+     * @param p the player to check
+     * @param plugin the plugin
+     * @return wether the player has a zone
+     * @throws IOException if it cant find a file et al
+     */
+    public static boolean hasZone(Player p, Zone2 plugin) throws IOException {
         UUID playerUuid = p.getUniqueId();
 
         ConfigReader reader = ConfigReader.getInstance(plugin);
@@ -73,6 +80,12 @@ public class PlayerZone extends Zone implements Serializable {
         return !zoneUuids.contains(playerUuid);
     }
 
+    /**
+     * Checks wether the instance Zone collides with any other Zone
+     * @param plugin the plugin
+     * @return wether the instance collides
+     * @throws IOException if it cant find a file et al
+     */
     public boolean collidesWithAnyZone(Zone2 plugin) throws IOException {
         ConfigReader reader = ConfigReader.getInstance(plugin);
         List<PlayerZone> playerZoneList = reader.getPlayerZoneList();
@@ -117,6 +130,12 @@ public class PlayerZone extends Zone implements Serializable {
         return false;
     }
 
+    /**
+     * Returns the next available ID
+     * @param plugin the plugin
+     * @return the ID
+     * @throws IOException if it cant find a file et al
+     */
     public static int getNextId(Zone2 plugin) throws IOException {
         ConfigReader reader = ConfigReader.getInstance(plugin);
         List<PlayerZone> playerZoneList = reader.getPlayerZoneList();
