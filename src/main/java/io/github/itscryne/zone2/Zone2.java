@@ -1,6 +1,5 @@
 package io.github.itscryne.zone2;
 
-import io.github.itscryne.zone2.commands.Zone2CommandExecutor;
 import io.github.itscryne.zone2.commands.Zone2CreateServerZoneCommand;
 import io.github.itscryne.zone2.commands.Zone2CreateZoneCommand;
 import io.github.itscryne.zone2.events.Zone2EventListener;
