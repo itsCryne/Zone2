@@ -95,6 +95,7 @@ public class Zone2CreateServerZoneCommand implements CommandExecutor {
             ConfigWriter writer = ConfigWriter.getInstance(this.plugin);
             writer.writeServerZone(sz);
             sender.sendMessage("Zone wurde erstellt!");
+            writer.destroy();
             return true;
         } catch (IOException e) {
             sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer");

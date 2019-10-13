@@ -115,6 +115,7 @@ public class Zone2CreateZoneCommand implements CommandExecutor {
             }
             writer.writePlayerZone(pz);
             sender.sendMessage("Zone wurde erstellt!");
+            writer.destroy();
             return true;
         } catch (IOException e) {
             e.printStackTrace();
