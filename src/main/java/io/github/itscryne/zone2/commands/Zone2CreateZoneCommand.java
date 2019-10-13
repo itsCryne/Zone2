@@ -69,10 +69,16 @@ public class Zone2CreateZoneCommand implements CommandExecutor {
             return true;
         }
 
-        if (hx.equals(lx) || hz.equals(lz)){
+        final int MIN_LEN = 20;
+
+        if (hx - lx < MIN_LEN || hz - lz < MIN_LEN){
+            sender.sendMessage(ChatColor.YELLOW + "Eine Zone muss in alle Richtungen mindestens 20 Blöcke lang sein");
+        }
+
+        /*if (hx.equals(lx) || hz.equals(lz)){
             sender.sendMessage(ChatColor.YELLOW + "Eine Zone muss in alle Richtungen mindestens zwei Blöcke lang sein");
             return true;
-        }
+        }*/
 
         World w = Bukkit.getWorld("world"); //TODO Welt in Config
 
