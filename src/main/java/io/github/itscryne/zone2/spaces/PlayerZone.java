@@ -90,9 +90,9 @@ public class PlayerZone extends Zone implements Serializable {
                     i.setL2(Location.deserialize(i.getSerL2()));
 
                     if ((this.getL2().getX() <= i.getL1().getX() && this.getL1().getX() >= i.getL2().getX())
-                            || (this.getL2().getY() <= i.getL1().getY() && this.getL1().getY() >= i.getL2().getY())
-                            || (this.getL2().getZ() <= i.getL1().getZ() && this.getL1().getZ() >= i.getL2().getZ())
-                            || (this.getL1().getWorld().equals(i.getL1().getWorld()))) {
+                            && (this.getL2().getY() <= i.getL1().getY() && this.getL1().getY() >= i.getL2().getY())
+                            && (this.getL2().getZ() <= i.getL1().getZ() && this.getL1().getZ() >= i.getL2().getZ())
+                            && (this.getL1().getWorld().equals(i.getL1().getWorld()))) {
                         return true;
                     }
                 }
