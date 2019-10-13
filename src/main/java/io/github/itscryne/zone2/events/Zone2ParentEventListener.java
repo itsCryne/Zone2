@@ -57,7 +57,10 @@ public class Zone2ParentEventListener {
                 PlayerZone highestPriorityPlayerZone = (PlayerZone) highestPriority;
                 Permission neededPerm = new Permission(p, t);
                 Permission administratePerm = new Permission(p, PermissionType.ADMINISTRATE);
-                return highestPriorityPlayerZone.getPerms().contains(neededPerm) || highestPriorityPlayerZone.getPerms().contains(administratePerm) || p.hasPermission("Zone2.modifyPlayerZone");
+                return highestPriorityPlayerZone.getPerms().contains(neededPerm)
+                        || highestPriorityPlayerZone.getPerms().contains(administratePerm)
+                        || highestPriorityPlayerZone.getPlayerUuid().equals(p.getUniqueId())
+                        || p.hasPermission("Zone2.modifyPlayerZone");
             } else {
                 return p.hasPermission("Zone2.modifyServerZone");
             }
@@ -65,7 +68,10 @@ public class Zone2ParentEventListener {
             PlayerZone highestPriorityPlayerZone = PlayerZone.getHighestPlayerZonePriority(playerZoneList);
             Permission neededPerm = new Permission(p, t);
             Permission administratePerm = new Permission(p, PermissionType.ADMINISTRATE);
-            return highestPriorityPlayerZone.getPerms().contains(neededPerm) || highestPriorityPlayerZone.getPerms().contains(administratePerm) || p.hasPermission("Zone2.modifyPlayerZone");
+            return highestPriorityPlayerZone.getPerms().contains(neededPerm)
+                    || highestPriorityPlayerZone.getPerms().contains(administratePerm)
+                    || highestPriorityPlayerZone.getPlayerUuid().equals(p.getUniqueId())
+                    || p.hasPermission("Zone2.modifyPlayerZone");
         } else {
             return p.hasPermission("Zone2.modifyServerZone");
         }
