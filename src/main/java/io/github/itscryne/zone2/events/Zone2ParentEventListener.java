@@ -8,7 +8,6 @@ import io.github.itscryne.zone2.spaces.PlayerZone;
 import io.github.itscryne.zone2.spaces.ServerZone;
 import io.github.itscryne.zone2.spaces.Zone;
 import org.bukkit.Location;
-import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
 import java.io.IOException;

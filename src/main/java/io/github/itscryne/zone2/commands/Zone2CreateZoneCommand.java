@@ -1,7 +1,6 @@
 package io.github.itscryne.zone2.commands;
 
 import io.github.itscryne.zone2.Zone2;
-import io.github.itscryne.zone2.config.ConfigReader;
 import io.github.itscryne.zone2.config.ConfigWriter;
 import io.github.itscryne.zone2.perms.Permission;
 import io.github.itscryne.zone2.spaces.PlayerZone;
