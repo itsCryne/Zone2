@@ -1,5 +1,6 @@
 package io.github.itscryne.zone2.perms;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.io.Serializable;
@@ -41,6 +42,12 @@ public class Permission implements Serializable {
      * @return Player the permission belongs to
      */
     public Player getP() {
-        return p;
+        if (this.p == null){
+            this.p = Bukkit.getPlayer(this.playerUuid);
+            if (this.p == null){
+                throw (new RuntimeException("Failed to deserialize player"));
+            }
+        }
+        return this.p;
     }
 }

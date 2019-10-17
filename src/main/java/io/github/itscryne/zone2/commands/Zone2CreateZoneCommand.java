@@ -38,7 +38,7 @@ public class Zone2CreateZoneCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)){
-            sender.sendMessage("Nur Spieler können Spielerzonen erstellen!");
+            sender.sendMessage(ChatColor.YELLOW + "Nur Spieler können Spielerzonen erstellen!");
             return true;
         }
 
@@ -109,11 +109,11 @@ public class Zone2CreateZoneCommand implements CommandExecutor {
         try {
             ConfigWriter writer = ConfigWriter.getInstance(this.plugin);
             if (pz.collidesWithAnyZone(this.plugin)){
-                sender.sendMessage("Die Zone kann hier nicht erstellt werden!");
+                sender.sendMessage(ChatColor.YELLOW + "Die Zone kann hier nicht erstellt werden!");
                 return true;
             }
             writer.writePlayerZone(pz);
-            sender.sendMessage("Zone wurde erstellt!");
+            sender.sendMessage(ChatColor.GREEN + "Zone wurde erstellt!");
             writer.destroy();
             return true;
         } catch (IOException e) {

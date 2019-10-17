@@ -5,8 +5,9 @@ import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 
-public class test {
+public class TestZone2 {
     private ServerMock server;
     private Zone2 plugin;
 
@@ -15,8 +16,6 @@ public class test {
     {
         server = MockBukkit.mock();
         plugin = (Zone2) MockBukkit.load(Zone2.class);
-        boolean result = testit();
-        System.out.println(result);
     }
 
     @After
@@ -25,8 +24,11 @@ public class test {
         MockBukkit.unload();
     }
 
-    public boolean testit(){
-        PlayerMock player = server.addPlayer("Cryne");
-        return player.getName().equals("Cryne");
+    @Test
+    public void testZone2(){
+        //PlayerMock player = server.addPlayer("Cryne");
+
+
+
     }
 }

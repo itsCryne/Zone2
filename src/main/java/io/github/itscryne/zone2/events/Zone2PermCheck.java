@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Zone2ParentEventListener {
+public class Zone2PermCheck {
     /**
      *
      * @param l Location to check

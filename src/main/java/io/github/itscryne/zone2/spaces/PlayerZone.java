@@ -170,4 +170,6 @@ public class PlayerZone extends Zone implements Serializable {
     public List<Permission> getPerms() {
         return this.perms;
     }
+
+    public void setPerms(List<Permission> perms) { this.perms = perms; }
 }

@@ -44,7 +44,7 @@ public class Zone2PermissionCommand implements CommandExecutor {
             return false;
         }
 
-        if (!args[0].equalsIgnoreCase("add") && !args[0].equalsIgnoreCase("remove")){
+        if (!args[0].equalsIgnoreCase("add") && !args[0].equalsIgnoreCase("delete")){
             return false;
         }
 
@@ -94,6 +94,7 @@ public class Zone2PermissionCommand implements CommandExecutor {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer!");
+                return true;
             }
 
             if (playerZoneList == null){
@@ -116,14 +117,147 @@ public class Zone2PermissionCommand implements CommandExecutor {
 
             Permission zoneAdmin = new Permission((Player) sender, PermissionType.ADMINISTRATE);
 
-            if (zone.getPlayerUuid() != ((Player) sender).getUniqueId() && !zone.getPerms().contains(zoneAdmin)){
+            if (!zone.getPlayerUuid().equals(((Player) sender).getUniqueId())) {
+                if (!zone.getPerms().contains(zoneAdmin)) {
+                    if (!sender.hasPermission("Zone2.modifyPermissions"))
+                    sender.sendMessage(ChatColor.YELLOW + "Du hast hierzu keine Berechtigung");
+                    return true;
+                }
+            }
+
+            List<Permission> perms = new ArrayList<>(zone.getPerms());
+
+            for (Permission i: perms){
+                if (i.getP().equals(perm.getP())){
+                    if (i.getPerm().equals(perm.getPerm())){
+                        sender.sendMessage(ChatColor.YELLOW + "Du hast dem Spieler " + ChatColor.RESET + who.getDisplayName() + ChatColor.YELLOW + " das Recht " + ChatColor.RED + args[2].toUpperCase() + ChatColor.YELLOW + " schon gewährt");
+                        return true;
+                    }
+                }
+            }
+
+            perms.add(perm);
+            zone.setPerms(perms);
+
+            try {
+                writer = ConfigWriter.getInstance(this.plugin);
+            } catch (IOException e) {
+                sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer!");
+                e.printStackTrace();
+                return true;
+            }
+
+            try {
+                writer.deletePlayerZone(zone.getId());
+                writer.writePlayerZone(zone);
+                String message = ChatColor.GREEN + "Dem Spieler " + ChatColor.RESET + who.getDisplayName() + ChatColor.GREEN +
+                        " wurde das Recht " + ChatColor.DARK_GREEN + args[2].toUpperCase() + ChatColor.GREEN + " gewährt";
+                sender.sendMessage(message);
+                return true;
+            } catch (IOException e) {
+                sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer!");
+                e.printStackTrace();
+                return true;
+            }
+
+        } else if (args[0].equalsIgnoreCase("delete")){
+            PermissionType permType = PermissionType.valueOf(args[2].toUpperCase());
+            Permission perm = new Permission(who, permType);
+
+            ConfigReader reader;
+            ConfigWriter writer;
+            try{
+                reader = ConfigReader.getInstance(this.plugin);
+                writer = ConfigWriter.getInstance(this.plugin);
+            } catch (IOException e) {
+                e.printStackTrace();
+                sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer!");
+                return true;
+            }
+
+            List<PlayerZone> playerZoneList = new ArrayList<>();
+            try {
+                playerZoneList = reader.getPlayerZoneList();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer!");
+                return true;
+            }
+
+            if (playerZoneList == null){
+                sender.sendMessage(ChatColor.YELLOW + "Zone nicht gefunden");
+                return true;
+            }
+
+            PlayerZone zone = null;
+
+            for (PlayerZone i : playerZoneList){
+                if (id == i.getId()){
+                    zone = i;
+                }
+            }
+
+            if (zone == null){
+                sender.sendMessage(ChatColor.YELLOW + "Zone nicht gefunden");
+                return true;
+            }
+
+            Permission zoneAdmin = new Permission((Player) sender, PermissionType.ADMINISTRATE);
+
+            if (!zone.getPlayerUuid().equals(((Player) sender).getUniqueId())) {
+                if (!zone.getPerms().contains(zoneAdmin)) {
+                    if (!sender.hasPermission("Zone2.modifyPermissions"))
+                        sender.sendMessage(ChatColor.YELLOW + "Du hast hierzu keine Berechtigung");
+                    return true;
+                }
+            }
+
+            List<Permission> perms = new ArrayList<>(zone.getPerms());
+            boolean removed = false;
+            Permission toRemove = null;
+
+            for (Permission i: perms){
+                if (i.getP().equals(who)){
+                    if (i.getPerm().equals(permType)){
+                        toRemove = i;
+                        removed = true;
+                    }
+                }
+            }
+
+            if (removed){
+                perms.remove(toRemove);
+                zone.setPerms(perms);
+            }
+
+            if (!removed){
+                sender.sendMessage(ChatColor.YELLOW + "Der Spieler " + ChatColor.RESET + who.getDisplayName() + ChatColor.YELLOW + " besitzt die Berechtigung " + ChatColor.RED + args[2].toUpperCase() + ChatColor.YELLOW + " nicht");
+                return true;
 
             }
 
+            try {
+                writer = ConfigWriter.getInstance(this.plugin);
+            } catch (IOException e) {
+                sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer!");
+                e.printStackTrace();
+                return true;
+            }
 
+            try {
+                writer.deletePlayerZone(zone.getId());
+                writer.writePlayerZone(zone);
+                String message = ChatColor.GREEN + "Dem Spieler " + ChatColor.RESET + who.getDisplayName() + ChatColor.GREEN +
+                        " wurde das Recht " + ChatColor.DARK_GREEN + args[2].toUpperCase() + ChatColor.GREEN + " verwehrt";
+                sender.sendMessage(message);
+                return true;
+            } catch (IOException e) {
+                sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer!");
+                e.printStackTrace();
+                return true;
+            }
 
         }
-
         return false;
     }
 }
