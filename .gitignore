@@ -1,2 +1,7 @@
 target/
 .idea/
+pom.xml
+.project
+.classpath
+.settings
+.vscode

@@ -1,6 +1,5 @@
 package io.github.itscryne.zone2;
 
-import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import io.github.itscryne.zone2.commands.Zone2CreateServerZoneCommand;
 import io.github.itscryne.zone2.commands.Zone2CreateZoneCommand;
 import io.github.itscryne.zone2.commands.Zone2MyZonesCommandExecutor;
@@ -19,8 +18,7 @@ import java.io.Serializable;
  * @version 1.0-SNAPSHOT
  */
 public final class Zone2 extends JavaPlugin implements Serializable {
-
-    public Zone2(){
+    public Zone2() {
         super();
     }
 

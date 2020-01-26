@@ -162,7 +162,6 @@ public class Zone2PermissionCommand implements CommandExecutor {
 
         } else if (args[0].equalsIgnoreCase("delete")){
             PermissionType permType = PermissionType.valueOf(args[2].toUpperCase());
-            Permission perm = new Permission(who, permType);
 
             ConfigReader reader;
             ConfigWriter writer;
