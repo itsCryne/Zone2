@@ -4,6 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+
+import org.bukkit.Location;
+
 import io.github.itscryne.zone2.Zone2;
 import io.github.itscryne.zone2.spaces.PlayerZone;
 import io.github.itscryne.zone2.spaces.ServerZone;
@@ -89,7 +92,16 @@ public class ConfigReader {
 
         Type playerZoneListType = new TypeToken<List<PlayerZone>>() {
         }.getType();
-        return gson.fromJson(playerZoneListReader, playerZoneListType);
+
+        List<PlayerZone> pzl = gson.fromJson(playerZoneListReader, playerZoneListType);
+        for (int i = 0; i < pzl.size(); i++) {
+            PlayerZone j = pzl.get(i);
+            j.setL1(Location.deserialize(j.getSerL1()));
+            j.setL2(Location.deserialize(j.getSerL2()));
+            pzl.set(i, j);
+        }
+
+        return pzl;
     }
 
     /**
@@ -103,6 +115,15 @@ public class ConfigReader {
 
         Type serverZoneListType = new TypeToken<List<ServerZone>>() {
         }.getType();
-        return gson.fromJson(serverZoneListReader, serverZoneListType);
+
+        List<ServerZone> szl = gson.fromJson(serverZoneListReader, serverZoneListType);
+        for (int i = 0; i < szl.size(); i++) {
+            ServerZone j = szl.get(i);
+            j.setL1(Location.deserialize(j.getSerL1()));
+            j.setL2(Location.deserialize(j.getSerL2()));
+            szl.set(i, j);
+        }
+        
+        return szl;
     }
 }
