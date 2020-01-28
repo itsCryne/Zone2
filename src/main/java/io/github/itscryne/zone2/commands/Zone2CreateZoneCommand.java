@@ -1,9 +1,10 @@
 package io.github.itscryne.zone2.commands;
 
-import io.github.itscryne.zone2.Zone2;
-import io.github.itscryne.zone2.config.ConfigWriter;
-import io.github.itscryne.zone2.perms.Permission;
-import io.github.itscryne.zone2.spaces.PlayerZone;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -12,10 +13,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import io.github.itscryne.zone2.Zone2;
+import io.github.itscryne.zone2.config.ConfigWriter;
+import io.github.itscryne.zone2.perms.Permission;
+import io.github.itscryne.zone2.spaces.PlayerZone;
 
 public class Zone2CreateZoneCommand implements CommandExecutor {
     private Zone2 plugin;
@@ -35,6 +36,7 @@ public class Zone2CreateZoneCommand implements CommandExecutor {
      * @param args    Passed command arguments
      * @return true if a valid command, otherwise false
      */
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)){
@@ -42,20 +44,18 @@ public class Zone2CreateZoneCommand implements CommandExecutor {
             return true;
         }
 
-        if (args.length != 4) { return false; }
+        if (args.length != 4) return false;
 
-        Integer hx = null;
-        Integer lx = null;
-        Integer hy = null;
-        Integer ly = null;
-        Integer hz = null;
-        Integer lz = null;
+        int hx = 0;
+        int lx = 0;
+        int hy = 256;
+        int ly = 0;
+        int hz = 0;
+        int lz = 0;
 
         try{
             hx = Integer.parseInt(args[0]);
             lx = Integer.parseInt(args[1]);
-            hy = 256;
-            ly = 0;
             hz = Integer.parseInt(args[2]);
             lz = Integer.parseInt(args[3]);
         } catch (NumberFormatException e){
@@ -74,10 +74,12 @@ public class Zone2CreateZoneCommand implements CommandExecutor {
             sender.sendMessage(ChatColor.YELLOW + "Eine Zone muss in alle Richtungen mindestens 20 Blöcke lang sein");
         }
 
-        /*if (hx.equals(lx) || hz.equals(lz)){
+        /*
+        if (hx.equals(lx) || hz.equals(lz)){
             sender.sendMessage(ChatColor.YELLOW + "Eine Zone muss in alle Richtungen mindestens zwei Blöcke lang sein");
             return true;
-        }*/
+        }
+        */
 
         World w = Bukkit.getWorld("world"); //TODO Welt in Config
 
@@ -87,6 +89,7 @@ public class Zone2CreateZoneCommand implements CommandExecutor {
             this.plugin.getLogger().severe("Die Standardwelt wurde nicht gefunden!");
             return true;
         }
+
 
         int priority = 1;
         int id = 0;
@@ -99,11 +102,10 @@ public class Zone2CreateZoneCommand implements CommandExecutor {
             return true;
         }
 
-        String name = sender.getName();
+
+        String name = ((Player) sender).getName();
         UUID uuid = ((Player)sender).getUniqueId();
-
         List<Permission> perms = new ArrayList<>();
-
         PlayerZone pz = new PlayerZone(hx, lx, hy, ly, hz, lz, w, priority, id, name, uuid, perms);
 
         try {
