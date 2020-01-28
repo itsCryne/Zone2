@@ -11,9 +11,9 @@ import org.bukkit.event.block.BlockBreakEvent;
 import io.github.itscryne.zone2.Zone2;
 import io.github.itscryne.zone2.perms.PermissionType;
 
-public class Zone2BreakTypeEvent implements Listener {
+public class Zone2DestroyTypeEvent implements Listener {
     private Zone2 plugin;
-    public Zone2BreakTypeEvent(Zone2 plugin){
+    public Zone2DestroyTypeEvent(Zone2 plugin){
         this.plugin = plugin;
     }
 
