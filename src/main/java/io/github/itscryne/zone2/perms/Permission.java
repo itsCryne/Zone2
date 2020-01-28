@@ -24,6 +24,23 @@ public class Permission implements Serializable {
         this.perm = perm;
     }
 
+    public boolean equals(Object obj){
+        if (this == obj){
+            return true;
+        }
+        if ((obj == null) || (obj.getClass() != this.getClass())) {
+            return false;
+        }
+
+        Permission permObj = (Permission) obj;
+
+        boolean uuidEquals = this.getPlayerUuid().equals(permObj.getPlayerUuid());
+        boolean playerEquals = this.getP().equals(permObj.getP());
+        boolean permissionTypeEquals = this.getPerm().equals(permObj.getPerm());
+
+        return uuidEquals && playerEquals && permissionTypeEquals;
+    }
+
     /**
      * @return Type of the permission
      */
