@@ -4,7 +4,7 @@ import io.github.itscryne.zone2.commands.Zone2CreateServerZoneCommand;
 import io.github.itscryne.zone2.commands.Zone2CreateZoneCommand;
 import io.github.itscryne.zone2.commands.Zone2MyZonesCommandExecutor;
 import io.github.itscryne.zone2.commands.Zone2PermissionCommand;
-import io.github.itscryne.zone2.events.Zone2EventListener;
+import io.github.itscryne.zone2.events.Zone2BreakTypeEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -38,7 +38,7 @@ public final class Zone2 extends JavaPlugin implements Serializable {
         this.getCommand("permission").setExecutor(new Zone2PermissionCommand(this));
         this.getCommand("myzones").setExecutor(new Zone2MyZonesCommandExecutor(this));
 
-        Bukkit.getPluginManager().registerEvents(new Zone2EventListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new Zone2BreakTypeEvent(this), this);
 
     }
 
