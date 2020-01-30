@@ -59,13 +59,7 @@ public class TestZone2 {
 
         String serverZoneString = gson.toJson(szl.get(0));
         String sCorrect = "{\"name\":\"Cryne\",\"priority\":1,\"id\":0,\"serL1\":{\"world\":\"world\",\"x\":10.0,\"y\":255.0,\"z\":10.0,\"pitch\":0.0,\"yaw\":0.0},\"serL2\":{\"world\":\"world\",\"x\":-10.0,\"y\":1.0,\"z\":-10.0,\"pitch\":0.0,\"yaw\":0.0}}";
-        
-        System.out.println(serverZoneString);
 
         assert serverZoneString.equals(sCorrect);
-    }
-
-    @Test
-    public void testServerZoneCreation() throws IOException {
     }
 }
