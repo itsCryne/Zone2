@@ -6,5 +6,5 @@ import java.io.Serializable;
  * @serial JSON
  */
 public enum PermissionType implements Serializable {
-    BREAK, PLACE, REDSTONE, DOORS, CONTAINER, ADMINISTRATE
+    DESTROY, BUILD, REDSTONE, DOORS, INVENTORY, ENTITY, TRANSPORT, MANAGE
 }
