@@ -93,7 +93,7 @@ public class Area implements Serializable {
         boolean worldsMatch = l.getWorld().equals(this.getL1().getWorld());
         boolean xContain = l.getBlockX() < this.l1.getBlockX() && l.getBlockX() > this.l2.getBlockX();
         boolean yContain = l.getBlockY() < this.l1.getBlockY() && l.getBlockY() > this.l2.getBlockY();
-        boolean zContain = l.getBlockX() < this.l1.getBlockX() && l.getBlockX() > this.l2.getBlockX();
+        boolean zContain = l.getBlockZ() < this.l1.getBlockZ() && l.getBlockZ() > this.l2.getBlockZ();
 
         return xContain && yContain && zContain && worldsMatch;
     }
