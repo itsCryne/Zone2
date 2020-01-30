@@ -115,7 +115,7 @@ public class Zone2PermissionCommand implements CommandExecutor {
                 return true;
             }
 
-            Permission zoneAdmin = new Permission((Player) sender, PermissionType.ADMINISTRATE);
+            Permission zoneAdmin = new Permission((Player) sender, PermissionType.MANAGE);
 
             if (!zone.getPlayerUuid().equals(((Player) sender).getUniqueId())) {
                 if (!zone.getPerms().contains(zoneAdmin)) {
@@ -201,7 +201,7 @@ public class Zone2PermissionCommand implements CommandExecutor {
                 return true;
             }
 
-            Permission zoneAdmin = new Permission((Player) sender, PermissionType.ADMINISTRATE);
+            Permission zoneAdmin = new Permission((Player) sender, PermissionType.MANAGE);
 
             if (!zone.getPlayerUuid().equals(((Player) sender).getUniqueId())) {
                 if (!zone.getPerms().contains(zoneAdmin)) {
