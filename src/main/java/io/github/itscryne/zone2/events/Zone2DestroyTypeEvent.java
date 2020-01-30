@@ -27,7 +27,7 @@ public class Zone2DestroyTypeEvent implements Listener {
         Location eventLocation = event.getBlock().getLocation();
         Player eventPlayer = event.getPlayer();
 
-        boolean allowed = Zone2PermCheck.isAllowed(eventLocation, eventPlayer, PermissionType.BREAK, this.plugin);
+        boolean allowed = Zone2PermCheck.isAllowed(eventLocation, eventPlayer, PermissionType.DESTROY, this.plugin);
         this.plugin.getLogger().info(String.valueOf(allowed));
     }
 
@@ -40,7 +40,7 @@ public class Zone2DestroyTypeEvent implements Listener {
 
         Player eventPlayer = (Player) event.getRemover();
 
-        boolean allowed = Zone2PermCheck.isAllowed(eventLocation, eventPlayer, PermissionType.BREAK, this.plugin);
+        boolean allowed = Zone2PermCheck.isAllowed(eventLocation, eventPlayer, PermissionType.DESTROY, this.plugin);
         this.plugin.getLogger().info(String.valueOf(allowed));
     }
 
@@ -56,7 +56,7 @@ public class Zone2DestroyTypeEvent implements Listener {
             return;
         }
 
-        boolean allowed = Zone2PermCheck.isAllowed(eventLocation, eventPlayer, PermissionType.BREAK, this.plugin);
+        boolean allowed = Zone2PermCheck.isAllowed(eventLocation, eventPlayer, PermissionType.DESTROY, this.plugin);
         this.plugin.getLogger().info(String.valueOf(allowed));
     }
 
@@ -65,7 +65,7 @@ public class Zone2DestroyTypeEvent implements Listener {
         Location eventLocation = event.getBlock().getLocation();
         Player eventPlayer = event.getPlayer();
 
-        boolean allowed = Zone2PermCheck.isAllowed(eventLocation, eventPlayer, PermissionType.BREAK, this.plugin);
+        boolean allowed = Zone2PermCheck.isAllowed(eventLocation, eventPlayer, PermissionType.DESTROY, this.plugin);
         this.plugin.getLogger().info(String.valueOf(allowed));
     }
 }
