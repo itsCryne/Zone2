@@ -94,6 +94,11 @@ public class ConfigReader {
         }.getType();
 
         List<PlayerZone> pzl = gson.fromJson(playerZoneListReader, playerZoneListType);
+
+        if (pzl == null){
+            pzl = new ArrayList<PlayerZone>();
+        }
+
         for (int i = 0; i < pzl.size(); i++) {
             PlayerZone j = pzl.get(i);
             j.setL1(Location.deserialize(j.getSerL1()));
