@@ -33,12 +33,12 @@ public class Zone2TransportTypeEvent implements Listener {
      }
 
      @EventHandler
-     public void onEntityMount (EntityMountEvent event) throws IOException {
-         Location eventLocation = event.getEntity().getLocation();
+     public void onEntityMount (EntityMountEvent event) throws IOException { //Transport or Entity
+         Location eventLocation = event.getMount().getLocation();
 
-         if (!(event.getMount() instanceof Player)) return;
+         if (!(event.getEntity() instanceof Player)) return;
 
-         Player eventPlayer = (Player) event.getMount();
+         Player eventPlayer = (Player) event.getEntity();
 
          boolean allowed = Zone2PermCheck.isAllowed(eventLocation, eventPlayer, PermissionType.TRANSPORT, this.plugin);
          this.plugin.getLogger().info(String.valueOf(allowed));
