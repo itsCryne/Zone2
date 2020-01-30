@@ -17,33 +17,45 @@ import java.util.List;
 
 public class Zone2PermCheck {
     protected static boolean inPlayerZone(Location l, Zone2 plugin) throws FileNotFoundException, IOException {
-        boolean inPlayerZone = false;
-        List<PlayerZone> playerZoneList = new ArrayList<>();
-
         for (PlayerZone i : ConfigReader.getInstance(plugin).getPlayerZoneList()){
             if (i.contains(l)){
-                playerZoneList.add(i);
-                inPlayerZone = true;
+                return true;
             }
         }
-        return inPlayerZone;
+        return false;
     }
 
     protected static boolean inServerZone(Location l, Zone2 plugin) throws FileNotFoundException, IOException {
-        boolean inServerZone = false;
-        List<ServerZone> serverZoneList = new ArrayList<>();
-
         for (ServerZone i : ConfigReader.getInstance(plugin).getServerZoneList()){
             if (i.contains(l)){
-                serverZoneList.add(i);
-                inServerZone = true;
+                return true;
             }
         }
-        return inServerZone;
+        return false;
     }
 
     protected static boolean inZone(Location l, Zone2 plugin) throws FileNotFoundException, IOException {
         return inPlayerZone(l, plugin) || inServerZone(l, plugin);
+    }
+
+    protected static List<ServerZone> getServerZonesOfLocation(Location l, Zone2 plugin) throws FileNotFoundException, IOException {
+        List<ServerZone> serverZoneList = new ArrayList<>();
+        for(ServerZone i : ConfigReader.getInstance(plugin).getServerZoneList()){
+            if (i.contains(l)){
+                serverZoneList.add(i);
+            }
+        }
+        return serverZoneList;
+    }
+
+    protected static List<PlayerZone> getPlayerZonesOfLocation(Location l, Zone2 plugin) throws FileNotFoundException, IOException {
+        List<PlayerZone> playerZoneList = new ArrayList<>();
+        for(PlayerZone i : ConfigReader.getInstance(plugin).getPlayerZoneList()){
+            if (i.contains(l)){
+                playerZoneList.add(i);
+            }
+        }
+        return playerZoneList;
     }
 
     /**
@@ -60,8 +72,8 @@ public class Zone2PermCheck {
         boolean inServerZone = inServerZone(l, plugin);
         boolean inZone = inZone(l, plugin);
 
-        List<PlayerZone> playerZoneList = new ArrayList<>();
-        List<ServerZone> serverZoneList = new ArrayList<>();
+        List<PlayerZone> playerZoneList = getPlayerZonesOfLocation(l, plugin);
+        List<ServerZone> serverZoneList = getServerZonesOfLocation(l, plugin);
 
         if (!inZone){
             return p.hasPermission("Zone2.modifyNoZone");
