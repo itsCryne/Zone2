@@ -95,7 +95,7 @@ public class ConfigWriter {
         try {
             gson.toJson(playerZoneList, fw);
         } catch (StackOverflowError e) {
-            System.out.println("ERWISCHT!");
+            throw e;
         }
         fw.flush();
         fw.close();
