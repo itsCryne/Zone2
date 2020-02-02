@@ -22,6 +22,10 @@ public class Zonecation extends Location {
         super(world, x, y, z, yaw, pitch);
     }
 
+    public Zonecation(Location l){
+        super(l.getWorld(), l.getX(), l.getY(), l.getZ(), l.getYaw(), l.getPitch());
+    }
+
     public boolean inPlayerZone() throws FileNotFoundException, IOException {
         for (PlayerZone i : ConfigReader.getInstance(Zone2.getPlugin()).getPlayerZoneList()){
             if (i.contains(this)){

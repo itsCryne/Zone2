@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.craftbukkit.v1_14_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
+import org.bukkit.entity.Player;
 
 import io.github.itscryne.zone2.perms.Permission;
 import io.github.itscryne.zone2.perms.PermissionType;
@@ -17,6 +18,10 @@ public class Zoneler extends CraftPlayer {
 
     public Zoneler(CraftServer server, EntityPlayer entity) {
         super(server, entity);
+    }
+
+    public Zoneler(Player p){
+        super((CraftServer) p.getServer(), (EntityPlayer) p); //Does this work?
     }
 
         /**

@@ -28,7 +28,6 @@ public class TestZone2 {
         this.plugin = (Zone2) MockBukkit.load(Zone2.class);
         this.cryne = this.server.addPlayer("Cryne");
         this.cryne.setOp(true);
-        this.paddi = this.server.addPlayer("Paddi");
     }
 
     @After

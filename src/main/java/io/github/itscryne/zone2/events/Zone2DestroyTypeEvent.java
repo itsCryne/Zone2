@@ -22,8 +22,8 @@ public class Zone2DestroyTypeEvent implements Listener {
 
     @EventHandler
     public void onBlockBreak (BlockBreakEvent event) throws IOException {
-        Zonecation eventLocation = (Zonecation) event.getBlock().getLocation();
-        Zoneler eventPlayer = (Zoneler) event.getPlayer();
+        Zonecation eventLocation = new Zonecation(event.getBlock().getLocation());
+        Zoneler eventPlayer = new Zoneler(event.getPlayer());
 
         boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.DESTROY);
         Zone2.getPlugin().getLogger().info(String.valueOf(allowed));
@@ -31,12 +31,12 @@ public class Zone2DestroyTypeEvent implements Listener {
 
     @EventHandler
     public void onHangingBreakByEntity (HangingBreakByEntityEvent event) throws IOException {
-        Zonecation eventLocation = (Zonecation) event.getEntity().getLocation();
+        Zonecation eventLocation = new Zonecation(event.getEntity().getLocation());
         if (!(event.getRemover() instanceof Player)){
             return;
         }
 
-        Zoneler eventPlayer = (Zoneler) event.getRemover();
+        Zoneler eventPlayer = new Zoneler((Player)event.getRemover());
 
         boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.DESTROY);
         Zone2.getPlugin().getLogger().info(String.valueOf(allowed));
@@ -46,8 +46,8 @@ public class Zone2DestroyTypeEvent implements Listener {
     public void onPlayerInteract (PlayerInteractEvent event) throws IOException { //TODO: Only Farmland so far, are there other things?
         if (event.getClickedBlock() == null) return;
 
-        Zonecation eventLocation = (Zonecation) event.getClickedBlock().getLocation();
-        Zoneler eventPlayer = (Zoneler) event.getPlayer();
+        Zonecation eventLocation = new Zonecation(event.getClickedBlock().getLocation());
+        Zoneler eventPlayer = new Zoneler(event.getPlayer());
         Action action = event.getAction();
 
         if (!(action.equals(Action.PHYSICAL) && eventLocation.getBlock().getType().equals(Material.FARMLAND))){
@@ -60,8 +60,8 @@ public class Zone2DestroyTypeEvent implements Listener {
 
     @EventHandler
     public void onPlayerBucketFill (PlayerBucketFillEvent event) throws IOException {
-        Zonecation eventLocation = (Zonecation) event.getBlock().getLocation();
-        Zoneler eventPlayer = (Zoneler) event.getPlayer();
+        Zonecation eventLocation = new Zonecation(event.getBlock().getLocation());
+        Zoneler eventPlayer = new Zoneler(event.getPlayer());
 
         boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.DESTROY);
         Zone2.getPlugin().getLogger().info(String.valueOf(allowed));

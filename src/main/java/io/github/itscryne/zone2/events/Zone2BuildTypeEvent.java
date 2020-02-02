@@ -23,8 +23,8 @@ public class Zone2BuildTypeEvent implements Listener {
 
     @EventHandler
     public void onBlockPlace (BlockPlaceEvent event) throws IOException {
-        Zonecation eventLocation = (Zonecation) event.getBlock().getLocation();
-        Zoneler eventPlayer = (Zoneler) event.getPlayer();
+        Zonecation eventLocation = new Zonecation(event.getBlock().getLocation());
+        Zoneler eventPlayer = new Zoneler(event.getPlayer());
 
         boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.BUILD);
         Zone2.getPlugin().getLogger().info(String.valueOf(allowed));
@@ -32,8 +32,8 @@ public class Zone2BuildTypeEvent implements Listener {
 
     @EventHandler
     public void onPlayerBucketFill (PlayerBucketFillEvent event) throws IOException {
-        Zonecation eventLocation = (Zonecation) event.getBlock().getLocation();
-        Zoneler eventPlayer = (Zoneler) event.getPlayer();
+        Zonecation eventLocation = new Zonecation(event.getBlock().getLocation());
+        Zoneler eventPlayer = new Zoneler(event.getPlayer());
 
         boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.BUILD);
         Zone2.getPlugin().getLogger().info(String.valueOf(allowed));
@@ -54,8 +54,8 @@ public class Zone2BuildTypeEvent implements Listener {
         if(event.getItem() == null) return;
         if(!hoes.contains(event.getItem().getType())) return;
 
-        Zonecation eventLocation = (Zonecation) event.getClickedBlock().getLocation();
-        Zoneler eventPlayer = (Zoneler) event.getPlayer();
+        Zonecation eventLocation = new Zonecation(event.getClickedBlock().getLocation());
+        Zoneler eventPlayer = new Zoneler(event.getPlayer());
 
         boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.BUILD);
         Zone2.getPlugin().getLogger().info(String.valueOf(allowed));

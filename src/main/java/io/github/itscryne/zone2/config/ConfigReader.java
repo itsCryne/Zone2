@@ -36,8 +36,7 @@ public class ConfigReader {
         this.playerZonesFile = new File(dataDir.getAbsolutePath().concat(File.separator).concat("playerZones.json"));
         playerZonesFile.createNewFile();
         if (playerZonesFile.length() == 0) { //writing empty List<PlayerZone> to JSON file so we can access it later
-            Type playerZoneListType = new TypeToken<List<PlayerZone>>() {
-            }.getType();
+            Type playerZoneListType = new TypeToken<List<PlayerZone>>() {}.getType();
             List<PlayerZone> playerZoneList = new ArrayList<>();
 
             Gson gson = new Gson();
@@ -100,8 +99,8 @@ public class ConfigReader {
 
         for (int i = 0; i < pzl.size(); i++) {
             PlayerZone j = pzl.get(i);
-            j.setL1((Zonecation) Zonecation.deserialize(j.getSerL1()));
-            j.setL2((Zonecation) Zonecation.deserialize(j.getSerL2()));
+            j.setL1(new Zonecation(Zonecation.deserialize(j.getSerL1())));
+            j.setL2(new Zonecation( Zonecation.deserialize(j.getSerL2())));
             pzl.set(i, j);
         }
 
@@ -123,8 +122,8 @@ public class ConfigReader {
         List<ServerZone> szl = gson.fromJson(serverZoneListReader, serverZoneListType);
         for (int i = 0; i < szl.size(); i++) {
             ServerZone j = szl.get(i);
-            j.setL1((Zonecation) Zonecation.deserialize(j.getSerL1()));
-            j.setL2((Zonecation) Zonecation.deserialize(j.getSerL2()));
+            j.setL1(new Zonecation(Zonecation.deserialize(j.getSerL1())));
+            j.setL2(new Zonecation( Zonecation.deserialize(j.getSerL2())));
             szl.set(i, j);
         }
         

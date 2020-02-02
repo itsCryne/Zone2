@@ -53,8 +53,8 @@ public class Zone2RedstoneTypeEvent implements Listener {
             }
         }
 
-        Zonecation eventLocation = (Zonecation) event.getClickedBlock().getLocation();
-        Zoneler eventPlayer = (Zoneler) event.getPlayer();
+        Zonecation eventLocation = new Zonecation(event.getClickedBlock().getLocation());
+        Zoneler eventPlayer = new Zoneler(event.getPlayer());
 
         boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.REDSTONE);
         Zone2.getPlugin().getLogger().info(String.valueOf(allowed));

@@ -35,6 +35,7 @@ public class Zone2PermissionCommand implements CommandExecutor {
      * @return true if a valid command, otherwise false
      */
     @Override
+    @SuppressWarnings("deprecation")
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) { //add|remove who what id
         if (args.length != 4) {
             return false;

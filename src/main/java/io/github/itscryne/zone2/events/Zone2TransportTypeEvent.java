@@ -30,12 +30,12 @@ public class Zone2TransportTypeEvent implements Listener {
             }
         }
 
-        Zonecation eventLocation = (Zonecation) event.getTo();
+        Zonecation eventLocation = new Zonecation(event.getTo());
 
         if (!eventLocation.inZone())
             return;
 
-        Zoneler eventPlayer = (Zoneler) event.getPlayer();
+        Zoneler eventPlayer = new Zoneler(event.getPlayer());
 
         boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.TRANSPORT);
         Zone2.getPlugin().getLogger().info(String.valueOf(allowed));
@@ -72,8 +72,8 @@ public class Zone2TransportTypeEvent implements Listener {
 
         if(event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getClickedBlock().getLocation() == null || !vehicles.contains(event.getClickedBlock().getType())) return;
 
-        Zoneler eventPlayer = (Zoneler) event.getPlayer();
-        Zonecation eventLocation = (Zonecation) event.getClickedBlock().getLocation();
+        Zoneler eventPlayer = new Zoneler(event.getPlayer());
+        Zonecation eventLocation = new Zonecation(event.getClickedBlock().getLocation());
 
         boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.TRANSPORT);
         Zone2.getPlugin().getLogger().info(String.valueOf(allowed));

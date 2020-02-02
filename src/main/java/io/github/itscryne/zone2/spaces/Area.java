@@ -77,10 +77,10 @@ public class Area implements Serializable {
      */
     public boolean contains(Zonecation l) {
         if (this.l1 == null) {
-            this.l1 = (Zonecation) Zonecation.deserialize(serL1);
+            this.l1 = new Zonecation(Zonecation.deserialize(serL1));
         }
         if (this.l2 == null) {
-            this.l2 = (Zonecation) Zonecation.deserialize(serL2);
+            this.l2 = new Zonecation(Zonecation.deserialize(serL2));
         }
 
         boolean worldsMatch = l.getWorld().equals(this.getL1().getWorld());

@@ -45,8 +45,8 @@ public class Zone2DoorsTypeEvent implements Listener {
 
         if(!(doors.contains(event.getClickedBlock().getType()))) return;
 
-        Zonecation eventLocation = (Zonecation) event.getClickedBlock().getLocation();
-        Zoneler eventPlayer = (Zoneler) event.getPlayer();
+        Zonecation eventLocation = new Zonecation(event.getClickedBlock().getLocation());
+        Zoneler eventPlayer = new Zoneler(event.getPlayer());
 
         boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.DOORS);
         Zone2.getPlugin().getLogger().info(String.valueOf(allowed));
