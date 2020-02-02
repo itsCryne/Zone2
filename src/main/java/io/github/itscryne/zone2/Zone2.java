@@ -25,6 +25,8 @@ import java.io.Serializable;
  * @version 1.0-SNAPSHOT
  */
 public final class Zone2 extends JavaPlugin implements Serializable {
+    private static Zone2 plugin;
+
     public Zone2() {
         super();
     }
@@ -34,24 +36,29 @@ public final class Zone2 extends JavaPlugin implements Serializable {
         super(loader, description, dataFolder, file);
     }
 
+    public static Zone2 getPlugin(){
+        return plugin;
+    }
+
     /**
      * Called when this plugin is enabled
      */
     @Override
     public void onEnable() {
+        plugin = this;
         // Plugin startup logic
-        this.getCommand("createzone").setExecutor(new Zone2CreateZoneCommand(this));
-        this.getCommand("createserverzone").setExecutor(new Zone2CreateServerZoneCommand(this));
-        this.getCommand("permission").setExecutor(new Zone2PermissionCommand(this));
-        this.getCommand("myzones").setExecutor(new Zone2MyZonesCommandExecutor(this));
+        this.getCommand("createzone").setExecutor(new Zone2CreateZoneCommand());
+        this.getCommand("createserverzone").setExecutor(new Zone2CreateServerZoneCommand());
+        this.getCommand("permission").setExecutor(new Zone2PermissionCommand());
+        this.getCommand("myzones").setExecutor(new Zone2MyZonesCommandExecutor());
 
-        Bukkit.getPluginManager().registerEvents(new Zone2DestroyTypeEvent(this), this);
-        Bukkit.getPluginManager().registerEvents(new Zone2BuildTypeEvent(this), this);
-        Bukkit.getPluginManager().registerEvents(new Zone2DoorsTypeEvent(this), this);
-        Bukkit.getPluginManager().registerEvents(new Zone2EntityTypeEvent(this), this);
-        Bukkit.getPluginManager().registerEvents(new Zone2InventoryTypeEvent(this), this);
-        Bukkit.getPluginManager().registerEvents(new Zone2RedstoneTypeEvent(this), this);
-        Bukkit.getPluginManager().registerEvents(new Zone2TransportTypeEvent(this), this);
+        Bukkit.getPluginManager().registerEvents(new Zone2DestroyTypeEvent(), this);
+        Bukkit.getPluginManager().registerEvents(new Zone2BuildTypeEvent(), this);
+        Bukkit.getPluginManager().registerEvents(new Zone2DoorsTypeEvent(), this);
+        Bukkit.getPluginManager().registerEvents(new Zone2EntityTypeEvent(), this);
+        Bukkit.getPluginManager().registerEvents(new Zone2InventoryTypeEvent(), this);
+        Bukkit.getPluginManager().registerEvents(new Zone2RedstoneTypeEvent(), this);
+        Bukkit.getPluginManager().registerEvents(new Zone2TransportTypeEvent(), this);
 
     }
 

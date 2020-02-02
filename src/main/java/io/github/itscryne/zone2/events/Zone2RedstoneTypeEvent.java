@@ -5,9 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -15,12 +13,11 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import io.github.itscryne.zone2.Zone2;
 import io.github.itscryne.zone2.perms.PermissionType;
+import io.github.itscryne.zone2.extensions.Zonecation;
+import io.github.itscryne.zone2.extensions.Zoneler;
 
 public class Zone2RedstoneTypeEvent implements Listener {
-    private Zone2 plugin;
-    public Zone2RedstoneTypeEvent(Zone2 plugin){
-        this.plugin = plugin;
-    }
+    public Zone2RedstoneTypeEvent(){}
 
     @EventHandler
     public void onPlayerInteract (PlayerInteractEvent event) throws IOException {
@@ -56,10 +53,10 @@ public class Zone2RedstoneTypeEvent implements Listener {
             }
         }
 
-        Location eventLocation = event.getClickedBlock().getLocation();
-        Player eventPlayer = event.getPlayer();
+        Zonecation eventLocation = (Zonecation) event.getClickedBlock().getLocation();
+        Zoneler eventPlayer = (Zoneler) event.getPlayer();
 
-        boolean allowed = Zone2PermCheck.isAllowed(eventLocation, eventPlayer, PermissionType.REDSTONE, this.plugin);
-        this.plugin.getLogger().info(String.valueOf(allowed));
+        boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.REDSTONE);
+        Zone2.getPlugin().getLogger().info(String.valueOf(allowed));
     }
 }

@@ -2,7 +2,6 @@ package io.github.itscryne.zone2.spaces;
 
 import io.github.itscryne.zone2.config.ConfigReader;
 import io.github.itscryne.zone2.Zone2;
-import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.io.IOException;
@@ -11,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import io.github.itscryne.zone2.extensions.Zonecation;
 /**
  * @serial JSON
  */
@@ -18,14 +18,14 @@ public class ServerZone extends Zone implements Serializable {
     private String name;
 
     /**
-     * Constructor for locations
-     * @param l1       First Location (higher coordinates)
-     * @param l2       Second Location (lower coordinates)
+     * Constructor for Zonecations
+     * @param l1       First Zonecation (higher coordinates)
+     * @param l2       Second Zonecation (lower coordinates)
      * @param priority Priority of the Zone
      * @param id       ID of the Zone
      * @param name     Name of the Zone
      */
-    public ServerZone(Location l1, Location l2, int priority, int id, String name) {
+    public ServerZone(Zonecation l1, Zonecation l2, int priority, int id, String name) {
         super(l1, l2, priority, id);
         this.name = name;
     }
@@ -63,8 +63,8 @@ public class ServerZone extends Zone implements Serializable {
         if (playerZoneList != null) {
             if (!playerZoneList.isEmpty()) {
                 for (PlayerZone i : playerZoneList) {
-                    i.setL1(Location.deserialize(i.getSerL1()));
-                    i.setL2(Location.deserialize(i.getSerL2()));
+                    i.setL1((Zonecation) Zonecation.deserialize(i.getSerL1()));
+                    i.setL2((Zonecation) Zonecation.deserialize(i.getSerL2()));
 
                     if ((this.getL2().getX() <= i.getL1().getX() && this.getL1().getX() >= i.getL2().getX())
                             && (this.getL2().getY() <= i.getL1().getY() && this.getL1().getY() >= i.getL2().getY())
@@ -79,8 +79,8 @@ public class ServerZone extends Zone implements Serializable {
         if (playerZoneList != null) {
             if (!playerZoneList.isEmpty()) {
                 for (ServerZone i : serverZoneList) {
-                    i.setL1(Location.deserialize(i.getSerL1()));
-                    i.setL2(Location.deserialize(i.getSerL2()));
+                    i.setL1((Zonecation) Zonecation.deserialize(i.getSerL1()));
+                    i.setL2((Zonecation) Zonecation.deserialize(i.getSerL2()));
 
                     if ((this.getL2().getX() <= i.getL1().getX() && this.getL1().getX() >= i.getL2().getX())
                             && (this.getL2().getY() <= i.getL1().getY() && this.getL1().getY() >= i.getL2().getY())

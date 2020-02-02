@@ -21,7 +21,6 @@ public class TestZone2 {
     private ServerMock server;
     private Zone2 plugin;
     private PlayerMock cryne;
-    private PlayerMock paddi;
 
     @Before
     public void setUp() {

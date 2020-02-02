@@ -1,10 +1,11 @@
 package io.github.itscryne.zone2.spaces;
 
-import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.io.Serializable;
 import java.util.List;
+
+import io.github.itscryne.zone2.extensions.Zonecation;
 
 /**
  * @serial JSON
@@ -14,12 +15,12 @@ public class Zone extends Area implements Serializable {
     private int id;
 
     /**
-     * @param l1       First Location (Higher Coordinates)
-     * @param l2       Second Location (Lower Coordinates)
+     * @param l1       First Zonecation (Higher Coordinates)
+     * @param l2       Second Zonecation (Lower Coordinates)
      * @param priority Priority of the zone
      * @param id       ID of the zone
      */
-    protected Zone(Location l1, Location l2, int priority, int id) {
+    protected Zone(Zonecation l1, Zonecation l2, int priority, int id) {
         super(l1, l2); // -> l1, l2
         this.id = id;
         this.priority = priority;

@@ -13,11 +13,8 @@ import org.bukkit.command.CommandSender;
 import java.io.IOException;
 
 public class Zone2CreateServerZoneCommand implements CommandExecutor {
-    private Zone2 plugin;
 
-    public Zone2CreateServerZoneCommand(Zone2 plugin){
-        this.plugin = plugin;
-    }
+    public Zone2CreateServerZoneCommand(){}
 
     /**
      * Executes the given command, returning its success.
@@ -79,7 +76,7 @@ public class Zone2CreateServerZoneCommand implements CommandExecutor {
 
         int id = 0;
         try {
-            id = ServerZone.getNextId(this.plugin);
+            id = ServerZone.getNextId(Zone2.getPlugin());
         } catch (IOException e) {
             e.printStackTrace();
             sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer");
@@ -92,7 +89,7 @@ public class Zone2CreateServerZoneCommand implements CommandExecutor {
         ServerZone sz = new ServerZone(hx, lx, hy, ly, hz, lz, w, priority, id, name);
 
         try {
-            ConfigWriter writer = ConfigWriter.getInstance(this.plugin);
+            ConfigWriter writer = ConfigWriter.getInstance(Zone2.getPlugin());
             writer.writeServerZone(sz);
             sender.sendMessage(ChatColor.GREEN + "Zone wurde erstellt!");
             writer.destroy();

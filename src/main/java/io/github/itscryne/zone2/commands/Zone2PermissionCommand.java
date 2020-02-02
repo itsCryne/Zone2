@@ -20,11 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Zone2PermissionCommand implements CommandExecutor {
-    Zone2 plugin;
-
-    public Zone2PermissionCommand(Zone2 plugin){
-        this.plugin = plugin;
-    }
+    public Zone2PermissionCommand(){}
 
     /**
      * Executes the given command, returning its success.
@@ -80,8 +76,8 @@ public class Zone2PermissionCommand implements CommandExecutor {
             ConfigReader reader;
             ConfigWriter writer;
             try{
-                reader = ConfigReader.getInstance(this.plugin);
-                writer = ConfigWriter.getInstance(this.plugin);
+                reader = ConfigReader.getInstance(Zone2.getPlugin());
+                writer = ConfigWriter.getInstance(Zone2.getPlugin());
             } catch (IOException e) {
                 e.printStackTrace();
                 sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer!");
@@ -140,7 +136,7 @@ public class Zone2PermissionCommand implements CommandExecutor {
             zone.setPerms(perms);
 
             try {
-                writer = ConfigWriter.getInstance(this.plugin);
+                writer = ConfigWriter.getInstance(Zone2.getPlugin());
             } catch (IOException e) {
                 sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer!");
                 e.printStackTrace();
@@ -166,8 +162,8 @@ public class Zone2PermissionCommand implements CommandExecutor {
             ConfigReader reader;
             ConfigWriter writer;
             try{
-                reader = ConfigReader.getInstance(this.plugin);
-                writer = ConfigWriter.getInstance(this.plugin);
+                reader = ConfigReader.getInstance(Zone2.getPlugin());
+                writer = ConfigWriter.getInstance(Zone2.getPlugin());
             } catch (IOException e) {
                 e.printStackTrace();
                 sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer!");
@@ -236,7 +232,7 @@ public class Zone2PermissionCommand implements CommandExecutor {
             }
 
             try {
-                writer = ConfigWriter.getInstance(this.plugin);
+                writer = ConfigWriter.getInstance(Zone2.getPlugin());
             } catch (IOException e) {
                 sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer!");
                 e.printStackTrace();

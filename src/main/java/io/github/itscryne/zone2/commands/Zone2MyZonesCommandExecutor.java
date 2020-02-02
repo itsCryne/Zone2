@@ -16,10 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Zone2MyZonesCommandExecutor implements CommandExecutor {
-    private Zone2 plugin;
-    public Zone2MyZonesCommandExecutor(Zone2 plugin){
-        this.plugin = plugin;
-    }
+    public Zone2MyZonesCommandExecutor(){}
 
     /**
      * Executes the given command, returning its success.
@@ -43,7 +40,7 @@ public class Zone2MyZonesCommandExecutor implements CommandExecutor {
         ConfigReader reader;
 
         try {
-            reader = ConfigReader.getInstance(this.plugin);
+            reader = ConfigReader.getInstance(Zone2.getPlugin());
         } catch (IOException e) {
             sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer!");
             e.printStackTrace();

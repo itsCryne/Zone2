@@ -1,17 +1,18 @@
 package io.github.itscryne.zone2.spaces;
 
-import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.io.Serializable;
 import java.util.Map;
 
+import io.github.itscryne.zone2.extensions.Zonecation;
+
 /**
  * @serial JSON
  */
 public class Area implements Serializable {
-    private transient Location l1; //upper location
-    private transient Location l2; //lower location
+    private transient Zonecation l1; //upper Location
+    private transient Zonecation l2; //lower Location
     private Map<String, Object> serL1;
     private Map<String, Object> serL2;
 
@@ -19,7 +20,7 @@ public class Area implements Serializable {
      * @param l1 First Location (higher coordinates)
      * @param l2 Second Location (lower coordinates)
      */
-    protected Area(Location l1, Location l2) {
+    protected Area(Zonecation l1, Zonecation l2) {
         this.l1 = l1;
         this.l2 = l2;
         this.serL1 = this.l1.serialize();
@@ -56,8 +57,8 @@ public class Area implements Serializable {
      * @param w  World
      */
     protected Area(int hx, int lx, int hy, int ly, int hz, int lz, World w) {
-        this.l1 = new Location(w, hx, hy, hz);
-        this.l2 = new Location(w, lx, ly, lz);
+        this.l1 = new Zonecation(w, hx, hy, hz);
+        this.l2 = new Zonecation(w, lx, ly, lz);
         this.serL1 = this.l1.serialize();
         this.serL2 = this.l2.serialize();
 
@@ -74,12 +75,12 @@ public class Area implements Serializable {
      * @param l Location to test
      * @return Wether the Zone object contains l
      */
-    public boolean contains(Location l) {
+    public boolean contains(Zonecation l) {
         if (this.l1 == null) {
-            this.l1 = Location.deserialize(serL1);
+            this.l1 = (Zonecation) Zonecation.deserialize(serL1);
         }
         if (this.l2 == null) {
-            this.l2 = Location.deserialize(serL2);
+            this.l2 = (Zonecation) Zonecation.deserialize(serL2);
         }
 
         boolean worldsMatch = l.getWorld().equals(this.getL1().getWorld());
@@ -93,22 +94,22 @@ public class Area implements Serializable {
     /**
      * @return First Location (higher coordinates)
      */
-    public Location getL1() {
+    public Zonecation getL1() {
         return this.l1;
     }
 
     /**
      *
-     * @param l1 The location to set
+     * @param l1 The Location to set
      */
-    public void setL1(Location l1) {
+    public void setL1(Zonecation l1) {
         this.l1 = l1;
     }
 
     /**
      * @return Second Location (lower coordinates)
      */
-    public Location getL2() {
+    public Zonecation getL2() {
         return this.l2;
     }
 
@@ -116,7 +117,7 @@ public class Area implements Serializable {
      *
      * @param l2 The Location to set
      */
-    public void setL2(Location l2) {
+    public void setL2(Zonecation l2) {
         this.l2 = l2;
     }
 

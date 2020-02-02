@@ -5,27 +5,22 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-import org.spigotmc.event.entity.EntityMountEvent;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
 import io.github.itscryne.zone2.Zone2;
 import io.github.itscryne.zone2.perms.PermissionType;
+import io.github.itscryne.zone2.extensions.Zonecation;
+import io.github.itscryne.zone2.extensions.Zoneler;
 
 public class Zone2TransportTypeEvent implements Listener {
-    private Zone2 plugin;
-
-    public Zone2TransportTypeEvent(Zone2 plugin) {
-        this.plugin = plugin;
-    }
+    public Zone2TransportTypeEvent(){}
 
     @EventHandler
     public void onPlayerTeleport(PlayerTeleportEvent event) throws IOException {
@@ -35,15 +30,15 @@ public class Zone2TransportTypeEvent implements Listener {
             }
         }
 
-        Location eventLocation = event.getTo();
+        Zonecation eventLocation = (Zonecation) event.getTo();
 
-        if (!Zone2PermCheck.inZone(eventLocation, this.plugin))
+        if (!eventLocation.inZone())
             return;
 
-        Player eventPlayer = event.getPlayer();
+        Zoneler eventPlayer = (Zoneler) event.getPlayer();
 
-        boolean allowed = Zone2PermCheck.isAllowed(eventLocation, eventPlayer, PermissionType.TRANSPORT, this.plugin);
-        this.plugin.getLogger().info(String.valueOf(allowed));
+        boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.TRANSPORT);
+        Zone2.getPlugin().getLogger().info(String.valueOf(allowed));
     }
 
     /*
@@ -56,8 +51,8 @@ public class Zone2TransportTypeEvent implements Listener {
      * Player eventPlayer = (Player) event.getEntity();
      * 
      * boolean allowed = Zone2PermCheck.isAllowed(eventLocation, eventPlayer,
-     * PermissionType.TRANSPORT, this.plugin);
-     * this.plugin.getLogger().info(String.valueOf(allowed)); }
+     * PermissionType.TRANSPORT, Zone2.getPlugin());
+     * Zone2.getPlugin().getLogger().info(String.valueOf(allowed)); }
      */
 
     @EventHandler
@@ -77,10 +72,10 @@ public class Zone2TransportTypeEvent implements Listener {
 
         if(event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getClickedBlock().getLocation() == null || !vehicles.contains(event.getClickedBlock().getType())) return;
 
-        Player eventPlayer = event.getPlayer();
-        Location eventLocation = event.getClickedBlock().getLocation();
+        Zoneler eventPlayer = (Zoneler) event.getPlayer();
+        Zonecation eventLocation = (Zonecation) event.getClickedBlock().getLocation();
 
-        boolean allowed = Zone2PermCheck.isAllowed(eventLocation, eventPlayer, PermissionType.TRANSPORT, this.plugin);
-        this.plugin.getLogger().info(String.valueOf(allowed));
+        boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.TRANSPORT);
+        Zone2.getPlugin().getLogger().info(String.valueOf(allowed));
      }
 }

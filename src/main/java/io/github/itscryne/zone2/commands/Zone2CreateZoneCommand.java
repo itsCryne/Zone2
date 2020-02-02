@@ -19,11 +19,7 @@ import io.github.itscryne.zone2.perms.Permission;
 import io.github.itscryne.zone2.spaces.PlayerZone;
 
 public class Zone2CreateZoneCommand implements CommandExecutor {
-    private Zone2 plugin;
-
-    public Zone2CreateZoneCommand(Zone2 plugin){
-        this.plugin = plugin;
-    }
+    public Zone2CreateZoneCommand(){}
     /**
      * Executes the given command, returning its success.
      * <br>
@@ -86,7 +82,7 @@ public class Zone2CreateZoneCommand implements CommandExecutor {
         if (w == null){
             sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer");
             sender.sendMessage(ChatColor.RED + "Zone konnte nicht erstellt werden");
-            this.plugin.getLogger().severe("Die Standardwelt wurde nicht gefunden!");
+            Zone2.getPlugin().getLogger().severe("Die Standardwelt wurde nicht gefunden!");
             return true;
         }
 
@@ -94,7 +90,7 @@ public class Zone2CreateZoneCommand implements CommandExecutor {
         int priority = 1;
         int id = 0;
         try {
-            id = PlayerZone.getNextId(this.plugin);
+            id = PlayerZone.getNextId(Zone2.getPlugin());
         } catch (IOException e) {
             e.printStackTrace();
             sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer");
@@ -109,8 +105,8 @@ public class Zone2CreateZoneCommand implements CommandExecutor {
         PlayerZone pz = new PlayerZone(hx, lx, hy, ly, hz, lz, w, priority, id, name, uuid, perms);
 
         try {
-            ConfigWriter writer = ConfigWriter.getInstance(this.plugin);
-            if (pz.collidesWithAnyZone(this.plugin)){
+            ConfigWriter writer = ConfigWriter.getInstance(Zone2.getPlugin());
+            if (pz.collidesWithAnyZone(Zone2.getPlugin())){
                 sender.sendMessage(ChatColor.YELLOW + "Die Zone kann hier nicht erstellt werden!");
                 return true;
             }

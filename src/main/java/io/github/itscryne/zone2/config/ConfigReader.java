@@ -5,11 +5,10 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
-import org.bukkit.Location;
-
 import io.github.itscryne.zone2.Zone2;
 import io.github.itscryne.zone2.spaces.PlayerZone;
 import io.github.itscryne.zone2.spaces.ServerZone;
+import io.github.itscryne.zone2.extensions.Zonecation;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -101,8 +100,8 @@ public class ConfigReader {
 
         for (int i = 0; i < pzl.size(); i++) {
             PlayerZone j = pzl.get(i);
-            j.setL1(Location.deserialize(j.getSerL1()));
-            j.setL2(Location.deserialize(j.getSerL2()));
+            j.setL1((Zonecation) Zonecation.deserialize(j.getSerL1()));
+            j.setL2((Zonecation) Zonecation.deserialize(j.getSerL2()));
             pzl.set(i, j);
         }
 
@@ -124,8 +123,8 @@ public class ConfigReader {
         List<ServerZone> szl = gson.fromJson(serverZoneListReader, serverZoneListType);
         for (int i = 0; i < szl.size(); i++) {
             ServerZone j = szl.get(i);
-            j.setL1(Location.deserialize(j.getSerL1()));
-            j.setL2(Location.deserialize(j.getSerL2()));
+            j.setL1((Zonecation) Zonecation.deserialize(j.getSerL1()));
+            j.setL2((Zonecation) Zonecation.deserialize(j.getSerL2()));
             szl.set(i, j);
         }
         
