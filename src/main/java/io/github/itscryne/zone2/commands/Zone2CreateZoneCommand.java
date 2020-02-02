@@ -70,7 +70,7 @@ public class Zone2CreateZoneCommand implements CommandExecutor {
 
         final int MIN_LEN = 20;
 
-        if (hx - lx < MIN_LEN || hz - lz < MIN_LEN){
+        if (hx - lx < MIN_LEN || hz - lz < MIN_LEN){//TODO: config
             sender.sendMessage(ChatColor.YELLOW + "Eine Zone muss in alle Richtungen mindestens 20 Blöcke lang sein");
         }
 

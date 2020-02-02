@@ -136,7 +136,7 @@ public class PlayerZone extends Zone implements Serializable {
      * @return the ID
      * @throws IOException if it cant find a file et al
      */
-    public static int getNextId(Zone2 plugin) throws IOException {
+    public static int getNextId(Zone2 plugin) throws IOException { //TODO: -> Zone
         ConfigReader reader = ConfigReader.getInstance(plugin);
         List<PlayerZone> playerZoneList = reader.getPlayerZoneList();
 
