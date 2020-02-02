@@ -21,7 +21,7 @@ public class Zoneler extends CraftPlayer {
     }
 
     public Zoneler(Player p){
-        super((CraftServer) p.getServer(), (EntityPlayer) p); //Does this work?
+        super((CraftServer) p.getServer(), ((CraftPlayer) p).getHandle()); //Does this work?
     }
 
         /**
