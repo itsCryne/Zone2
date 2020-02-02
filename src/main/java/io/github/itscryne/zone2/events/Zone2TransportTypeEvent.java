@@ -1,13 +1,19 @@
 package io.github.itscryne.zone2.events;
 
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.spigotmc.event.entity.EntityMountEvent;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
@@ -22,32 +28,59 @@ public class Zone2TransportTypeEvent implements Listener {
     }
 
     @EventHandler
-    public void onPlayerTeleport(PlayerTeleportEvent event) throws IOException { //TODO: Teleport outside of zones allow into config
-        if(event.getCause() != TeleportCause.CHORUS_FRUIT){
-            if(event.getCause() != TeleportCause.ENDER_PEARL){
+    public void onPlayerTeleport(PlayerTeleportEvent event) throws IOException {
+        if (event.getCause() != TeleportCause.CHORUS_FRUIT) {
+            if (event.getCause() != TeleportCause.ENDER_PEARL) {
                 return;
             }
         }
 
         Location eventLocation = event.getTo();
 
-        if (!Zone2PermCheck.inZone(eventLocation, this.plugin)) return;
+        if (!Zone2PermCheck.inZone(eventLocation, this.plugin))
+            return;
 
         Player eventPlayer = event.getPlayer();
 
         boolean allowed = Zone2PermCheck.isAllowed(eventLocation, eventPlayer, PermissionType.TRANSPORT, this.plugin);
         this.plugin.getLogger().info(String.valueOf(allowed));
-     }
+    }
 
-     @EventHandler
-     public void onEntityMount (EntityMountEvent event) throws IOException { //Transport or Entity
-         Location eventLocation = event.getMount().getLocation();
+    /*
+     * @EventHandler public void onEntityMount (EntityMountEvent event) throws
+     * IOException { //Transport or Entity Location eventLocation =
+     * event.getMount().getLocation();
+     * 
+     * if (!(event.getEntity() instanceof Player)) return;
+     * 
+     * Player eventPlayer = (Player) event.getEntity();
+     * 
+     * boolean allowed = Zone2PermCheck.isAllowed(eventLocation, eventPlayer,
+     * PermissionType.TRANSPORT, this.plugin);
+     * this.plugin.getLogger().info(String.valueOf(allowed)); }
+     */
 
-         if (!(event.getEntity() instanceof Player)) return;
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent event) throws IOException { // Placing boats/minecarts
+        List<Material> vehicles = new ArrayList<>(Arrays.asList(
+           Material.ACACIA_BOAT,
+           Material.BIRCH_BOAT,
+           Material.SPRUCE_BOAT,
+           Material.OAK_BOAT,
+           Material.SPRUCE_BOAT,
+           Material.JUNGLE_BOAT,
+           Material.MINECART,
+           Material.CHEST_MINECART,
+           Material.FURNACE_MINECART,
+           Material.HOPPER_MINECART
+        ));
 
-         Player eventPlayer = (Player) event.getEntity();
+        if(event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getClickedBlock().getLocation() == null || !vehicles.contains(event.getClickedBlock().getType())) return;
 
-         boolean allowed = Zone2PermCheck.isAllowed(eventLocation, eventPlayer, PermissionType.TRANSPORT, this.plugin);
-         this.plugin.getLogger().info(String.valueOf(allowed));
+        Player eventPlayer = event.getPlayer();
+        Location eventLocation = event.getClickedBlock().getLocation();
+
+        boolean allowed = Zone2PermCheck.isAllowed(eventLocation, eventPlayer, PermissionType.TRANSPORT, this.plugin);
+        this.plugin.getLogger().info(String.valueOf(allowed));
      }
 }
