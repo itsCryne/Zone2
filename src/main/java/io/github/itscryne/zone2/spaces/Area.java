@@ -68,14 +68,6 @@ public class Area implements Serializable {
         } else if (this.l1.getBlockZ() < this.l2.getBlockZ()) {
             throw new RuntimeException("l1 must contain the higher coordinates");
         }
-
-        if (this.l1.getBlockX() == this.l2.getBlockX()) {
-            throw new RuntimeException("This is not an area");
-        } else if (this.l1.getBlockY() == this.l2.getBlockY()) {
-            throw new RuntimeException("This is not an area");
-        } else if (this.l1.getBlockY() == this.l2.getBlockY()) {
-            throw new RuntimeException("This is not an area");
-        }
     }
 
     /**
