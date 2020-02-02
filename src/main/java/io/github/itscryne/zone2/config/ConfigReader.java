@@ -1,9 +1,9 @@
 package io.github.itscryne.zone2.config;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
 
 import io.github.itscryne.zone2.Zone2;
 import io.github.itscryne.zone2.spaces.PlayerZone;
@@ -18,6 +18,8 @@ import java.util.List;
 public class ConfigReader {
     private static ConfigReader instance;
 
+    private final String playerZonePath;
+    private final String serverZonePath;
     private Zone2 plugin;
     private File dataDir;
     private File playerZonesFile;
@@ -29,33 +31,37 @@ public class ConfigReader {
      * @throws IOException if it cant access the files et al
      */
     private ConfigReader(Zone2 plugin) throws IOException {
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.setPrettyPrinting().create();
+
         this.plugin = plugin;
         this.dataDir = this.plugin.getDataFolder();
         dataDir.mkdir();
 
-        this.playerZonesFile = new File(dataDir.getAbsolutePath().concat(File.separator).concat("playerZones.json"));
+        String dataDirPath = dataDir.getAbsolutePath();
+        this.serverZonePath = dataDirPath.concat(File.separator).concat("serverZones.json");
+        this.playerZonePath = dataDirPath.concat(File.separator).concat("playerZones.json");
+
+        this.playerZonesFile = new File(playerZonePath);
         playerZonesFile.createNewFile();
         if (playerZonesFile.length() == 0) { //writing empty List<PlayerZone> to JSON file so we can access it later
-            Type playerZoneListType = new TypeToken<List<PlayerZone>>() {}.getType();
             List<PlayerZone> playerZoneList = new ArrayList<>();
 
-            Gson gson = new Gson();
-
-            JsonWriter playerZoneListWriter = new JsonWriter(new FileWriter(this.playerZonesFile));
-            gson.toJson(playerZoneList, playerZoneListType, playerZoneListWriter);
+            Writer fw = new FileWriter(playerZonePath);
+            gson.toJson(playerZoneList, fw);
+            fw.flush();
+            fw.close();
         }
 
-        this.serverZonesFile = new File(dataDir.getAbsolutePath().concat(File.separator).concat("serverZones.json"));
+        this.serverZonesFile = new File(serverZonePath);
         serverZonesFile.createNewFile();
         if (serverZonesFile.length() == 0) { //writing empty List<ServerZone> to JSON file so we can access it later
-            Type serverZoneListType = new TypeToken<List<ServerZone>>() {
-            }.getType();
             List<ServerZone> serverZoneList = new ArrayList<>();
 
-            Gson gson = new Gson();
-
-            JsonWriter serverZoneListWriter = new JsonWriter(new FileWriter(this.serverZonesFile));
-            gson.toJson(serverZoneList, serverZoneListType, serverZoneListWriter);
+            Writer fw = new FileWriter(serverZonePath);
+            gson.toJson(serverZoneList, fw);
+            fw.flush();
+            fw.close();
         }
     }
 
