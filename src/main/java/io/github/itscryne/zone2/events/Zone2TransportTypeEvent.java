@@ -11,16 +11,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 
-import io.github.itscryne.zone2.Zone2;
 import io.github.itscryne.zone2.perms.PermissionType;
 import io.github.itscryne.zone2.extensions.Zonecation;
 import io.github.itscryne.zone2.extensions.Zoneler;
 
 public class Zone2TransportTypeEvent implements Listener {
-    public Zone2TransportTypeEvent(){}
 
     @EventHandler
     public void onPlayerTeleport(PlayerTeleportEvent event) throws IOException {
@@ -32,13 +31,17 @@ public class Zone2TransportTypeEvent implements Listener {
 
         Zonecation eventLocation = new Zonecation(event.getTo());
 
-        if (!eventLocation.inZone())
+        if (!eventLocation.inZone()) { // TODO intended?
             return;
+        }
 
         Zoneler eventPlayer = new Zoneler(event.getPlayer());
 
         boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.TRANSPORT);
-        Zone2.getPlugin().getLogger().info(String.valueOf(allowed));
+        event.setCancelled(!allowed);
+        if (!allowed) {
+            eventPlayer.sendXPMessage(ChatColor.RED + "Das darfst du hier nicht", true);
+        }
     }
 
     /*
@@ -51,31 +54,29 @@ public class Zone2TransportTypeEvent implements Listener {
      * Player eventPlayer = (Player) event.getEntity();
      * 
      * boolean allowed = Zone2PermCheck.isAllowed(eventLocation, eventPlayer,
-     * PermissionType.TRANSPORT, Zone2.getPlugin());
-     * Zone2.getPlugin().getLogger().info(String.valueOf(allowed)); }
+     * PermissionType.TRANSPORT, Zone2.getPlugin()); event.setCancelled(!allowed);
+     * if(!allowed){ eventPlayer.sendXPMessage(ChatColor.RED +
+     * "Das darfst du hier nicht", true); }
      */
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) throws IOException { // Placing boats/minecarts
-        List<Material> vehicles = new ArrayList<>(Arrays.asList(
-           Material.ACACIA_BOAT,
-           Material.BIRCH_BOAT,
-           Material.SPRUCE_BOAT,
-           Material.OAK_BOAT,
-           Material.SPRUCE_BOAT,
-           Material.JUNGLE_BOAT,
-           Material.MINECART,
-           Material.CHEST_MINECART,
-           Material.FURNACE_MINECART,
-           Material.HOPPER_MINECART
-        ));
+        List<Material> vehicles = new ArrayList<>(Arrays.asList(Material.ACACIA_BOAT, Material.BIRCH_BOAT,
+                Material.SPRUCE_BOAT, Material.OAK_BOAT, Material.SPRUCE_BOAT, Material.JUNGLE_BOAT, Material.MINECART,
+                Material.CHEST_MINECART, Material.FURNACE_MINECART, Material.HOPPER_MINECART));
 
-        if(event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getClickedBlock().getLocation() == null || !vehicles.contains(event.getClickedBlock().getType())) return;
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getClickedBlock().getLocation() == null
+                || !vehicles.contains(event.getMaterial())) {
+            return;
+        }
 
         Zoneler eventPlayer = new Zoneler(event.getPlayer());
         Zonecation eventLocation = new Zonecation(event.getClickedBlock().getLocation());
 
         boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.TRANSPORT);
-        Zone2.getPlugin().getLogger().info(String.valueOf(allowed));
-     }
+        event.setCancelled(!allowed);
+        if (!allowed) {
+            eventPlayer.sendXPMessage(ChatColor.RED + "Das darfst du hier nicht", true);
+        }
+    }
 }
