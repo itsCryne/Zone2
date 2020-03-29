@@ -7,7 +7,13 @@ commands:
     usage: /createzone <hx lx hz lz>
   createserverzone:
     usage: /createserverzone <hx lx hy ly hz lz world priority name>
+  createsubzone:
+    usage: /createsubzone <hx lx hy ly hz lz>
   permission:
     usage: /permission <add|delete who what id>
   myzones:
     usage: /myZones
+  zoneinfo:
+    usage: /zoneinfo <id>
+  serverpermission:
+    usage: /permission <add|delete who what id>
