@@ -1,0 +1,10 @@
+# Minimale Länge einer Spielerzone
+minLength: 10 
+# Maximale Länge einer Spielerzone
+maxLength: 150
+# Standardwelt für Spielerzonen
+world: "world"
+# Welt, in der Spieler außerhalb von Zonen alles machen dürfen
+noZoneWorld: 
+  - "world_nether"
+  - "world_the_end"
