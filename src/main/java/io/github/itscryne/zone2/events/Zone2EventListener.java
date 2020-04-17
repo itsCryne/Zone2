@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
+import io.github.itscryne.zone2.Zone2;
 import io.github.itscryne.zone2.extensions.Zonecation;
 import io.github.itscryne.zone2.extensions.Zoneler;
 import io.github.itscryne.zone2.spaces.Zone;
@@ -23,8 +24,8 @@ public class Zone2EventListener implements Listener {
 
         String message = "";
 
-        if (zoneList.isEmpty()) {
-            message = "Keine Zone";
+        if (zoneList.isEmpty() || zoneList == null) {
+            message = Zone2.getPlugin().getConfig().getString("noZoneHere");
         } else if (zoneList.size() == 1) {
             message = zoneList.get(0).getName();
         } else {
