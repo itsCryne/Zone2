@@ -56,13 +56,13 @@ public class Zoneler extends CraftPlayer {
         OfflinePlayer p = Bukkit.getOfflinePlayer("*");
         Permission genericPerm = new Permission(p, t);
 
-        final List<String> noZoneWorlds = (List<String>) Zone2.getPlugin().getConfig().getList("noZoneWorld");
+        List<String> noZoneWorlds = (List<String>) Zone2.getPlugin().getConfig().getList("noZoneWorld");
 
         if (!inZone) {
             if(noZoneWorlds.contains(l.getWorld().getName())){
                 return true;
             } else {
-                return this.hasPermission("Zone2.modifyNoZone");
+                return this.hasPermission("zone2.modifyNoZone");
             }
         }
 
@@ -72,7 +72,7 @@ public class Zoneler extends CraftPlayer {
             return highestPrioritySubZone.getPerms().contains(neededPerm)
                     || highestPrioritySubZone.getPerms().contains(administratePerm)
                     || highestPrioritySubZone.getPlayerUUID().equals(this.getUniqueId()) //TODO subzones for serverzones maybe
-                    || this.hasPermission("Zone2.modifyPlayerZone")
+                    || this.hasPermission("zone2.modifyPlayerZone")
                     || highestPrioritySubZone.getPerms().contains(genericPerm);
         } else {
             Zone highestPriorityZone = l.getHighestPriorityZone();
@@ -81,62 +81,17 @@ public class Zoneler extends CraftPlayer {
                 return highestPriorityZone.getPerms().contains(neededPerm)
                         || highestPriorityZone.getPerms().contains(administratePerm)
                         || ((PlayerZone) highestPriorityZone).getPlayerUuid().equals(this.getUniqueId())
-                        || this.hasPermission("Zone2.modifyPlayerZone")
+                        || this.hasPermission("zone2.modifyPlayerZone")
                         || highestPriorityZone.getPerms().contains(genericPerm);
             } else {
                 return highestPriorityZone.getPerms().contains(neededPerm)
                         || highestPriorityZone.getPerms().contains(administratePerm)
-                        || this.hasPermission("Zone2.modifyServerZone")
+                        || this.hasPermission("zone2.modifyServerZone")
                         || highestPriorityZone.getPerms().contains(genericPerm);
             }
 
         }
     }
-        /*if (inPlayerZone && inServerZone) {
-            Zone highestPriority = l.getHighestPriorityZone();
-            if (highestPriority instanceof PlayerZone) {
-                if (inSubZone) {
-                    SubZone highestPrioritySubZone = l.getHighestPrioritySubZone();
-                    Permission neededPerm = new Permission(this, t);
-                    Permission administratePerm = new Permission(this, PermissionType.MANAGE);
-                    return highestPrioritySubZone.getPerms().contains(neededPerm)
-                            || highestPrioritySubZone.getPerms().contains(administratePerm)
-                            || highestPrioritySubZone.getPlayerUUID().equals(this.getUniqueId())
-                            || this.hasPermission("Zone2.modifyPlayerZone") || this.getName().equals("*");
-                } else {
-                    PlayerZone highestPriorityPlayerZone = (PlayerZone) highestPriority;
-                    Permission neededPerm = new Permission(this, t);
-                    Permission administratePerm = new Permission(this, PermissionType.MANAGE);
-                    return highestPriorityPlayerZone.getPerms().contains(neededPerm)
-                            || highestPriorityPlayerZone.getPerms().contains(administratePerm)
-                            || highestPriorityPlayerZone.getPlayerUuid().equals(this.getUniqueId())
-                            || this.hasPermission("Zone2.modifyPlayerZone") || this.getName().equals("*");
-                }
-            } else {
-                return this.hasPermission("Zone2.modifyServerZone");
-            }
-        } else if (inPlayerZone) {
-            if (inSubZone) {
-                SubZone highestPrioritySubZone = l.getHighestPrioritySubZone();
-                Permission neededPerm = new Permission(this, t);
-                Permission administratePerm = new Permission(this, PermissionType.MANAGE);
-                return highestPrioritySubZone.getPerms().contains(neededPerm)
-                        || highestPrioritySubZone.getPerms().contains(administratePerm)
-                        || highestPrioritySubZone.getPlayerUUID().equals(this.getUniqueId())
-                        || this.hasPermission("Zone2.modifyPlayerZone") || this.getName().equals("*");
-            } else {
-                PlayerZone highestPriorityPlayerZone = l.getHighestPriorityPlayerZone();
-                Permission neededPerm = new Permission(this, t);
-                Permission administratePerm = new Permission(this, PermissionType.MANAGE);
-                return highestPriorityPlayerZone.getPerms().contains(neededPerm)
-                        || highestPriorityPlayerZone.getPerms().contains(administratePerm)
-                        || highestPriorityPlayerZone.getPlayerUuid().equals(this.getUniqueId())
-                        || this.hasPermission("Zone2.modifyPlayerZone") || this.getName().equals("*");
-            }
-        } else {
-            return this.hasPermission("Zone2.modifyServerZone") || this.getName().equals("*");
-        }
-    }*/
 
     /**
      * Function to check, wether the player already has a Zone
@@ -152,7 +107,7 @@ public class Zoneler extends CraftPlayer {
         List<UUID> zoneUuids = new ArrayList<>();
         playerZoneList.forEach(element -> zoneUuids.add(element.getPlayerUuid()));
 
-        reader.destroy();
+        ConfigReader.destroy();
         return zoneUuids.contains(playerUuid);
     }
 
