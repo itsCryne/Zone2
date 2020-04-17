@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import com.sk89q.worldedit.WorldEditException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -13,11 +15,13 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import io.github.itscryne.zone2.Zone2;
 import io.github.itscryne.zone2.config.ConfigWriter;
 import io.github.itscryne.zone2.perms.Permission;
 import io.github.itscryne.zone2.spaces.PlayerZone;
+import io.github.itscryne.zone2.spaces.Zone;
 
 public class Zone2CreatePlayerZoneCommand implements CommandExecutor {
     /**
@@ -35,11 +39,11 @@ public class Zone2CreatePlayerZoneCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.YELLOW + "Nur Spieler können Spielerzonen erstellen!");
+            sender.sendMessage(ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("onlyPlayersZones"));
             return true;
         }
 
-        if (args.length != 4){
+        if (args.length != 4) {
             return false;
         }
 
@@ -51,52 +55,47 @@ public class Zone2CreatePlayerZoneCommand implements CommandExecutor {
         int lz = 0;
 
         try {
-            hx = Integer.parseInt(args[0]);
-            lx = Integer.parseInt(args[1]);
-            hz = Integer.parseInt(args[2]);
-            lz = Integer.parseInt(args[3]);
+            hx = Integer.max(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
+            lx = Integer.min(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
+            hz = Integer.max(Integer.parseInt(args[2]), Integer.parseInt(args[3]));
+            lz = Integer.min(Integer.parseInt(args[2]), Integer.parseInt(args[3]));
         } catch (NumberFormatException e) {
-            sender.sendMessage(ChatColor.YELLOW + "Die Koordinaten müssen Ganzzahlen sein!");
+            sender.sendMessage(ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("intCoords"));
             return true;
         }
 
-        if (hx < lx || hz < lz) {
-            sender.sendMessage(ChatColor.YELLOW + "h <-> High coordinates | l <-> Low coordinates");
-            return true;
-        }
-
-        final int minLength = Zone2.getPlugin().getConfig().getInt("minLengthGTH", 20);
-        final int maxLength = Zone2.getPlugin().getConfig().getInt("maxLengthGTH", 100);
+        int minLength = Zone2.getPlugin().getConfig().getInt("minLengthGTH", 20);
+        int maxLength = Zone2.getPlugin().getConfig().getInt("maxLengthGTH", 150);
 
         if (hx - lx < minLength || hz - lz < minLength) {
-            sender.sendMessage(ChatColor.YELLOW + "Eine Zone muss in alle Richtungen mindestens "
-                    + String.valueOf(minLength) + " Blöcke lang sein");
+            sender.sendMessage(ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("tooShort1")
+                    + String.valueOf(minLength) + Zone2.getPlugin().getConfig().getString("tooShort2"));
             return true;
         }
         if (hx - lx > maxLength || hz - lz > maxLength) {
-            sender.sendMessage(ChatColor.YELLOW + "Eine Zone darf in alle Richtungen maximal " + String.valueOf(maxLength)
-                    + " Blöcke lang sein");
+            sender.sendMessage(ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("tooLong1")
+                    + String.valueOf(maxLength) + Zone2.getPlugin().getConfig().getString("tooLong2"));
             return true;
         }
 
-        final String world = Zone2.getPlugin().getConfig().getString("world", "world");
+        String world = Zone2.getPlugin().getConfig().getString("world", "world");
         World w = Bukkit.getWorld(world);
 
         if (w == null) {
-            sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer");
-            sender.sendMessage(ChatColor.RED + "Zone konnte nicht erstellt werden");
-            Zone2.getPlugin().getLogger().severe("Die Standardwelt wurde nicht gefunden!");
+            sender.sendMessage(ChatColor.DARK_RED + Zone2.getPlugin().getConfig().getString("oops"));
+            sender.sendMessage(ChatColor.RED + Zone2.getPlugin().getConfig().getString("cantCreate"));
+            Zone2.getPlugin().getLogger().severe(Zone2.getPlugin().getConfig().getString("invalidConfigWorld"));
             return true;
         }
 
         int priority = 1;
         int id = 0;
         try {
-            id = PlayerZone.getNextId();
+            id = Zone.getNextId();
         } catch (IOException e) {
             Zone2.getPlugin().getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
-            sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer");
-            sender.sendMessage(ChatColor.RED + "Zone konnte nicht erstellt werden");
+            sender.sendMessage(ChatColor.DARK_RED + Zone2.getPlugin().getConfig().getString("oops"));
+            sender.sendMessage(ChatColor.RED + Zone2.getPlugin().getConfig().getString("cantCreate"));
             return true;
         }
 
@@ -108,17 +107,36 @@ public class Zone2CreatePlayerZoneCommand implements CommandExecutor {
         try {
             ConfigWriter writer = ConfigWriter.getInstance();
             if (pz.collidesWithAnyZone()) {
-                sender.sendMessage(ChatColor.YELLOW + "Die Zone kann hier nicht erstellt werden!");
+                sender.sendMessage(ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("cantCreateHere"));
                 return true;
             }
+
+            String zoneName = "Zone_".concat(name).concat("_").concat(String.valueOf(id)).concat("_")
+                    .concat(uuid.toString());
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    try {
+                        pz.saveSchem(zoneName);
+                    } catch (WorldEditException | IOException e) {
+                        Zone2.getPlugin().getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
+                        sender.sendMessage(ChatColor.DARK_RED + Zone2.getPlugin().getConfig().getString("oops"));
+                        sender.sendMessage(ChatColor.RED + Zone2.getPlugin().getConfig().getString("cantCreate"));
+                        return;
+                    }
+                    pz.displayAreaMarker(Zone2.getMarkers());
+                }
+            }.runTask(Zone2.getPlugin());
+
             writer.writePlayerZone(pz);
-            sender.sendMessage(ChatColor.GREEN + "Zone wurde erstellt!");
-            writer.destroy();
+            sender.sendMessage(ChatColor.GREEN + Zone2.getPlugin().getConfig().getString("success"));
+            ConfigWriter.destroy();
             return true;
         } catch (IOException e) {
             Zone2.getPlugin().getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
-            sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer");
-            sender.sendMessage(ChatColor.RED + "Zone konnte nicht erstellt werden");
+            sender.sendMessage(ChatColor.DARK_RED + Zone2.getPlugin().getConfig().getString("oops"));
+            sender.sendMessage(ChatColor.RED + Zone2.getPlugin().getConfig().getString("cantCreate"));
             return true;
         }
     }
