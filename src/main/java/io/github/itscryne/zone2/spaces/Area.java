@@ -1,10 +1,27 @@
 package io.github.itscryne.zone2.spaces;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map;
 
+import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.WorldEditException;
+import com.sk89q.worldedit.extent.clipboard.BlockArrayClipboard;
+import com.sk89q.worldedit.extent.clipboard.io.BuiltInClipboardFormat;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardWriter;
+import com.sk89q.worldedit.function.operation.ForwardExtentCopy;
+import com.sk89q.worldedit.function.operation.Operations;
+import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.regions.CuboidRegion;
+
+import io.github.itscryne.zone2.Zone2;
 import io.github.itscryne.zone2.extensions.Zonecation;
 
 /**
@@ -37,14 +54,6 @@ public class Area implements Serializable {
         } else if (this.l1.getBlockZ() < this.l2.getBlockZ()) {
             throw new RuntimeException("l1 must contain the higher coordinates");
         }
-
-        if (this.l1.getBlockX() == this.l2.getBlockX()) {
-            throw new RuntimeException("This is not an area");
-        } else if (this.l1.getBlockY() == this.l2.getBlockY()) {
-            throw new RuntimeException("This is not an area");
-        } else if (this.l1.getBlockY() == this.l2.getBlockY()) {
-            throw new RuntimeException("This is not an area");
-        }
     }
 
     /**
@@ -57,14 +66,14 @@ public class Area implements Serializable {
      * @param w  World
      */
     protected Area(int hx, int lx, int hy, int ly, int hz, int lz, World w) {
-        this.l1 = new Zonecation(w, hx, hy, hz);
-        this.l2 = new Zonecation(w, lx, ly, lz);
+        this.l1 = new Zonecation(w, hx+1, hy+1, hz+1);
+        this.l2 = new Zonecation(w, lx-1, ly-1, lz-1);
         this.serL1 = this.l1.serialize();
         this.serL2 = this.l2.serialize();
 
         if (this.l1.getBlockX() < this.l2.getBlockX()) {
             throw new RuntimeException("l1 must contain the higher coordinates");
-        } else if (this.l1.getBlockY() < this.l1.getBlockY()) {
+        } else if (this.l1.getBlockY() < this.l2.getBlockY()) {
             throw new RuntimeException("l1 must conatin the higher coordinates");
         } else if (this.l1.getBlockZ() < this.l2.getBlockZ()) {
             throw new RuntimeException("l1 must contain the higher coordinates");
@@ -77,10 +86,10 @@ public class Area implements Serializable {
      */
     public boolean contains(Zonecation l) {
         if (this.l1 == null) {
-            this.l1 = new Zonecation(Zonecation.deserialize(serL1));
+            this.l1 = new Zonecation(Location.deserialize(serL1));
         }
         if (this.l2 == null) {
-            this.l2 = new Zonecation(Zonecation.deserialize(serL2));
+            this.l2 = new Zonecation(Location.deserialize(serL2));
         }
 
         boolean worldsMatch = l.getWorld().equals(this.getL1().getWorld());
@@ -89,6 +98,35 @@ public class Area implements Serializable {
         boolean zContain = l.getBlockZ() < this.l1.getBlockZ() && l.getBlockZ() > this.l2.getBlockZ();
 
         return xContain && yContain && zContain && worldsMatch;
+    }
+
+    public void saveSchem(String name) throws WorldEditException, IOException {
+        if (this.l1 == null) {
+            this.l1 = new Zonecation(Location.deserialize(serL1));
+        }
+        if (this.l2 == null) {
+            this.l2 = new Zonecation(Location.deserialize(serL2));
+        }
+
+        World world = Bukkit.getWorld("world");
+        com.sk89q.worldedit.world.World  weWorld = new com.sk89q.worldedit.bukkit.BukkitWorld(world);
+        BlockVector3 min = BlockVector3.at(this.l1.getX(),this.l1.getY(),this.l1.getZ());
+        BlockVector3 max = BlockVector3.at(this.l2.getX(),this.l2.getY(),this.l2.getZ());
+        CuboidRegion region = new CuboidRegion(weWorld, min, max);
+        BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
+
+        EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(region.getWorld(), -1);
+
+        ForwardExtentCopy forwardExtentCopy = new ForwardExtentCopy(editSession, region, clipboard, region.getMinimumPoint());
+        forwardExtentCopy.setCopyingEntities(true);
+        Operations.complete(forwardExtentCopy);
+
+        new File(Zone2.getPlugin().getDataFolder() + "/schematics").mkdirs();
+        File saveTo = new File(Zone2.getPlugin().getDataFolder() + "/schematics/" + name + ".schem");
+
+        try (ClipboardWriter writer = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getWriter(new FileOutputStream(saveTo))) {
+            writer.write(clipboard);
+        }
     }
 
     /**
@@ -135,5 +173,21 @@ public class Area implements Serializable {
      */
     public Map<String, Object> getSerL2() {
         return serL2;
+    }
+
+    public Integer getMaxX(){
+        return this.getL1().getBlockX();
+    }
+
+    public Integer getMaxZ(){
+        return this.getL1().getBlockZ();
+    }
+
+    public Integer getMinX(){
+        return this.getL2().getBlockX();
+    }
+
+    public Integer getMinZ(){
+        return this.getL2().getBlockZ();
     }
 }
