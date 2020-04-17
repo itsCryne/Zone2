@@ -1,6 +1,5 @@
 package io.github.itscryne.zone2.commands;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +32,7 @@ public class Zone2InfoCommand implements CommandExecutor {
         try {
             id = Integer.parseInt(args[0]);
         } catch (NumberFormatException e) {
-            sender.sendMessage("Bitte gib als ID eine Ganzzahl an");
+            sender.sendMessage(Zone2.getPlugin().getConfig().getString("intID"));
             return true;
         }
 
@@ -41,7 +40,7 @@ public class Zone2InfoCommand implements CommandExecutor {
         try {
             reader = ConfigReader.getInstance();
         } catch (IOException e) {
-            sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer!");
+            sender.sendMessage(ChatColor.DARK_RED + Zone2.getPlugin().getConfig().getString("oops"));
             Zone2.getPlugin().getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
             return true;
         }
@@ -49,24 +48,25 @@ public class Zone2InfoCommand implements CommandExecutor {
         List<PlayerZone> playerZoneList;
         try {
             playerZoneList = reader.getPlayerZoneList();
-        } catch (FileNotFoundException e) {
-            sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer!");
+        } catch (IOException e) {
+            sender.sendMessage(ChatColor.DARK_RED + Zone2.getPlugin().getConfig().getString("oops"));
             Zone2.getPlugin().getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
+            ConfigReader.destroy();
             return true;
         }
 
         PlayerZone selectedZone = playerZoneList.stream().filter(zone -> id == zone.getId()).findFirst().orElse(null);
 
         if (selectedZone == null) {
-            sender.sendMessage(ChatColor.YELLOW + "Zone nicht gefunden");
+            sender.sendMessage(ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("zoneNotFound"));
             return true;
         }
 
         if (sender instanceof Player
                 && !(selectedZone.getPerms().contains(new Permission((Player) sender, PermissionType.MANAGE))
                         || selectedZone.getPlayerUuid().equals(((Player) sender).getUniqueId())
-                        || ((Player) sender).hasPermission("Zone2.modifyPlayerZone"))) {
-            sender.sendMessage(ChatColor.YELLOW + "Du hast nicht genügend Rechte");
+                        || ((Player) sender).hasPermission("zone2.modifyPlayerZone"))) {
+            sender.sendMessage(ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("noPerm"));
             return true;
         }
 
@@ -79,28 +79,28 @@ public class Zone2InfoCommand implements CommandExecutor {
         try {
             subZones = selectedZone.getSubZones();
         } catch (IOException e) {
-            sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer!");
+            sender.sendMessage(ChatColor.DARK_RED + Zone2.getPlugin().getConfig().getString("oops"));
             Zone2.getPlugin().getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
             return true;
         }
 
         String message;
 
-        message = ChatColor.DARK_GREEN + "Zone: " + Integer.toString(id) + "\n";
-        message = message.concat(ChatColor.WHITE + "Besitzer: " + ChatColor.GOLD + owner + "\n");
-        message = message.concat(ChatColor.WHITE + "Ecke 1: " + ChatColor.GOLD + "X: " + l1.getBlockX() + " Z: "
+        message = ChatColor.DARK_GREEN + Zone2.getPlugin().getConfig().getString("zoneWord") + Integer.toString(id) + "\n";
+        message = message.concat(ChatColor.WHITE + Zone2.getPlugin().getConfig().getString("ownerWord") + ChatColor.GOLD + owner + "\n");
+        message = message.concat(ChatColor.WHITE + Zone2.getPlugin().getConfig().getString("corner1Word") + ChatColor.GOLD + "X: " + l1.getBlockX() + " Z: "
                 + l1.getBlockZ() + "\n");
-        message = message.concat(ChatColor.WHITE + "Ecke 2: " + ChatColor.GOLD + "X: " + l2.getBlockX() + " Z: "
+        message = message.concat(ChatColor.WHITE + Zone2.getPlugin().getConfig().getString("corner1Word") + ChatColor.GOLD + "X: " + l2.getBlockX() + " Z: "
                 + l2.getBlockZ() + "\n");
 
-        message = message.concat(ChatColor.WHITE + "Permissions:\n");
+        message = message.concat(ChatColor.WHITE + Zone2.getPlugin().getConfig().getString("permissionsWord") + "\n");
 
         for (PermissionType t : PermissionType.values()) {
             List<String> permPlayers = new ArrayList<>();
             for (Permission p : permList) {
                 if (p.getPerm().equals(t)) {
                     if (p.getP().getName() == null) {
-                        permPlayers.add(ChatColor.RED + "  -" + "???" + "\n");
+                        permPlayers.add(ChatColor.RED + "  -" + Zone2.getPlugin().getConfig().getString("unknownPlayer") + "\n");
                     } else {
                         permPlayers.add(ChatColor.BLUE + "  -" + p.getP().getName() + "\n");
                     }
@@ -116,28 +116,28 @@ public class Zone2InfoCommand implements CommandExecutor {
             }
         }
 
-        message = message.concat(ChatColor.WHITE + "Subzonen:\n");
+        message = message.concat(ChatColor.WHITE + Zone2.getPlugin().getConfig().getString("subzonesWord") + "\n");
 
         for (SubZone zone : subZones) {
             Zonecation subL1 = zone.getL1();
             Zonecation subL2 = zone.getL2();
             List<Permission> subPermList = zone.getPerms();
 
-            message = message.concat(ChatColor.GOLD + " -Subzone " + zone.getId() + ":\n");
+            message = message.concat(ChatColor.GOLD + " -" + Zone2.getPlugin().getConfig().getString("subzoneWord") + zone.getId() + ":\n");
 
-            message = message.concat(ChatColor.BLUE + "  -Ecke 1: " + ChatColor.GREEN + "X: " + subL1.getBlockX()
+            message = message.concat(ChatColor.BLUE + "  -" + Zone2.getPlugin().getConfig().getString("corner1Word") + ChatColor.GREEN + "X: " + subL1.getBlockX()
                     + " Z: " + subL1.getBlockZ() + "\n");
-            message = message.concat(ChatColor.BLUE + "  -Ecke 2: " + ChatColor.GREEN + "X: " + subL2.getBlockX()
+            message = message.concat(ChatColor.BLUE + "  -" + Zone2.getPlugin().getConfig().getString("corner2Word") + ChatColor.GREEN + "X: " + subL2.getBlockX()
                     + " Z: " + subL2.getBlockZ() + "\n");
 
-            message = message.concat(ChatColor.BLUE + "  -Permissions:\n");
+            message = message.concat(ChatColor.BLUE + "  -" + Zone2.getPlugin().getConfig().getString("permissionsWord") + "\n");
 
             for (PermissionType t : PermissionType.values()) {
                 List<String> permPlayers = new ArrayList<>();
                 for (Permission p : subPermList) {
                     if (p.getPerm().equals(t)) {
                         if (p.getP().getName() == null) {
-                            permPlayers.add(ChatColor.RED + "    -" + "???" + "\n");
+                            permPlayers.add(ChatColor.RED + "    -" + Zone2.getPlugin().getConfig().getString("unknownPlayer") + "\n");
                         } else {
                             permPlayers.add(ChatColor.GRAY + "    -" + p.getP().getName() + "\n");
                         }
