@@ -75,9 +75,6 @@ public class Permission implements Serializable {
             if (this.p == null) {
                 this.p = Bukkit.getOfflinePlayer(this.playerUuid);
             }
-            if (this.p == null) {
-                throw new RuntimeException("Failed to deserialize player");
-            }
         }
         return this.p;
     }
