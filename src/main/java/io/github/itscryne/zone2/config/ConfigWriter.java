@@ -101,7 +101,8 @@ public final class ConfigWriter {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.setPrettyPrinting().create();
 
-        JsonReader playerZoneListReader = new JsonReader(new FileReader(this.playerZonesFile));
+        FileReader fr = new FileReader(this.playerZonesFile);
+        JsonReader playerZoneListReader = new JsonReader(fr);
         Type playerZoneListType = new TypeToken<List<PlayerZone>>() {
         }.getType();
         List<PlayerZone> playerZoneList = gson.fromJson(playerZoneListReader, playerZoneListType);
@@ -115,6 +116,7 @@ public final class ConfigWriter {
         }
         fw.flush();
         fw.close();
+        fr.close();
     }
 
     /**
@@ -127,7 +129,8 @@ public final class ConfigWriter {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.setPrettyPrinting().create();
 
-        JsonReader serverZoneListReader = new JsonReader(new FileReader(this.serverZonesFile));
+        FileReader fr = new FileReader(this.serverZonesFile);
+        JsonReader serverZoneListReader = new JsonReader(fr);
 
         Type serverZoneListType = new TypeToken<List<ServerZone>>() {
         }.getType();
@@ -138,13 +141,15 @@ public final class ConfigWriter {
         gson.toJson(serverZoneList, fw);
         fw.flush();
         fw.close();
+        fr.close();
     }
 
     public void writeSubZone(SubZone zone) throws IOException {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.setPrettyPrinting().create();
 
-        JsonReader subZoneListReader = new JsonReader(new FileReader(this.subZonesFile));
+        FileReader fr = new FileReader(this.subZonesFile);
+        JsonReader subZoneListReader = new JsonReader(fr);
 
         Type subZoneListType = new TypeToken<List<SubZone>>() {
         }.getType();
@@ -155,6 +160,7 @@ public final class ConfigWriter {
         gson.toJson(subZoneList, fw);
         fw.flush();
         fw.close();
+        fr.close();
     }
 
     /**
@@ -183,7 +189,8 @@ public final class ConfigWriter {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.setPrettyPrinting().create();
 
-        JsonReader playerZoneListReader = new JsonReader(new FileReader(this.playerZonesFile));
+        FileReader fr = new FileReader(this.playerZonesFile);
+        JsonReader playerZoneListReader = new JsonReader(fr);
 
         Type playerZoneListType = new TypeToken<List<PlayerZone>>() {
         }.getType();
@@ -200,6 +207,7 @@ public final class ConfigWriter {
         gson.toJson(playerZoneList, fw);
         fw.flush();
         fw.close();
+        fr.close();
     }
 
     /**
@@ -228,7 +236,8 @@ public final class ConfigWriter {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.setPrettyPrinting().create();
 
-        JsonReader serverZoneListReader = new JsonReader(new FileReader(this.serverZonesFile));
+        FileReader fr = new FileReader(this.serverZonesFile);
+        JsonReader serverZoneListReader = new JsonReader(fr);
 
         Type serverZoneListType = new TypeToken<List<ServerZone>>() {
         }.getType();
@@ -245,6 +254,7 @@ public final class ConfigWriter {
         gson.toJson(serverZoneList, fw);
         fw.flush();
         fw.close();
+        fr.close();
     }
 
     private int findSubZoneIndexById(List<SubZone> subZoneList, int id) {
@@ -266,7 +276,8 @@ public final class ConfigWriter {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.setPrettyPrinting().create();
 
-        JsonReader subZoneListReader = new JsonReader(new FileReader(this.subZonesFile));
+        FileReader fr = new FileReader(this.subZonesFile);
+        JsonReader subZoneListReader = new JsonReader(fr);
 
         Type subZoneListType = new TypeToken<List<SubZone>>() {
         }.getType();
@@ -288,7 +299,7 @@ public final class ConfigWriter {
     /**
      * Destroys the ConfigWriter instance
      */
-    public void destroy() {
+    public static void destroy() {
         instance = null;
     }
 }
