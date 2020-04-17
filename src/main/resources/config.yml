@@ -8,3 +8,65 @@ world: "world"
 noZoneWorld: 
   - "world_nether"
   - "world_the_end"
+
+
+onlyPlayersZones: 
+intCoords: "Die Koordinaten müssen Ganzzahlen sein"
+lchc: "Bitte gib jeweils als erstes die niedrigeren Koordinaten ein."
+tooShort1: "Eine Zone muss mindestens "
+tooShort2: " Blöcke lang sein"
+tooLong1: "Eine Zone darf höchstens "
+tooLong2: " Blöcke lang sein"
+oops: "Etwas ist schiefgelaufen, bitte kontaktiere einen Deveoloper"
+cantCreate: "Zone konnte nicht erstellt werden"
+invalidConfigWorld: "Die Standardwelt in der Config ist nicht vorhanden"
+cantCreateHere: "Die Zone kann hier nicht erstellt werden"
+success: "Zone erstellt"
+subSuccess: "Subzone erstellt"
+
+noSuchWorld: "Diese Welt existiert nicht"
+possibleWorlds: "Es gibt folgende Welten:"
+
+onlyPlayersSubZones: "Nur Spieler könnnen Subzonen erstellen"
+mustBeInZone: "Eine Subzone muss in einer Zone sein"
+justInOneZone: "Eine Subzone kann nicht in mehreren Zonen gleichzeitig sein"
+noSubZonePermHere: "Du darfst hier keine Subzone erstellen"
+subCollides: "Es ist leider noch nicht möglich, Subzonen zu schachteln bzw. zu überlappen"
+
+zoneNotFound: "Zone nicht gefunden"
+noPerm: "Dazu hast du keine Rechte"
+unknownPlayer: "Spieler nicht gefunden"
+
+onlyPlayersCanQueryZones: "Nur Spieler können ihre Zonen abrufen"
+noZones: "Du besitzt keine Zonen"
+canEdit: "Du kannst diese Zonen bearbeiten"
+noServerZones: "Es gibt keine Serverzonen"
+thoseServerZones: "Es gibt diese Serverzonen"
+
+noSuchPerm: "Dieses Recht existiert nicht"
+availablePerms: "Folgende Rechte existieren"
+intID: "Die ID muss eine Ganzzahl sein"
+noPermission: "Das darfst du hier nicht"
+grant1: "Du hast "
+grant2: " das Recht "
+grant3: "gegeben "
+playerNoPerm1:
+playerNoPerm2: " besitzt die Berechtigung"
+playerNoPerm3: "nicht"
+revoke1: "Du hast dem Spieler "
+revoke2: " das Recht "
+revoke3: " entzogen"
+alreadyGranted1: "Du hast "
+alreadyGranted2: " die Berechtigung "
+alreadyGranted3: " schon gegeben"
+
+noZoneHere: "Keine Zone"
+
+#Word translations
+zoneWord: "Zone"
+ownerWord: "Besitzer"
+corner1Word: "Ecke 1"
+corner2Word: "Ecke 2"
+permissionsWord: "Rechte"
+subzonesWord: "Subzonen"
+subzoneWord: "Subzone"
