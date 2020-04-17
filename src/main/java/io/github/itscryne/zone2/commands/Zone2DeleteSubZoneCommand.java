@@ -23,7 +23,7 @@ public class Zone2DeleteSubZoneCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.YELLOW + "Nur Spieler können Spielerzonen erstellen!");
+            sender.sendMessage(ChatColor.YELLOW + "Nur Spieler können Subzonen löschen!");
             return true;
         }
 
@@ -41,7 +41,7 @@ public class Zone2DeleteSubZoneCommand implements CommandExecutor {
         try {
             id = Integer.parseInt(args[0]);
         } catch (NumberFormatException e) {
-            sender.sendMessage(ChatColor.YELLOW + "Die Koordinaten müssen Ganzzahlen sein!");
+            sender.sendMessage(ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("intID"));
             return true;
         }
 
@@ -72,7 +72,7 @@ public class Zone2DeleteSubZoneCommand implements CommandExecutor {
             return true;
         } catch (IOException e) {
             Zone2.getPlugin().getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
-            sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer");
+            sender.sendMessage(ChatColor.DARK_RED + Zone2.getPlugin().getConfig().getString("oops"));
             sender.sendMessage(ChatColor.RED + "Zone konnte nicht gelöscht werden");
             return true;
         }

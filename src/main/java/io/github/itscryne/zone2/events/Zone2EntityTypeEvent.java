@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 
+import io.github.itscryne.zone2.Zone2;
 import io.github.itscryne.zone2.extensions.Zonecation;
 import io.github.itscryne.zone2.extensions.Zoneler;
 import io.github.itscryne.zone2.perms.PermissionType;
@@ -30,7 +31,7 @@ public class Zone2EntityTypeEvent implements Listener {
         boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.ENTITY);
         event.setCancelled(!allowed);
         if (!allowed) {
-            eventPlayer.sendXPMessage(ChatColor.RED + "Das darfst du hier nicht", true);
+            eventPlayer.sendXPMessage(ChatColor.RED + Zone2.getPlugin().getConfig().getString("noPermission"), true);
         }
     }
 
@@ -42,7 +43,7 @@ public class Zone2EntityTypeEvent implements Listener {
         boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.ENTITY);
         event.setCancelled(!allowed);
         if (!allowed) {
-            eventPlayer.sendXPMessage(ChatColor.RED + "Das darfst du hier nicht", true);
+            eventPlayer.sendXPMessage(ChatColor.RED + Zone2.getPlugin().getConfig().getString("noPermission"), true);
         }
     }
 }

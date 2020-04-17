@@ -16,6 +16,7 @@ import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import io.github.itscryne.zone2.Zone2;
 import io.github.itscryne.zone2.extensions.Zonecation;
 import io.github.itscryne.zone2.extensions.Zoneler;
 import io.github.itscryne.zone2.perms.PermissionType;
@@ -38,7 +39,7 @@ public class Zone2DestroyTypeEvent implements Listener {
         }
         event.setCancelled(!allowed);
         if (!allowed) {
-            eventPlayer.sendXPMessage(ChatColor.RED + "Das darfst du hier nicht", true);
+            eventPlayer.sendXPMessage(ChatColor.RED + Zone2.getPlugin().getConfig().getString("noPermission"), true);
         }
     }
 
@@ -54,7 +55,7 @@ public class Zone2DestroyTypeEvent implements Listener {
         boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.DESTROY);
         event.setCancelled(!allowed);
         if (!allowed) {
-            eventPlayer.sendXPMessage(ChatColor.RED + "Das darfst du hier nicht", true);
+            eventPlayer.sendXPMessage(ChatColor.RED + Zone2.getPlugin().getConfig().getString("noPermission"), true);
         }
     }
 
@@ -75,7 +76,7 @@ public class Zone2DestroyTypeEvent implements Listener {
         boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.DESTROY);
         event.setCancelled(!allowed);
         if (!allowed) {
-            eventPlayer.sendXPMessage(ChatColor.RED + "Das darfst du hier nicht", true);
+            eventPlayer.sendXPMessage(ChatColor.RED + Zone2.getPlugin().getConfig().getString("noPermission"), true);
         }
     }
 
@@ -87,7 +88,7 @@ public class Zone2DestroyTypeEvent implements Listener {
         boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.DESTROY);
         event.setCancelled(!allowed);
         if (!allowed) {
-            eventPlayer.sendXPMessage(ChatColor.RED + "Das darfst du hier nicht", true);
+            eventPlayer.sendXPMessage(ChatColor.RED + Zone2.getPlugin().getConfig().getString("noPermission"), true);
         }
     }
 }

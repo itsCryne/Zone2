@@ -12,7 +12,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +32,7 @@ public class Zone2MyZonesCommand implements CommandExecutor { //serverzones
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.YELLOW + "Nur Spieler können ihre Zonen abrufen");
+            sender.sendMessage(ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("onlyPlayersCanQueryZones"));
             return true;
         }
 
@@ -42,7 +41,7 @@ public class Zone2MyZonesCommand implements CommandExecutor { //serverzones
         try {
             reader = ConfigReader.getInstance();
         } catch (IOException e) {
-            sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer!");
+            sender.sendMessage(ChatColor.DARK_RED + Zone2.getPlugin().getConfig().getString("oops"));
             Zone2.getPlugin().getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
             return true;
         }
@@ -52,9 +51,10 @@ public class Zone2MyZonesCommand implements CommandExecutor { //serverzones
 
             try {
                 playerZoneList = reader.getPlayerZoneList();
-            } catch (FileNotFoundException e) {
-                sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer!");
+            } catch (IOException e) {
+                sender.sendMessage(ChatColor.DARK_RED + Zone2.getPlugin().getConfig().getString("oops"));
                 Zone2.getPlugin().getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
+                ConfigReader.destroy();
             }
 
             if (playerZoneList == null) {
@@ -76,11 +76,11 @@ public class Zone2MyZonesCommand implements CommandExecutor { //serverzones
             }
 
             if (sendersZones.isEmpty()) {
-                sender.sendMessage(ChatColor.YELLOW + "Du besitzt keine Zonen");
+                sender.sendMessage(ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("noZones"));
                 return true;
             }
 
-            sender.sendMessage(ChatColor.GREEN + "Du kannst folgende Zonen bearbeiten:");
+            sender.sendMessage(ChatColor.GREEN + Zone2.getPlugin().getConfig().getString("canEdit"));
             for (PlayerZone i : sendersZones) {
                 sender.sendMessage("   ID: " + ChatColor.GOLD + i.getId());
             }
@@ -89,9 +89,10 @@ public class Zone2MyZonesCommand implements CommandExecutor { //serverzones
 
             try {
                 serverZoneList = reader.getServerZoneList();
-            } catch (FileNotFoundException e) {
-                sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer!");
+            } catch (IOException e) {
+                sender.sendMessage(ChatColor.DARK_RED + Zone2.getPlugin().getConfig().getString("oops"));
                 Zone2.getPlugin().getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
+                ConfigReader.destroy();
             }
 
             if (serverZoneList == null) {
@@ -105,11 +106,11 @@ public class Zone2MyZonesCommand implements CommandExecutor { //serverzones
             }
 
             if (sendersZones.isEmpty()) {
-                sender.sendMessage(ChatColor.YELLOW + "Es gibt keine Serverzonen");
+                sender.sendMessage(ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("noServerZones"));
                 return true;
             }
 
-            sender.sendMessage(ChatColor.GREEN + "Es gibt die folgenden Serverzonen:");
+            sender.sendMessage(ChatColor.GREEN + Zone2.getPlugin().getConfig().getString("thoseServerZones"));
             for (ServerZone i : sendersZones) {
                 sender.sendMessage("   ID: " + ChatColor.GOLD + i.getId() + ChatColor.WHITE + "   Name: " + ChatColor.GOLD + i.getName());
             }

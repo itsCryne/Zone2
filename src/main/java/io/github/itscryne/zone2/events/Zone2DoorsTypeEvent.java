@@ -13,6 +13,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import io.github.itscryne.zone2.perms.PermissionType;
+import io.github.itscryne.zone2.Zone2;
 import io.github.itscryne.zone2.extensions.Zonecation;
 import io.github.itscryne.zone2.extensions.Zoneler;
 
@@ -44,7 +45,7 @@ public class Zone2DoorsTypeEvent implements Listener {
         boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.DOORS);
         event.setCancelled(!allowed);
         if (!allowed) {
-            eventPlayer.sendXPMessage(ChatColor.RED + "Das darfst du hier nicht", true);
+            eventPlayer.sendXPMessage(ChatColor.RED + Zone2.getPlugin().getConfig().getString("noPermission"), true);
         }
     }
 }

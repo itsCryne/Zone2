@@ -16,6 +16,7 @@ import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 
 import io.github.itscryne.zone2.perms.PermissionType;
+import io.github.itscryne.zone2.Zone2;
 import io.github.itscryne.zone2.extensions.Zonecation;
 import io.github.itscryne.zone2.extensions.Zoneler;
 
@@ -40,7 +41,7 @@ public class Zone2TransportTypeEvent implements Listener {
         boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.TRANSPORT);
         event.setCancelled(!allowed);
         if (!allowed) {
-            eventPlayer.sendXPMessage(ChatColor.RED + "Das darfst du hier nicht", true);
+            eventPlayer.sendXPMessage(ChatColor.RED + Zone2.getPlugin().getConfig().getString("noPermission"), true);
         }
     }
 
@@ -56,7 +57,7 @@ public class Zone2TransportTypeEvent implements Listener {
      * boolean allowed = Zone2PermCheck.isAllowed(eventLocation, eventPlayer,
      * PermissionType.TRANSPORT, Zone2.getPlugin()); event.setCancelled(!allowed);
      * if(!allowed){ eventPlayer.sendXPMessage(ChatColor.RED +
-     * "Das darfst du hier nicht", true); }
+     * Zone2.getPlugin().getConfig().getString("noPermission"), true); }
      */
 
     @EventHandler
@@ -76,7 +77,7 @@ public class Zone2TransportTypeEvent implements Listener {
         boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.TRANSPORT);
         event.setCancelled(!allowed);
         if (!allowed) {
-            eventPlayer.sendXPMessage(ChatColor.RED + "Das darfst du hier nicht", true);
+            eventPlayer.sendXPMessage(ChatColor.RED + Zone2.getPlugin().getConfig().getString("noPermission"), true);
         }
     }
 }
