@@ -1,6 +1,9 @@
 package io.github.itscryne.zone2.spaces;
 
+import org.bukkit.Location;
 import org.bukkit.World;
+import org.dynmap.markers.AreaMarker;
+import org.dynmap.markers.MarkerSet;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,6 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import io.github.itscryne.zone2.Zone2;
 import io.github.itscryne.zone2.config.ConfigReader;
 import io.github.itscryne.zone2.extensions.Zonecation;
 import io.github.itscryne.zone2.perms.Permission;
@@ -52,7 +56,8 @@ public class Zone extends Area {
      * @param name     Name of the zone
      * @param perms    Permissions of the zone
      */
-    protected Zone(int hx, int lx, int hy, int ly, int hz, int lz, World w, int priority, int id, String name, List<Permission> perms) {
+    protected Zone(int hx, int lx, int hy, int ly, int hz, int lz, World w, int priority, int id, String name,
+            List<Permission> perms) {
         super(hx, lx, hy, ly, hz, lz, w); // -> l1, l2
         this.id = id;
         this.priority = priority;
@@ -73,34 +78,32 @@ public class Zone extends Area {
         List<PlayerZone> playerZoneList = reader.getPlayerZoneList();
         List<ServerZone> serverZoneList = reader.getServerZoneList();
 
-        if (playerZoneList != null) {
-            if (!playerZoneList.isEmpty()) {
-                for (PlayerZone i : playerZoneList) {
-                    i.setL1(new Zonecation(Zonecation.deserialize(i.getSerL1())));
-                    i.setL2(new Zonecation(Zonecation.deserialize(i.getSerL2())));
+        if (playerZoneList != null && !playerZoneList.isEmpty()) {
+            for (PlayerZone i : playerZoneList) {
+                i.setL1(new Zonecation(Location.deserialize(i.getSerL1())));
+                i.setL2(new Zonecation(Location.deserialize(i.getSerL2())));
 
-                    if (this.getL2().getX() <= i.getL1().getX() && this.getL1().getX() >= i.getL2().getX()
-                            && this.getL2().getY() <= i.getL1().getY() && this.getL1().getY() >= i.getL2().getY()
-                            && this.getL2().getZ() <= i.getL1().getZ() && this.getL1().getZ() >= i.getL2().getZ()
-                            && this.getL1().getWorld().equals(i.getL1().getWorld())) {
-                        return true;
-                    }
+                if (this.getL2().getX() <= i.getL1().getX() && this.getL1().getX() >= i.getL2().getX()
+                        && this.getL2().getY() <= i.getL1().getY() && this.getL1().getY() >= i.getL2().getY()
+                        && this.getL2().getZ() <= i.getL1().getZ() && this.getL1().getZ() >= i.getL2().getZ()
+                        && this.getL1().getWorld().equals(i.getL1().getWorld())) {
+                    return true;
+
                 }
             }
         }
 
-        if (playerZoneList != null) {
-            if (!playerZoneList.isEmpty()) {
-                for (ServerZone i : serverZoneList) {
-                    i.setL1(new Zonecation(Zonecation.deserialize(i.getSerL1())));
-                    i.setL2(new Zonecation(Zonecation.deserialize(i.getSerL2())));
+        if (serverZoneList != null && !serverZoneList.isEmpty()) {
+            for (ServerZone i : serverZoneList) {
+                i.setL1(new Zonecation(Location.deserialize(i.getSerL1())));
+                i.setL2(new Zonecation(Location.deserialize(i.getSerL2())));
 
-                    if (this.getL2().getX() <= i.getL1().getX() && this.getL1().getX() >= i.getL2().getX()
-                            && this.getL2().getY() <= i.getL1().getY() && this.getL1().getY() >= i.getL2().getY()
-                            && this.getL2().getZ() <= i.getL1().getZ() && this.getL1().getZ() >= i.getL2().getZ()
-                            && this.getL1().getWorld().equals(i.getL1().getWorld())) {
-                        return true;
-                    }
+                if (this.getL2().getX() <= i.getL1().getX() && this.getL1().getX() >= i.getL2().getX()
+                        && this.getL2().getY() <= i.getL1().getY() && this.getL1().getY() >= i.getL2().getY()
+                        && this.getL2().getZ() <= i.getL1().getZ() && this.getL1().getZ() >= i.getL2().getZ()
+                        && this.getL1().getWorld().equals(i.getL1().getWorld())) {
+                    return true;
+
                 }
             }
         }
@@ -125,17 +128,17 @@ public class Zone extends Area {
         }
 
         List<Integer> zoneIds = new ArrayList<>();
-        if (serverZoneList != null && !serverZoneList.isEmpty()){
+        if (serverZoneList != null && !serverZoneList.isEmpty()) {
             serverZoneList.forEach(element -> zoneIds.add(element.getId()));
         }
-        if (playerZoneList != null && !playerZoneList.isEmpty()){
+        if (playerZoneList != null && !playerZoneList.isEmpty()) {
             playerZoneList.forEach(element -> zoneIds.add(element.getId()));
         }
-        if (subZoneList != null && !subZoneList.isEmpty()){
+        if (subZoneList != null && !subZoneList.isEmpty()) {
             subZoneList.forEach(element -> zoneIds.add(element.getId()));
         }
 
-        if (zoneIds != null && !zoneIds.isEmpty()){
+        if (!zoneIds.isEmpty()) {
             return Collections.max(zoneIds) + 1;
         }
         return 0;
@@ -151,6 +154,40 @@ public class Zone extends Area {
             }
         }
         return matches;
+    }
+
+    public void displayAreaMarker(MarkerSet markerSet) {
+        // https://www.programcreek.com/java-api-examples/?api=org.dynmap.markers.AreaMarker
+        // - Example 29
+        final String id = this.getName().concat("_").concat(String.valueOf(this.getId()));
+        final String name = this.getName();
+        final boolean markup = false;
+        final String world = this.getL1().getWorld().getName();
+
+        final double[] x = new double[4];
+        final double[] z = new double[4];
+        x[0] = x[1] = this.getMinX();
+        x[2] = x[3] = this.getMaxX();
+        z[0] = z[3] = this.getMinZ();
+        z[1] = z[2] = this.getMaxZ();
+
+        final boolean persistent = false;
+
+        final AreaMarker marker = markerSet.createAreaMarker(id, name, markup, world, x, z, persistent);
+
+        if (this instanceof ServerZone && marker != null) {
+            // thickness, opacity, color
+            marker.setLineStyle(1, 0.25, 0x00008b);
+            // opacity, color
+            marker.setFillStyle(0.5, 0x00008b);
+        } else if (this instanceof PlayerZone && marker != null) {
+            // thickness, opacity, color
+            marker.setLineStyle(1, 0.25, 0xb33ff0);
+            // opacity, color
+            marker.setFillStyle(0.5, 0xb33ff0);
+        } else {
+            Zone2.getPlugin().getLogger().severe("Failed to create AreaMarker with id " + id);
+        }
     }
 
     /**
@@ -179,7 +216,7 @@ public class Zone extends Area {
         return this.getZoneUUID().equals(zone.getZoneUUID());
     }
 
-     /**
+    /**
      * @return Permissions of the zone
      */
     public List<Permission> getPerms() {

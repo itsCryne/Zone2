@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.Location;
 import org.bukkit.World;
 
 import io.github.itscryne.zone2.config.ConfigReader;
@@ -44,8 +45,8 @@ public class SubZone extends Zone {
 
         if (!subZoneList.isEmpty()) {
             for (SubZone i : subZoneList) {
-                i.setL1(new Zonecation(Zonecation.deserialize(i.getSerL1())));
-                i.setL2(new Zonecation(Zonecation.deserialize(i.getSerL2())));
+                i.setL1(new Zonecation(Location.deserialize(i.getSerL1())));
+                i.setL2(new Zonecation(Location.deserialize(i.getSerL2())));
 
                 if (this.getL2().getX() <= i.getL1().getX() && this.getL1().getX() >= i.getL2().getX()
                         && this.getL2().getY() <= i.getL1().getY() && this.getL1().getY() >= i.getL2().getY()
