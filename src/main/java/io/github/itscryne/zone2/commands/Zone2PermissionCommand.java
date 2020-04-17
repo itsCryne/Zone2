@@ -14,7 +14,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,7 +21,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 
-public class Zone2PermissionCommand implements CommandExecutor { //TODO: * perms
+public class Zone2PermissionCommand implements CommandExecutor {
     /**
      * Executes the given command, returning its success. <br>
      * If false is returned, then the "usage" plugin.yml entry for this command (if
@@ -38,7 +37,7 @@ public class Zone2PermissionCommand implements CommandExecutor { //TODO: * perms
     @SuppressWarnings("deprecation")
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) { // add|remove who
                                                                                                    // what id
-        if (args.length != 4) { //Subzones
+        if (args.length != 4) { // Subzones
             return false;
         }
 
@@ -50,7 +49,7 @@ public class Zone2PermissionCommand implements CommandExecutor { //TODO: * perms
         if (who == null) {
             who = Bukkit.getOfflinePlayer(args[1]);
             if (who == null) {
-                sender.sendMessage(ChatColor.YELLOW + "Dieser Spieler existiert nicht");
+                sender.sendMessage(ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("unknownPlayer"));
                 return true;
             }
         }
@@ -59,8 +58,8 @@ public class Zone2PermissionCommand implements CommandExecutor { //TODO: * perms
                 .asList(Arrays.stream(PermissionType.class.getEnumConstants()).map(Enum::name).toArray(String[]::new)));
         boolean validValue = enumValues.stream().anyMatch(args[2]::equalsIgnoreCase);
         if (!validValue) {
-            sender.sendMessage(ChatColor.YELLOW + "Diese Permission existiert nicht!");
-            sender.sendMessage(ChatColor.DARK_GREEN + "Mögliche Permissions sind:");
+            sender.sendMessage(ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("noSuchPerm"));
+            sender.sendMessage(ChatColor.DARK_GREEN + Zone2.getPlugin().getConfig().getString("availablePerms"));
             for (String i : enumValues) {
                 sender.sendMessage(ChatColor.GREEN + "  - " + i);
             }
@@ -71,7 +70,7 @@ public class Zone2PermissionCommand implements CommandExecutor { //TODO: * perms
         try {
             id = Integer.parseInt(args[3]);
         } catch (NumberFormatException e) {
-            sender.sendMessage("Bitte gib als ID eine Ganzzahl an");
+            sender.sendMessage(Zone2.getPlugin().getConfig().getString("intID"));
             return true;
         }
 
@@ -83,24 +82,24 @@ public class Zone2PermissionCommand implements CommandExecutor { //TODO: * perms
             ConfigWriter writer;
             try {
                 reader = ConfigReader.getInstance();
-                writer = ConfigWriter.getInstance();
             } catch (IOException e) {
                 Zone2.getPlugin().getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
-                sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer!");
+                sender.sendMessage(ChatColor.DARK_RED + Zone2.getPlugin().getConfig().getString("oops"));
                 return true;
             }
 
             List<PlayerZone> playerZoneList = new ArrayList<>();
             try {
                 playerZoneList = reader.getPlayerZoneList();
-            } catch (FileNotFoundException e) {
+            } catch (IOException e) {
                 Zone2.getPlugin().getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
-                sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer!");
+                sender.sendMessage(ChatColor.DARK_RED + Zone2.getPlugin().getConfig().getString("oops"));
+                ConfigReader.destroy();
                 return true;
             }
 
             if (playerZoneList == null) {
-                sender.sendMessage(ChatColor.YELLOW + "Zone nicht gefunden");
+                sender.sendMessage(ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("zoneNotFound"));
                 return true;
             }
 
@@ -113,19 +112,16 @@ public class Zone2PermissionCommand implements CommandExecutor { //TODO: * perms
             }
 
             if (zone == null) {
-                sender.sendMessage(ChatColor.YELLOW + "Zone nicht gefunden");
+                sender.sendMessage(ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("zoneNotFound"));
                 return true;
             }
 
             Permission zoneAdmin = new Permission((Player) sender, PermissionType.MANAGE);
 
-            if (!zone.getPlayerUuid().equals(((Player) sender).getUniqueId())) {
-                if (!zone.getPerms().contains(zoneAdmin)) {
-                    if (!sender.hasPermission("Zone2.modifyPermissions")){
-                        sender.sendMessage(ChatColor.YELLOW + "Du hast hierzu keine Berechtigung");
-                        return true;
-                    }
-                }
+            if (!zone.getPlayerUuid().equals(((Player) sender).getUniqueId()) && !zone.getPerms().contains(zoneAdmin)
+                    && !sender.hasPermission("zone2.modifyPermissions")) {
+                sender.sendMessage(ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("noPermission"));
+                return true;
             }
 
             List<Permission> perms = new ArrayList<>(zone.getPerms());
@@ -134,13 +130,15 @@ public class Zone2PermissionCommand implements CommandExecutor { //TODO: * perms
                 if (i.getP().equals(perm.getP())) {
                     if (i.getPerm().equals(perm.getPerm())) {
                         if (who instanceof Player) {
-                            sender.sendMessage(ChatColor.YELLOW + "Du hast dem Spieler " + ChatColor.RESET
-                                    + ((Player) who).getDisplayName() + ChatColor.YELLOW + " das Recht " + ChatColor.RED
-                                    + args[2].toUpperCase(new Locale("de")) + ChatColor.YELLOW + " schon gewährt");
+                            sender.sendMessage(ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("alreadyGranted1") + ChatColor.RESET
+                                    + ((Player) who).getDisplayName() + ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("alreadyGranted2")
+                                    + ChatColor.RED + args[2].toUpperCase(new Locale("de")) + ChatColor.YELLOW
+                                    + Zone2.getPlugin().getConfig().getString("alreadyGranted3"));
                         } else {
-                            sender.sendMessage(ChatColor.YELLOW + "Du hast dem Spieler " + ChatColor.RESET
-                                    + who.getName() + ChatColor.YELLOW + " das Recht " + ChatColor.RED
-                                    + args[2].toUpperCase(new Locale("de")) + ChatColor.YELLOW + " schon gewährt");
+                            sender.sendMessage(ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("alreadyGranted1") + ChatColor.RESET
+                                    + who.getName() + ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("alreadyGranted2") + ChatColor.RED
+                                    + args[2].toUpperCase(new Locale("de")) + ChatColor.YELLOW
+                                    + Zone2.getPlugin().getConfig().getString("alreadyGranted3"));
                         }
                         return true;
                     }
@@ -153,7 +151,7 @@ public class Zone2PermissionCommand implements CommandExecutor { //TODO: * perms
             try {
                 writer = ConfigWriter.getInstance();
             } catch (IOException e) {
-                sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer!");
+                sender.sendMessage(ChatColor.DARK_RED + Zone2.getPlugin().getConfig().getString("oops"));
                 Zone2.getPlugin().getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
                 return true;
             }
@@ -163,18 +161,18 @@ public class Zone2PermissionCommand implements CommandExecutor { //TODO: * perms
                 writer.writePlayerZone(zone);
                 String message;
                 if (who instanceof Player) {
-                    message = ChatColor.GREEN + "Dem Spieler " + ChatColor.RESET + ((Player) who).getDisplayName()
-                            + ChatColor.GREEN + " wurde das Recht " + ChatColor.DARK_GREEN + args[2].toUpperCase(new Locale("de"))
-                            + ChatColor.GREEN + " gewährt";
+                    message = ChatColor.GREEN + Zone2.getPlugin().getConfig().getString("grant1") + ChatColor.RESET + ((Player) who).getDisplayName()
+                            + ChatColor.GREEN + Zone2.getPlugin().getConfig().getString("grant2") + ChatColor.DARK_GREEN
+                            + args[2].toUpperCase(new Locale("de")) + ChatColor.GREEN + Zone2.getPlugin().getConfig().getString("grant3");
                 } else {
-                    message = ChatColor.GREEN + "Dem Spieler " + ChatColor.RESET + ((OfflinePlayer) who).getName()
-                            + ChatColor.GREEN + " wurde das Recht " + ChatColor.DARK_GREEN + args[2].toUpperCase(new Locale("de"))
-                            + ChatColor.GREEN + " gewährt";
+                    message = ChatColor.GREEN + Zone2.getPlugin().getConfig().getString("grant1") + ChatColor.RESET + ((OfflinePlayer) who).getName()
+                            + ChatColor.GREEN + Zone2.getPlugin().getConfig().getString("grant2") + ChatColor.DARK_GREEN
+                            + args[2].toUpperCase(new Locale("de")) + ChatColor.GREEN + Zone2.getPlugin().getConfig().getString("grant3");
                 }
                 sender.sendMessage(message);
                 return true;
             } catch (IOException e) {
-                sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer!");
+                sender.sendMessage(ChatColor.DARK_RED + Zone2.getPlugin().getConfig().getString("oops"));
                 Zone2.getPlugin().getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
                 return true;
             }
@@ -186,24 +184,24 @@ public class Zone2PermissionCommand implements CommandExecutor { //TODO: * perms
             ConfigWriter writer;
             try {
                 reader = ConfigReader.getInstance();
-                writer = ConfigWriter.getInstance();
             } catch (IOException e) {
                 Zone2.getPlugin().getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
-                sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer!");
+                sender.sendMessage(ChatColor.DARK_RED + Zone2.getPlugin().getConfig().getString("oops"));
                 return true;
             }
 
             List<PlayerZone> playerZoneList = new ArrayList<>();
             try {
                 playerZoneList = reader.getPlayerZoneList();
-            } catch (FileNotFoundException e) {
+            } catch (IOException e) {
                 Zone2.getPlugin().getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
-                sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer!");
+                sender.sendMessage(ChatColor.DARK_RED + Zone2.getPlugin().getConfig().getString("oops"));
+                ConfigReader.destroy();
                 return true;
             }
 
             if (playerZoneList == null) {
-                sender.sendMessage(ChatColor.YELLOW + "Zone nicht gefunden");
+                sender.sendMessage(ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("zoneNotFound"));
                 return true;
             }
 
@@ -216,19 +214,17 @@ public class Zone2PermissionCommand implements CommandExecutor { //TODO: * perms
             }
 
             if (zone == null) {
-                sender.sendMessage(ChatColor.YELLOW + "Zone nicht gefunden");
+                sender.sendMessage(ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("zoneNotFound"));
                 return true;
             }
 
             Permission zoneAdmin = new Permission((Player) sender, PermissionType.MANAGE);
 
-            if (!zone.getPlayerUuid().equals(((Player) sender).getUniqueId())) {
-                if (!zone.getPerms().contains(zoneAdmin)) {
-                    if (!sender.hasPermission("Zone2.modifyPermissions")){
-                        sender.sendMessage(ChatColor.YELLOW + "Du hast hierzu keine Berechtigung");
-                        return true;
-                    }
-                }
+            if (!sender.hasPermission("zone2.modifyPermissions")
+                    && !zone.getPlayerUuid().equals(((Player) sender).getUniqueId())
+                    && !zone.getPerms().contains(zoneAdmin)) {
+                sender.sendMessage(ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("noPermission"));
+                return true;
             }
 
             List<Permission> perms = new ArrayList<>(zone.getPerms());
@@ -236,11 +232,9 @@ public class Zone2PermissionCommand implements CommandExecutor { //TODO: * perms
             Permission toRemove = null;
 
             for (Permission i : perms) {
-                if (i.getP().equals(who)) {
-                    if (i.getPerm().equals(permType)) {
-                        toRemove = i;
-                        removed = true;
-                    }
+                if (i.getP().equals(who) && i.getPerm().equals(permType)) {
+                    toRemove = i;
+                    removed = true;
                 }
             }
 
@@ -251,13 +245,14 @@ public class Zone2PermissionCommand implements CommandExecutor { //TODO: * perms
 
             if (!removed) {
                 if (who instanceof Player) {
-                    sender.sendMessage(ChatColor.YELLOW + "Der Spieler " + ChatColor.RESET
-                            + ((Player) who).getDisplayName() + ChatColor.YELLOW + " besitzt die Berechtigung "
-                            + ChatColor.RED + args[2].toUpperCase(new Locale("de")) + ChatColor.YELLOW + " nicht");
+                    sender.sendMessage(ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("playerNoPerm1") + ChatColor.RESET
+                            + ((Player) who).getDisplayName() + ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("playerNoPerm2")
+                            + ChatColor.RED + args[2].toUpperCase(new Locale("de")) + ChatColor.YELLOW
+                            + Zone2.getPlugin().getConfig().getString("playerNoPerm3"));
                 } else {
-                    sender.sendMessage(ChatColor.YELLOW + "Der Spieler " + ChatColor.RESET + who.getName()
-                            + ChatColor.YELLOW + " besitzt die Berechtigung " + ChatColor.RED + args[2].toUpperCase(new Locale("de"))
-                            + ChatColor.YELLOW + " nicht");
+                    sender.sendMessage(ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("playerNoPerm1") + ChatColor.RESET + who.getName()
+                            + ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("playerNoPerm2") + ChatColor.RED
+                            + args[2].toUpperCase(new Locale("de")) + ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("playerNoPerm3"));
                 }
                 return true;
 
@@ -266,7 +261,7 @@ public class Zone2PermissionCommand implements CommandExecutor { //TODO: * perms
             try {
                 writer = ConfigWriter.getInstance();
             } catch (IOException e) {
-                sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer!");
+                sender.sendMessage(ChatColor.DARK_RED + Zone2.getPlugin().getConfig().getString("oops"));
                 Zone2.getPlugin().getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
                 return true;
             }
@@ -276,18 +271,18 @@ public class Zone2PermissionCommand implements CommandExecutor { //TODO: * perms
                 writer.writePlayerZone(zone);
                 String message;
                 if (who instanceof Player) {
-                    message = ChatColor.GREEN + "Dem Spieler " + ChatColor.RESET + ((Player) who).getDisplayName()
-                            + ChatColor.GREEN + " wurde das Recht " + ChatColor.DARK_GREEN + args[2].toUpperCase(new Locale("de"))
-                            + ChatColor.GREEN + " verwehrt";
+                    message = ChatColor.GREEN + Zone2.getPlugin().getConfig().getString("revoke1") + ChatColor.RESET + ((Player) who).getDisplayName()
+                            + ChatColor.GREEN + Zone2.getPlugin().getConfig().getString("revoke2") + ChatColor.DARK_GREEN
+                            + args[2].toUpperCase(new Locale("de")) + ChatColor.GREEN + Zone2.getPlugin().getConfig().getString("revoke3");
                 } else {
-                    message = ChatColor.GREEN + "Dem Spieler " + ChatColor.RESET + who.getName() + ChatColor.GREEN
-                            + " wurde das Recht " + ChatColor.DARK_GREEN + args[2].toUpperCase(new Locale("de")) + ChatColor.GREEN
-                            + " verwehrt";
+                    message = ChatColor.GREEN + Zone2.getPlugin().getConfig().getString("revoke1") + ChatColor.RESET + who.getName() + ChatColor.GREEN
+                            + Zone2.getPlugin().getConfig().getString("revoke2") + ChatColor.DARK_GREEN + args[2].toUpperCase(new Locale("de"))
+                            + ChatColor.GREEN + Zone2.getPlugin().getConfig().getString("revoke3");
                 }
                 sender.sendMessage(message);
                 return true;
             } catch (IOException e) {
-                sender.sendMessage(ChatColor.DARK_RED + "Etwas ist schiefgelaufen! Bitte kontaktiere einen Developer!");
+                sender.sendMessage(ChatColor.DARK_RED + Zone2.getPlugin().getConfig().getString("oops"));
                 Zone2.getPlugin().getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
                 return true;
             }
