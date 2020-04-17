@@ -2,18 +2,69 @@ name: Zone2
 version: ${project.version}
 main: io.github.itscryne.zone2.Zone2
 api-version: 1.13
+depend: [WorldEdit]
+softdepend: [dynmap]
+
 commands:
   createzone:
-    usage: /createzone <hx lx hz lz>
+    usage: /createzone <x1 x2 z1 z2>
+    permission: zone2.createzone
   createserverzone:
-    usage: /createserverzone <hx lx hy ly hz lz world priority name>
+    usage: /createserverzone <x1 x2 y1 y2 z1 z2 world priority name>
+    permission: zone2.createserverzone
   createsubzone:
-    usage: /createsubzone <hx lx hy ly hz lz>
+    usage: /createsubzone <x1 x2 y1 y2 z1 z2>
+    permission: zone2.createsubzone
   permission:
     usage: /permission <add|delete who what id>
+    permission: zone2.permission
   myzones:
     usage: /myZones
+    permission: zone2.myzones
   zoneinfo:
     usage: /zoneinfo <id>
+    permission: zone2.zoneinfo
   serverpermission:
-    usage: /permission <add|delete who what id>
+    usage: /serverpermission <add|delete who what id>
+    permission: zone2.serverpermission
+  deletesubzone:
+    usage: /deletesubzone <ID>
+    permission: zone2.deletesubzone
+
+permissions:
+  zone2.createzone:
+    description: createzone command
+    default: true
+  zone2.createserverzone:
+    description: createserverzone command
+    default: op
+  zone2.createsubzone:
+    description: createsubzone command
+    default: true
+  zone2.permission:
+    description: permission command
+    default: true
+  zone2.myzones:
+    description: myzones command
+    default: true
+  zone2.zoneinfo:
+    description: zoneinfo command
+    default: true
+  zone2.serverpermission:
+    description: serverpermission command
+    default: op
+  zone2.modifyPermissions:
+    description: Modify every permission
+    default: op
+  zone2.modifyPlayerZone:
+    description: Modify every playerzone
+    default: op
+  zone2.modifyServerZone:
+    description: Modify every serverzone
+    default: op
+  zone2.modifyNoZone:
+    description: Modify spaces outside of zones
+    default: op
+  zone2.deletesubzone:
+    description: deletesubzone command
+    default: true
