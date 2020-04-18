@@ -9,6 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -96,7 +97,14 @@ public class Zone2InventoryTypeEvent implements Listener {
             return;
         }
 
-        Zoneler eventPlayer = new Zoneler((Player) event.getDamager());
+        Zoneler eventPlayer;
+        if (event.getDamager() instanceof Player){
+            eventPlayer = new Zoneler((Player) event.getDamager());
+        } else if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter() instanceof Player){
+            eventPlayer = new Zoneler((Player) ((Projectile)event.getDamager()).getShooter());
+        } else {
+            return;
+        }
         Zonecation eventLocation = new Zonecation(event.getEntity().getLocation());
 
         boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.INVENTORY);
