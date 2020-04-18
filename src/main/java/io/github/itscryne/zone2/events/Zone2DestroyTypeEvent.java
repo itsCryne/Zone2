@@ -8,6 +8,7 @@ import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -46,6 +47,19 @@ public class Zone2DestroyTypeEvent implements Listener {
     @EventHandler
     public void onHangingBreakByEntity(HangingBreakByEntityEvent event) throws IOException {
         Zonecation eventLocation = new Zonecation(event.getEntity().getLocation());
+        if(event.getRemover() instanceof Projectile){
+            if(((Projectile) event.getRemover()).getShooter() instanceof Player){
+                Zoneler eventPlayer = new Zoneler((Player) ((Projectile)event.getRemover()).getShooter());
+                boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.DESTROY);
+
+                event.setCancelled(!allowed);
+                if (!allowed) {
+                    eventPlayer.sendXPMessage(ChatColor.RED + Zone2.getPlugin().getConfig().getString("noPermission"), true);
+                }
+                return;
+            }
+        }
+
         if (!(event.getRemover() instanceof Player)) {
             return;
         }
