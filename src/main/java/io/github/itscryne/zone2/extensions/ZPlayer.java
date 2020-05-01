@@ -1,19 +1,5 @@
 package io.github.itscryne.zone2.extensions;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.craftbukkit.v1_14_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import io.github.itscryne.zone2.Zone2;
 import io.github.itscryne.zone2.config.ConfigReader;
 import io.github.itscryne.zone2.perms.Permission;
@@ -21,48 +7,52 @@ import io.github.itscryne.zone2.perms.PermissionType;
 import io.github.itscryne.zone2.spaces.PlayerZone;
 import io.github.itscryne.zone2.spaces.SubZone;
 import io.github.itscryne.zone2.spaces.Zone;
-import net.minecraft.server.v1_14_R1.ChatMessageType;
-import net.minecraft.server.v1_14_R1.EntityPlayer;
-import net.minecraft.server.v1_14_R1.IChatBaseComponent;
-import net.minecraft.server.v1_14_R1.PacketPlayOutChat;
-import net.minecraft.server.v1_14_R1.PlayerConnection;
+import net.minecraft.server.v1_15_R1.*;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
-public class Zoneler extends CraftPlayer {
+import java.io.IOException;
+import java.util.*;
+
+public class ZPlayer extends CraftPlayer {
     static Set<UUID> noNotify;
 
-    public Zoneler(CraftServer server, EntityPlayer entity) {
+    public ZPlayer(CraftServer server, EntityPlayer entity) {
         super(server, entity);
     }
 
-    public Zoneler(Player p) {
+    public ZPlayer(Player p) {
         super((CraftServer) p.getServer(), ((CraftPlayer) p).getHandle()); // Does this work?
     }
 
     /**
-     *
      * @param l Zonecation to check
      * @param t PermissionType to check
      * @return wether the player is allowed to do the action
      * @throws IOException if it cant access a file et al
      */
-    @SuppressWarnings({"unchecked","deprecation"})
-    public boolean isAllowed(Zonecation l, PermissionType t) throws IOException { // TODO: * perms
+    @SuppressWarnings({"unchecked", "deprecation"})
+    public boolean isAllowed(ZLocation l, PermissionType t) throws IOException { // TODO: * perms
         boolean inSubZone = l.inSubZone();
         boolean inZone = l.inZone();
 
         Permission neededPerm = new Permission(this, t);
         Permission administratePerm = new Permission(this, PermissionType.MANAGE);
-        
+
         OfflinePlayer p = Bukkit.getOfflinePlayer("*");
         Permission genericPerm = new Permission(p, t);
 
         List<String> noZoneWorlds = (List<String>) Zone2.getPlugin().getConfig().getList("noZoneWorld");
 
         if (!inZone) {
-            if(noZoneWorlds.contains(l.getWorld().getName())){
+            if (noZoneWorlds.contains(l.getWorld().getName())) {
                 return true;
             } else {
-                return this.hasPermission("zone2.modifyNoZone");
+                return this.hasPermission("zone2.modifynozone");
             }
         }
 
@@ -77,7 +67,7 @@ public class Zoneler extends CraftPlayer {
         } else {
             Zone highestPriorityZone = l.getHighestPriorityZone();
 
-            if(highestPriorityZone instanceof PlayerZone){
+            if (highestPriorityZone instanceof PlayerZone) {
                 return highestPriorityZone.getPerms().contains(neededPerm)
                         || highestPriorityZone.getPerms().contains(administratePerm)
                         || ((PlayerZone) highestPriorityZone).getPlayerUuid().equals(this.getUniqueId())
@@ -95,7 +85,7 @@ public class Zoneler extends CraftPlayer {
 
     /**
      * Function to check, wether the player already has a Zone
-     * 
+     *
      * @return wether the player has a zone
      * @throws IOException if it cant find a file et al
      */
@@ -120,9 +110,9 @@ public class Zoneler extends CraftPlayer {
         }
         if (important) {
             noNotify.add(this.getUniqueId());
-            Zoneler p = this;
+            ZPlayer p = this;
 
-            PlayerConnection con = ((CraftPlayer) p).getHandle().playerConnection;
+            PlayerConnection con = p.getHandle().playerConnection;
             IChatBaseComponent chat = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + message + "\"}");
             PacketPlayOutChat packet = new PacketPlayOutChat(chat, ChatMessageType.GAME_INFO);
             con.sendPacket(packet);
@@ -130,7 +120,7 @@ public class Zoneler extends CraftPlayer {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    PlayerConnection con = ((CraftPlayer) p).getHandle().playerConnection;
+                    PlayerConnection con = p.getHandle().playerConnection;
                     IChatBaseComponent chat = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + message + "\"}");
                     PacketPlayOutChat packet = new PacketPlayOutChat(chat, ChatMessageType.GAME_INFO);
                     con.sendPacket(packet);
@@ -144,8 +134,8 @@ public class Zoneler extends CraftPlayer {
                 }
             }.runTaskLater(Zone2.getPlugin(), 40);
         } else {
-            Zoneler p = this;
-            PlayerConnection con = ((CraftPlayer) p).getHandle().playerConnection;
+            ZPlayer p = this;
+            PlayerConnection con = p.getHandle().playerConnection;
             IChatBaseComponent chat = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + message + "\"}");
             PacketPlayOutChat packet = new PacketPlayOutChat(chat, ChatMessageType.GAME_INFO);
             con.sendPacket(packet);
