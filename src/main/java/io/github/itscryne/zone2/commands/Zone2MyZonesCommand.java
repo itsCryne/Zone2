@@ -2,10 +2,8 @@ package io.github.itscryne.zone2.commands;
 
 import io.github.itscryne.zone2.Zone2;
 import io.github.itscryne.zone2.config.ConfigReader;
-import io.github.itscryne.zone2.perms.Permission;
 import io.github.itscryne.zone2.spaces.PlayerZone;
 import io.github.itscryne.zone2.spaces.ServerZone;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -46,7 +44,7 @@ public class Zone2MyZonesCommand implements CommandExecutor { //serverzones
             return true;
         }
 
-        if(args.length != 1 || !args[0].equalsIgnoreCase("server") || !((Player)sender).isOp()){
+        if (args.length != 1 || !args[0].equalsIgnoreCase("server") || !sender.isOp()) {
             List<PlayerZone> playerZoneList = null;
 
             try {
@@ -66,12 +64,6 @@ public class Zone2MyZonesCommand implements CommandExecutor { //serverzones
             for (PlayerZone i : playerZoneList) {
                 if (i.getPlayerUuid().equals(((Player) sender).getUniqueId())) {
                     sendersZones.add(i);
-                    continue;
-                }
-                for (Permission s : i.getPerms()) { //TODO: WHHHHHHHHHHHHHHHHHHHHHHHHAAAAAAAAT TF does this?
-                    if (s.getPlayerUuid().equals(((Player) sender).getUniqueId())) {
-                        sendersZones.add(i);
-                    }
                 }
             }
 
