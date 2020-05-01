@@ -1,5 +1,12 @@
 package io.github.itscryne.zone2.events;
 
+import io.github.itscryne.zone2.Zone2;
+import io.github.itscryne.zone2.extensions.ZLocation;
+import io.github.itscryne.zone2.extensions.ZPlayer;
+import io.github.itscryne.zone2.perms.PermissionType;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -11,15 +18,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.event.EventHandler;
-
-import io.github.itscryne.zone2.perms.PermissionType;
-import io.github.itscryne.zone2.Zone2;
-import io.github.itscryne.zone2.extensions.Zonecation;
-import io.github.itscryne.zone2.extensions.Zoneler;
-
 public class Zone2TransportTypeEvent implements Listener {
 
     @EventHandler
@@ -30,13 +28,13 @@ public class Zone2TransportTypeEvent implements Listener {
             }
         }
 
-        Zonecation eventLocation = new Zonecation(event.getTo());
+        ZLocation eventLocation = new ZLocation(event.getTo());
 
         if (!eventLocation.inZone()) { // TODO intended?
             return;
         }
 
-        Zoneler eventPlayer = new Zoneler(event.getPlayer());
+        ZPlayer eventPlayer = new ZPlayer(event.getPlayer());
 
         boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.TRANSPORT);
         event.setCancelled(!allowed);
@@ -71,8 +69,8 @@ public class Zone2TransportTypeEvent implements Listener {
             return;
         }
 
-        Zoneler eventPlayer = new Zoneler(event.getPlayer());
-        Zonecation eventLocation = new Zonecation(event.getClickedBlock().getLocation());
+        ZPlayer eventPlayer = new ZPlayer(event.getPlayer());
+        ZLocation eventLocation = new ZLocation(event.getClickedBlock().getLocation());
 
         boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.TRANSPORT);
         event.setCancelled(!allowed);

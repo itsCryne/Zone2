@@ -1,11 +1,13 @@
 package io.github.itscryne.zone2.commands;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.logging.Level;
-
+import io.github.itscryne.zone2.Zone2;
+import io.github.itscryne.zone2.config.ConfigWriter;
+import io.github.itscryne.zone2.extensions.ZLocation;
+import io.github.itscryne.zone2.extensions.ZPlayer;
+import io.github.itscryne.zone2.perms.Permission;
+import io.github.itscryne.zone2.perms.PermissionType;
+import io.github.itscryne.zone2.spaces.SubZone;
+import io.github.itscryne.zone2.spaces.Zone;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -14,14 +16,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import io.github.itscryne.zone2.Zone2;
-import io.github.itscryne.zone2.config.ConfigWriter;
-import io.github.itscryne.zone2.extensions.Zonecation;
-import io.github.itscryne.zone2.extensions.Zoneler;
-import io.github.itscryne.zone2.perms.Permission;
-import io.github.itscryne.zone2.perms.PermissionType;
-import io.github.itscryne.zone2.spaces.SubZone;
-import io.github.itscryne.zone2.spaces.Zone;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.logging.Level;
 
 public class Zone2CreateSubZoneCommand implements CommandExecutor {
 
@@ -76,9 +75,9 @@ public class Zone2CreateSubZoneCommand implements CommandExecutor {
             return true;
         }
 
-        Zonecation l1 = new Zonecation(w, hx, hy, hz);
-        Zonecation l2 = new Zonecation(w, lx, ly, lz);
-        Zoneler senderZoneler = new Zoneler((Player) sender);
+        ZLocation l1 = new ZLocation(w, hx, hy, hz);
+        ZLocation l2 = new ZLocation(w, lx, ly, lz);
+        ZPlayer senderZoneler = new ZPlayer((Player) sender);
 
         try {
             if (!(l1.inPlayerZone() && l2.inPlayerZone())) {
@@ -86,7 +85,7 @@ public class Zone2CreateSubZoneCommand implements CommandExecutor {
                 return true;
             }
 
-            if(!(l1.getHighestPriorityZone().equals(l2.getHighestPriorityZone()))){
+            if (!(l1.getHighestPriorityZone().equals(l2.getHighestPriorityZone()))) {
                 sender.sendMessage(ChatColor.RED + Zone2.getPlugin().getConfig().getString("justInOneZone"));
                 return true;
             }
@@ -103,7 +102,7 @@ public class Zone2CreateSubZoneCommand implements CommandExecutor {
             return true;
         }
 
-        String name = ((Player) sender).getName();
+        String name = sender.getName();
         UUID uuid = ((Player) sender).getUniqueId();
         List<Permission> perms = new ArrayList<>();
         
@@ -111,8 +110,8 @@ public class Zone2CreateSubZoneCommand implements CommandExecutor {
 
         int middleX = (l1.getBlockX() + l2.getBlockX())/2;
         int middleY = (l1.getBlockY() + l2.getBlockY())/2;
-        int middleZ = (l1.getBlockZ() + l2.getBlockZ())/2;
-        Zonecation middle = new Zonecation(w, middleX, middleY, middleZ);
+        int middleZ = (l1.getBlockZ() + l2.getBlockZ()) / 2;
+        ZLocation middle = new ZLocation(w, middleX, middleY, middleZ);
         Zone h;
         try {
             h = middle.getHighestPriorityZone();

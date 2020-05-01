@@ -1,10 +1,9 @@
 package io.github.itscryne.zone2.events;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import io.github.itscryne.zone2.Zone2;
+import io.github.itscryne.zone2.extensions.ZLocation;
+import io.github.itscryne.zone2.extensions.ZPlayer;
+import io.github.itscryne.zone2.perms.PermissionType;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.ItemFrame;
@@ -19,16 +18,16 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import io.github.itscryne.zone2.Zone2;
-import io.github.itscryne.zone2.extensions.Zonecation;
-import io.github.itscryne.zone2.extensions.Zoneler;
-import io.github.itscryne.zone2.perms.PermissionType;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Zone2InventoryTypeEvent implements Listener {
 
     @EventHandler
     public void onInventoryOpen(InventoryOpenEvent event) throws IOException {
-        if (!(event.getPlayer() instanceof Player)){
+        if (!(event.getPlayer() instanceof Player)) {
             return;
         }
 
@@ -37,16 +36,16 @@ public class Zone2InventoryTypeEvent implements Listener {
                 InventoryType.WORKBENCH, InventoryType.GRINDSTONE, InventoryType.CRAFTING, InventoryType.CREATIVE,
                 InventoryType.PLAYER));
 
-        Zoneler eventPlayer = new Zoneler((Player) event.getPlayer());
-        Zonecation eventLocation;
+        ZPlayer eventPlayer = new ZPlayer((Player) event.getPlayer());
+        ZLocation eventLocation;
 
         if (event.getInventory().getLocation() == null) {
-            eventLocation = new Zonecation(eventPlayer.getLocation());
+            eventLocation = new ZLocation(event.getPlayer().getLocation());
         } else {
-            eventLocation = new Zonecation(event.getInventory().getLocation());
+            eventLocation = new ZLocation(event.getInventory().getLocation());
         }
 
-        if (allowedInvs.contains(event.getInventory().getType())){
+        if (allowedInvs.contains(event.getInventory().getType())) {
             event.setCancelled(false);
             return;
         }
@@ -70,8 +69,8 @@ public class Zone2InventoryTypeEvent implements Listener {
             }
         }
 
-        Zoneler eventPlayer = new Zoneler(event.getPlayer());
-        Zonecation eventLocation = new Zonecation(event.getClickedBlock().getLocation());
+        ZPlayer eventPlayer = new ZPlayer(event.getPlayer());
+        ZLocation eventLocation = new ZLocation(event.getClickedBlock().getLocation());
 
         boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.INVENTORY);
         event.setCancelled(!allowed);
@@ -82,8 +81,8 @@ public class Zone2InventoryTypeEvent implements Listener {
 
     @EventHandler
     public void onPlayerArmorStandManipulate(PlayerArmorStandManipulateEvent event) throws IOException {
-        Zoneler eventPlayer = new Zoneler(event.getPlayer());
-        Zonecation eventLocation = new Zonecation(event.getRightClicked().getLocation());
+        ZPlayer eventPlayer = new ZPlayer(event.getPlayer());
+        ZLocation eventLocation = new ZLocation(event.getRightClicked().getLocation());
         boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.INVENTORY);
         event.setCancelled(!allowed);
         if (!allowed) {
@@ -97,15 +96,15 @@ public class Zone2InventoryTypeEvent implements Listener {
             return;
         }
 
-        Zoneler eventPlayer;
+        ZPlayer eventPlayer;
         if (event.getDamager() instanceof Player){
-            eventPlayer = new Zoneler((Player) event.getDamager());
+            eventPlayer = new ZPlayer((Player) event.getDamager());
         } else if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter() instanceof Player){
-            eventPlayer = new Zoneler((Player) ((Projectile)event.getDamager()).getShooter());
+            eventPlayer = new ZPlayer((Player) ((Projectile) event.getDamager()).getShooter());
         } else {
             return;
         }
-        Zonecation eventLocation = new Zonecation(event.getEntity().getLocation());
+        ZLocation eventLocation = new ZLocation(event.getEntity().getLocation());
 
         boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.INVENTORY);
         event.setCancelled(!allowed);

@@ -1,5 +1,9 @@
 package io.github.itscryne.zone2.spaces;
 
+import io.github.itscryne.zone2.Zone2;
+import io.github.itscryne.zone2.config.ConfigReader;
+import io.github.itscryne.zone2.extensions.ZLocation;
+import io.github.itscryne.zone2.perms.Permission;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.dynmap.markers.AreaMarker;
@@ -11,19 +15,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import io.github.itscryne.zone2.Zone2;
-import io.github.itscryne.zone2.config.ConfigReader;
-import io.github.itscryne.zone2.extensions.Zonecation;
-import io.github.itscryne.zone2.perms.Permission;
-
 /**
  * @serial JSON
  */
 public class Zone extends Area {
-    private int priority;
-    private int id;
-    private UUID zoneUUID;
-    private String name;
+    private final int priority;
+    private final int id;
+    private final UUID zoneUUID;
+    private final String name;
     private List<Permission> perms;
 
     /**
@@ -34,7 +33,7 @@ public class Zone extends Area {
      * @param name     Name of the zone
      * @param perms    Permissions of the zone
      */
-    protected Zone(Zonecation l1, Zonecation l2, int priority, int id, String name, List<Permission> perms) {
+    protected Zone(ZLocation l1, ZLocation l2, int priority, int id, String name, List<Permission> perms) {
         super(l1, l2); // -> l1, l2
         this.id = id;
         this.priority = priority;
@@ -80,8 +79,8 @@ public class Zone extends Area {
 
         if (playerZoneList != null && !playerZoneList.isEmpty()) {
             for (PlayerZone i : playerZoneList) {
-                i.setL1(new Zonecation(Location.deserialize(i.getSerL1())));
-                i.setL2(new Zonecation(Location.deserialize(i.getSerL2())));
+                i.setL1(new ZLocation(Location.deserialize(i.getSerL1())));
+                i.setL2(new ZLocation(Location.deserialize(i.getSerL2())));
 
                 if (this.getL2().getX() <= i.getL1().getX() && this.getL1().getX() >= i.getL2().getX()
                         && this.getL2().getY() <= i.getL1().getY() && this.getL1().getY() >= i.getL2().getY()
@@ -95,8 +94,8 @@ public class Zone extends Area {
 
         if (serverZoneList != null && !serverZoneList.isEmpty()) {
             for (ServerZone i : serverZoneList) {
-                i.setL1(new Zonecation(Location.deserialize(i.getSerL1())));
-                i.setL2(new Zonecation(Location.deserialize(i.getSerL2())));
+                i.setL1(new ZLocation(Location.deserialize(i.getSerL1())));
+                i.setL2(new ZLocation(Location.deserialize(i.getSerL2())));
 
                 if (this.getL2().getX() <= i.getL1().getX() && this.getL1().getX() >= i.getL2().getX()
                         && this.getL2().getY() <= i.getL1().getY() && this.getL1().getY() >= i.getL2().getY()

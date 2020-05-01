@@ -1,22 +1,21 @@
 package io.github.itscryne.zone2.commands;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-
+import io.github.itscryne.zone2.Zone2;
+import io.github.itscryne.zone2.config.ConfigWriter;
+import io.github.itscryne.zone2.extensions.ZLocation;
+import io.github.itscryne.zone2.extensions.ZPlayer;
+import io.github.itscryne.zone2.perms.PermissionType;
+import io.github.itscryne.zone2.spaces.SubZone;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import io.github.itscryne.zone2.Zone2;
-import io.github.itscryne.zone2.config.ConfigWriter;
-import io.github.itscryne.zone2.extensions.Zonecation;
-import io.github.itscryne.zone2.extensions.Zoneler;
-import io.github.itscryne.zone2.perms.PermissionType;
-import io.github.itscryne.zone2.spaces.SubZone;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
 
 public class Zone2DeleteSubZoneCommand implements CommandExecutor {
 
@@ -31,7 +30,7 @@ public class Zone2DeleteSubZoneCommand implements CommandExecutor {
             return false;
         }
 
-        Zoneler senderZoneler = new Zoneler((Player) sender);
+        ZPlayer senderZoneler = new ZPlayer((Player) sender);
 
         List<SubZone> subZoneList = new ArrayList<>();
         SubZone toDelete = null;
@@ -56,8 +55,8 @@ public class Zone2DeleteSubZoneCommand implements CommandExecutor {
             return true;
         }
 
-        Zonecation l1 = toDelete.getL1();
-        Zonecation l2 = toDelete.getL2();
+        ZLocation l1 = toDelete.getL1();
+        ZLocation l2 = toDelete.getL2();
 
         try {
             if (!(senderZoneler.isAllowed(l1, PermissionType.MANAGE)

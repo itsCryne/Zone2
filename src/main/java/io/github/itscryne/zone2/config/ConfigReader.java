@@ -1,42 +1,36 @@
 package io.github.itscryne.zone2.config;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
-
-import org.bukkit.Location;
-
 import io.github.itscryne.zone2.Zone2;
-import io.github.itscryne.zone2.extensions.Zonecation;
+import io.github.itscryne.zone2.extensions.ZLocation;
 import io.github.itscryne.zone2.spaces.PlayerZone;
 import io.github.itscryne.zone2.spaces.ServerZone;
 import io.github.itscryne.zone2.spaces.SubZone;
+import org.bukkit.Location;
+
+import java.io.*;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class ConfigReader {
     private static ConfigReader instance;
 
-    private String playerZonePath;
-    private String serverZonePath;
-    private String subZonePath;
-    private Zone2 plugin;
-    private File dataDir;
-    private File playerZonesFile;
-    private File serverZonesFile;
-    private File subZonesFile;
+    private final String playerZonePath;
+    private final String serverZonePath;
+    private final String subZonePath;
+    private final Zone2 plugin;
+    private final File dataDir;
+    private final File playerZonesFile;
+    private final File serverZonesFile;
+    private final File subZonesFile;
 
     /**
      * ConfigReader constructor - access via {@link #getInstance(Zone2)} method.
-     * 
+     *
      * @throws IOException if it cant access the files et al
      */
     private ConfigReader() throws IOException {
@@ -126,8 +120,8 @@ public final class ConfigReader {
 
         for (int i = 0; i < pzl.size(); i++) {
             PlayerZone j = pzl.get(i);
-            j.setL1(new Zonecation(Location.deserialize(j.getSerL1())));
-            j.setL2(new Zonecation(Location.deserialize(j.getSerL2())));
+            j.setL1(new ZLocation(Location.deserialize(j.getSerL1())));
+            j.setL2(new ZLocation(Location.deserialize(j.getSerL2())));
             pzl.set(i, j);
         }
 
@@ -151,8 +145,8 @@ public final class ConfigReader {
         List<ServerZone> szl = gson.fromJson(serverZoneListReader, serverZoneListType);
         for (int i = 0; i < szl.size(); i++) {
             ServerZone j = szl.get(i);
-            j.setL1(new Zonecation(Location.deserialize(j.getSerL1())));
-            j.setL2(new Zonecation(Location.deserialize(j.getSerL2())));
+            j.setL1(new ZLocation(Location.deserialize(j.getSerL1())));
+            j.setL2(new ZLocation(Location.deserialize(j.getSerL2())));
             szl.set(i, j);
         }
 
@@ -171,8 +165,8 @@ public final class ConfigReader {
         List<SubZone> szl = gson.fromJson(serverZoneListReader, subZoneListType);
         for (int i = 0; i < szl.size(); i++) {
             SubZone j = szl.get(i);
-            j.setL1(new Zonecation(Location.deserialize(j.getSerL1())));
-            j.setL2(new Zonecation(Location.deserialize(j.getSerL2())));
+            j.setL1(new ZLocation(Location.deserialize(j.getSerL1())));
+            j.setL2(new ZLocation(Location.deserialize(j.getSerL2())));
             szl.set(i, j);
         }
 

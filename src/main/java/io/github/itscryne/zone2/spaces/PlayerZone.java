@@ -1,18 +1,17 @@
 package io.github.itscryne.zone2.spaces;
 
+import io.github.itscryne.zone2.extensions.ZLocation;
 import io.github.itscryne.zone2.perms.Permission;
 import org.bukkit.World;
 
 import java.util.List;
 import java.util.UUID;
 
-import io.github.itscryne.zone2.extensions.Zonecation;
-
 /**
  * @serial JSON
  */
 public class PlayerZone extends Zone {
-    private UUID playerUuid;
+    private final UUID playerUuid;
 
     /**
      * @param hx         Hgher x coordinate
@@ -42,8 +41,8 @@ public class PlayerZone extends Zone {
      * @param name       Name of the Zone
      * @param playerUuid UUID of the creating player
      */
-    public PlayerZone(Zonecation l1, Zonecation l2, int priority, int id, String name, UUID playerUuid,
-            List<Permission> perms) {
+    public PlayerZone(ZLocation l1, ZLocation l2, int priority, int id, String name, UUID playerUuid,
+                      List<Permission> perms) {
         super(l1, l2, priority, id, name, perms);
         this.playerUuid = playerUuid;
     }

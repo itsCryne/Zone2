@@ -1,26 +1,25 @@
 package io.github.itscryne.zone2.spaces;
 
+import io.github.itscryne.zone2.config.ConfigReader;
+import io.github.itscryne.zone2.extensions.ZLocation;
+import io.github.itscryne.zone2.perms.Permission;
+import org.bukkit.Location;
+import org.bukkit.World;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.Location;
-import org.bukkit.World;
-
-import io.github.itscryne.zone2.config.ConfigReader;
-import io.github.itscryne.zone2.extensions.Zonecation;
-import io.github.itscryne.zone2.perms.Permission;
-
 /**
  * @serial JSON
  */
 public class SubZone extends Zone {
-    private UUID playerUUID;
-    private UUID superZoneUUID;
+    private final UUID playerUUID;
+    private final UUID superZoneUUID;
 
     public SubZone(int hx, int lx, int hy, int ly, int hz, int lz, World w, int priority, int id, String name,
-            UUID playerUuid, List<Permission> perms, UUID superZoneUUID) {
+                   UUID playerUuid, List<Permission> perms, UUID superZoneUUID) {
         super(hx, lx, hy, ly, hz, lz, w, priority, id, name, perms);
         this.playerUUID = playerUuid;
         this.superZoneUUID = superZoneUUID;
@@ -28,8 +27,8 @@ public class SubZone extends Zone {
 
     // TODO: Are Subzones always preferred over normal Zones?
 
-    public SubZone(Zonecation l1, Zonecation l2, int priority, int id, String name, UUID playerUuid,
-            List<Permission> perms, UUID superZoneUUID) {
+    public SubZone(ZLocation l1, ZLocation l2, int priority, int id, String name, UUID playerUuid,
+                   List<Permission> perms, UUID superZoneUUID) {
         super(l1, l2, priority, id, name, perms);
         this.playerUUID = playerUuid;
         this.superZoneUUID = superZoneUUID;
@@ -45,8 +44,8 @@ public class SubZone extends Zone {
 
         if (!subZoneList.isEmpty()) {
             for (SubZone i : subZoneList) {
-                i.setL1(new Zonecation(Location.deserialize(i.getSerL1())));
-                i.setL2(new Zonecation(Location.deserialize(i.getSerL2())));
+                i.setL1(new ZLocation(Location.deserialize(i.getSerL1())));
+                i.setL2(new ZLocation(Location.deserialize(i.getSerL2())));
 
                 if (this.getL2().getX() <= i.getL1().getX() && this.getL1().getX() >= i.getL2().getX()
                         && this.getL2().getY() <= i.getL1().getY() && this.getL1().getY() >= i.getL2().getY()

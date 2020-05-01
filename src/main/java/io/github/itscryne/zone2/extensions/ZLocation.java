@@ -1,34 +1,32 @@
 package io.github.itscryne.zone2.extensions;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.Location;
-import org.bukkit.World;
-
 import io.github.itscryne.zone2.config.ConfigReader;
 import io.github.itscryne.zone2.spaces.PlayerZone;
 import io.github.itscryne.zone2.spaces.ServerZone;
 import io.github.itscryne.zone2.spaces.SubZone;
 import io.github.itscryne.zone2.spaces.Zone;
+import org.bukkit.Location;
+import org.bukkit.World;
 
-public class Zonecation extends Location {
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-    public Zonecation(World world, double x, double y, double z) {
+public class ZLocation extends Location {
+
+    public ZLocation(World world, double x, double y, double z) {
         super(world, x, y, z);
     }
 
-    public Zonecation(World world, double x, double y, double z, float yaw, float pitch) {
+    public ZLocation(World world, double x, double y, double z, float yaw, float pitch) {
         super(world, x, y, z, yaw, pitch);
     }
 
-    public Zonecation(Location l) {
+    public ZLocation(Location l) {
         super(l.getWorld(), l.getX(), l.getY(), l.getZ(), l.getYaw(), l.getPitch());
     }
 
-    public boolean inPlayerZone() throws FileNotFoundException, IOException {
+    public boolean inPlayerZone() throws IOException {
         for (PlayerZone i : ConfigReader.getInstance().getPlayerZoneList()) {
             if (i.contains(this)) {
                 return true;
@@ -37,7 +35,7 @@ public class Zonecation extends Location {
         return false;
     }
 
-    public boolean inServerZone() throws FileNotFoundException, IOException {
+    public boolean inServerZone() throws IOException {
         for (ServerZone i : ConfigReader.getInstance().getServerZoneList()) {
             if (i.contains(this)) {
                 return true;
@@ -46,11 +44,11 @@ public class Zonecation extends Location {
         return false;
     }
 
-    public boolean inZone() throws FileNotFoundException, IOException {
+    public boolean inZone() throws IOException {
         return this.inPlayerZone() || this.inServerZone();
     }
 
-    public boolean inSubZone() throws FileNotFoundException, IOException {
+    public boolean inSubZone() throws IOException {
         for (SubZone i : ConfigReader.getInstance().getSubZoneList()) {
             if (i.contains(this)) {
                 return true;
@@ -59,7 +57,7 @@ public class Zonecation extends Location {
         return false;
     }
 
-    public List<ServerZone> getServerZones() throws FileNotFoundException, IOException {
+    public List<ServerZone> getServerZones() throws IOException {
         List<ServerZone> serverZoneList = new ArrayList<>();
         for (ServerZone i : ConfigReader.getInstance().getServerZoneList()) {
             if (i.contains(this)) {
@@ -69,7 +67,7 @@ public class Zonecation extends Location {
         return serverZoneList;
     }
 
-    public List<PlayerZone> getPlayerZones() throws FileNotFoundException, IOException {
+    public List<PlayerZone> getPlayerZones() throws IOException {
         List<PlayerZone> playerZoneList = new ArrayList<>();
         for (PlayerZone i : ConfigReader.getInstance().getPlayerZoneList()) {
             if (i.contains(this)) {
@@ -79,7 +77,7 @@ public class Zonecation extends Location {
         return playerZoneList;
     }
 
-    public List<SubZone> getSubZones() throws FileNotFoundException, IOException {
+    public List<SubZone> getSubZones() throws IOException {
         List<SubZone> subZoneList = new ArrayList<>();
         for (SubZone i : ConfigReader.getInstance().getSubZoneList()) {
             if (i.contains(this)) {
@@ -89,9 +87,9 @@ public class Zonecation extends Location {
         return subZoneList;
     }
 
-    public PlayerZone getHighestPriorityPlayerZone() throws FileNotFoundException, IOException {
+    public PlayerZone getHighestPriorityPlayerZone() throws IOException {
         PlayerZone highestPriorityZone = null;
-        for(PlayerZone z : this.getPlayerZones()){
+        for (PlayerZone z : this.getPlayerZones()) {
             if (highestPriorityZone == null) {
                 highestPriorityZone = z;
             }
@@ -102,9 +100,9 @@ public class Zonecation extends Location {
         return highestPriorityZone;
     }
 
-    public ServerZone getHighestPriorityServerZone() throws FileNotFoundException, IOException {
+    public ServerZone getHighestPriorityServerZone() throws IOException {
         ServerZone highestPriorityZone = null;
-        for(ServerZone z : this.getServerZones()){
+        for (ServerZone z : this.getServerZones()) {
             if (highestPriorityZone == null) {
                 highestPriorityZone = z;
             }
@@ -115,9 +113,9 @@ public class Zonecation extends Location {
         return highestPriorityZone;
     }
 
-    public SubZone getHighestPrioritySubZone() throws FileNotFoundException, IOException {
+    public SubZone getHighestPrioritySubZone() throws IOException {
         SubZone highestPriorityZone = null;
-        for(SubZone z : this.getSubZones()){
+        for (SubZone z : this.getSubZones()) {
             if (highestPriorityZone == null) {
                 highestPriorityZone = z;
             }
@@ -128,14 +126,14 @@ public class Zonecation extends Location {
         return highestPriorityZone;
     }
 
-    public Zone getHighestPriorityZone() throws FileNotFoundException, IOException {
+    public Zone getHighestPriorityZone() throws IOException {
         PlayerZone p = this.getHighestPriorityPlayerZone();
         ServerZone s = this.getHighestPriorityServerZone();
 
-        if(p == null){
+        if (p == null) {
             return s;
         }
-        if(s == null){
+        if (s == null) {
             return p;
         }
 

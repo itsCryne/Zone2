@@ -1,10 +1,9 @@
 package io.github.itscryne.zone2.events;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import io.github.itscryne.zone2.Zone2;
+import io.github.itscryne.zone2.extensions.ZLocation;
+import io.github.itscryne.zone2.extensions.ZPlayer;
+import io.github.itscryne.zone2.perms.PermissionType;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -12,10 +11,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import io.github.itscryne.zone2.perms.PermissionType;
-import io.github.itscryne.zone2.Zone2;
-import io.github.itscryne.zone2.extensions.Zonecation;
-import io.github.itscryne.zone2.extensions.Zoneler;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Zone2DoorsTypeEvent implements Listener {
 
@@ -35,12 +34,12 @@ public class Zone2DoorsTypeEvent implements Listener {
                         Material.JUNGLE_FENCE_GATE, Material.JUNGLE_TRAPDOOR, Material.ACACIA_DOOR,
                         Material.ACACIA_FENCE_GATE, Material.ACACIA_TRAPDOOR));
 
-        if (!(doors.contains(event.getClickedBlock().getType()))){
+        if (!(doors.contains(event.getClickedBlock().getType()))) {
             return;
         }
 
-        Zonecation eventLocation = new Zonecation(event.getClickedBlock().getLocation());
-        Zoneler eventPlayer = new Zoneler(event.getPlayer());
+        ZLocation eventLocation = new ZLocation(event.getClickedBlock().getLocation());
+        ZPlayer eventPlayer = new ZPlayer(event.getPlayer());
 
         boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.DOORS);
         event.setCancelled(!allowed);

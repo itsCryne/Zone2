@@ -1,10 +1,9 @@
 package io.github.itscryne.zone2.events;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import io.github.itscryne.zone2.Zone2;
+import io.github.itscryne.zone2.extensions.ZLocation;
+import io.github.itscryne.zone2.extensions.ZPlayer;
+import io.github.itscryne.zone2.perms.PermissionType;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -12,10 +11,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import io.github.itscryne.zone2.perms.PermissionType;
-import io.github.itscryne.zone2.Zone2;
-import io.github.itscryne.zone2.extensions.Zonecation;
-import io.github.itscryne.zone2.extensions.Zoneler;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Zone2RedstoneTypeEvent implements Listener {
 
@@ -32,7 +31,7 @@ public class Zone2RedstoneTypeEvent implements Listener {
                 Material.ACACIA_PRESSURE_PLATE, Material.DARK_OAK_PRESSURE_PLATE,
                 Material.LIGHT_WEIGHTED_PRESSURE_PLATE, Material.HEAVY_WEIGHTED_PRESSURE_PLATE));
 
-        if (event.getClickedBlock() == null){
+        if (event.getClickedBlock() == null) {
             return;
         }
         if (!(event.getAction().equals(Action.PHYSICAL)
@@ -43,8 +42,8 @@ public class Zone2RedstoneTypeEvent implements Listener {
             }
         }
 
-        Zonecation eventLocation = new Zonecation(event.getClickedBlock().getLocation());
-        Zoneler eventPlayer = new Zoneler(event.getPlayer());
+        ZLocation eventLocation = new ZLocation(event.getClickedBlock().getLocation());
+        ZPlayer eventPlayer = new ZPlayer(event.getPlayer());
 
         boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.REDSTONE);
         event.setCancelled(!allowed);
