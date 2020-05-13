@@ -48,10 +48,6 @@ public class Zone2PermissionCommand implements CommandExecutor {
         OfflinePlayer who = Bukkit.getPlayer(args[1]);
         if (who == null) {
             who = Bukkit.getOfflinePlayer(args[1]);
-            if (who == null) {
-                sender.sendMessage(ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("unknownPlayer"));
-                return true;
-            }
         }
 
         List<String> enumValues = new ArrayList<>(Arrays
@@ -88,18 +84,13 @@ public class Zone2PermissionCommand implements CommandExecutor {
                 return true;
             }
 
-            List<PlayerZone> playerZoneList = new ArrayList<>();
+            List<PlayerZone> playerZoneList;
             try {
                 playerZoneList = reader.getPlayerZoneList();
             } catch (IOException e) {
                 Zone2.getPlugin().getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
                 sender.sendMessage(ChatColor.DARK_RED + Zone2.getPlugin().getConfig().getString("oops"));
                 ConfigReader.destroy();
-                return true;
-            }
-
-            if (playerZoneList == null) {
-                sender.sendMessage(ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("zoneNotFound"));
                 return true;
             }
 
@@ -165,7 +156,7 @@ public class Zone2PermissionCommand implements CommandExecutor {
                             + ChatColor.GREEN + Zone2.getPlugin().getConfig().getString("grant2") + ChatColor.DARK_GREEN
                             + args[2].toUpperCase(new Locale("de")) + ChatColor.GREEN + Zone2.getPlugin().getConfig().getString("grant3");
                 } else {
-                    message = ChatColor.GREEN + Zone2.getPlugin().getConfig().getString("grant1") + ChatColor.RESET + ((OfflinePlayer) who).getName()
+                    message = ChatColor.GREEN + Zone2.getPlugin().getConfig().getString("grant1") + ChatColor.RESET + who.getName()
                             + ChatColor.GREEN + Zone2.getPlugin().getConfig().getString("grant2") + ChatColor.DARK_GREEN
                             + args[2].toUpperCase(new Locale("de")) + ChatColor.GREEN + Zone2.getPlugin().getConfig().getString("grant3");
                 }
@@ -190,18 +181,13 @@ public class Zone2PermissionCommand implements CommandExecutor {
                 return true;
             }
 
-            List<PlayerZone> playerZoneList = new ArrayList<>();
+            List<PlayerZone> playerZoneList;
             try {
                 playerZoneList = reader.getPlayerZoneList();
             } catch (IOException e) {
                 Zone2.getPlugin().getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
                 sender.sendMessage(ChatColor.DARK_RED + Zone2.getPlugin().getConfig().getString("oops"));
                 ConfigReader.destroy();
-                return true;
-            }
-
-            if (playerZoneList == null) {
-                sender.sendMessage(ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("zoneNotFound"));
                 return true;
             }
 
