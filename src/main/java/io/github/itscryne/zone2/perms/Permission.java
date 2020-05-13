@@ -11,9 +11,9 @@ import java.util.UUID;
  * @serial JSON
  */
 public class Permission implements Serializable {
-    private UUID playerUuid;
+    private final UUID playerUuid;
     private transient OfflinePlayer p;
-    private PermissionType perm;
+    private final PermissionType perm;
 
     /**
      * @param p    OfflinePlayer the permission belongs to
