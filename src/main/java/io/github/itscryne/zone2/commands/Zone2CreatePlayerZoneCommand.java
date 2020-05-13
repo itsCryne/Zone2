@@ -1,13 +1,11 @@
 package io.github.itscryne.zone2.commands;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.logging.Level;
-
 import com.sk89q.worldedit.WorldEditException;
-
+import io.github.itscryne.zone2.Zone2;
+import io.github.itscryne.zone2.config.ConfigWriter;
+import io.github.itscryne.zone2.perms.Permission;
+import io.github.itscryne.zone2.spaces.PlayerZone;
+import io.github.itscryne.zone2.spaces.Zone;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -17,11 +15,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import io.github.itscryne.zone2.Zone2;
-import io.github.itscryne.zone2.config.ConfigWriter;
-import io.github.itscryne.zone2.perms.Permission;
-import io.github.itscryne.zone2.spaces.PlayerZone;
-import io.github.itscryne.zone2.spaces.Zone;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.logging.Level;
 
 public class Zone2CreatePlayerZoneCommand implements CommandExecutor {
     /**
@@ -47,12 +45,9 @@ public class Zone2CreatePlayerZoneCommand implements CommandExecutor {
             return false;
         }
 
-        int hx = 0;
-        int lx = 0;
+        int hx, lx, hz, lz;
         int hy = 256;
         int ly = 0;
-        int hz = 0;
-        int lz = 0;
 
         try {
             hx = Integer.max(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
@@ -69,12 +64,12 @@ public class Zone2CreatePlayerZoneCommand implements CommandExecutor {
 
         if (hx - lx < minLength || hz - lz < minLength) {
             sender.sendMessage(ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("tooShort1")
-                    + String.valueOf(minLength) + Zone2.getPlugin().getConfig().getString("tooShort2"));
+                    + minLength + Zone2.getPlugin().getConfig().getString("tooShort2"));
             return true;
         }
         if (hx - lx > maxLength || hz - lz > maxLength) {
             sender.sendMessage(ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("tooLong1")
-                    + String.valueOf(maxLength) + Zone2.getPlugin().getConfig().getString("tooLong2"));
+                    + maxLength + Zone2.getPlugin().getConfig().getString("tooLong2"));
             return true;
         }
 
@@ -89,7 +84,7 @@ public class Zone2CreatePlayerZoneCommand implements CommandExecutor {
         }
 
         int priority = 1;
-        int id = 0;
+        int id;
         try {
             id = Zone.getNextId();
         } catch (IOException e) {
@@ -99,7 +94,7 @@ public class Zone2CreatePlayerZoneCommand implements CommandExecutor {
             return true;
         }
 
-        String name = ((Player) sender).getName();
+        String name = sender.getName();
         UUID uuid = ((Player) sender).getUniqueId();
         List<Permission> perms = new ArrayList<>();
         PlayerZone pz = new PlayerZone(hx, lx, hy, ly, hz, lz, w, priority, id, name, uuid, perms);
