@@ -77,7 +77,7 @@ public class Zone2MyZonesCommand implements CommandExecutor { //serverzones
                 sender.sendMessage("   ID: " + ChatColor.GOLD + i.getId());
             }
         } else {
-            List<ServerZone> serverZoneList = null;
+            List<ServerZone> serverZoneList;
 
             try {
                 serverZoneList = reader.getServerZoneList();
@@ -85,25 +85,16 @@ public class Zone2MyZonesCommand implements CommandExecutor { //serverzones
                 sender.sendMessage(ChatColor.DARK_RED + Zone2.getPlugin().getConfig().getString("oops"));
                 Zone2.getPlugin().getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
                 ConfigReader.destroy();
+                return true;
             }
 
-            if (serverZoneList == null) {
-                serverZoneList = new ArrayList<>();
-            }
-
-            List<ServerZone> sendersZones = new ArrayList<>();
-
-            for (ServerZone i : serverZoneList) {
-                    sendersZones.add(i);
-            }
-
-            if (sendersZones.isEmpty()) {
+            if (serverZoneList.isEmpty()) {
                 sender.sendMessage(ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("noServerZones"));
                 return true;
             }
 
             sender.sendMessage(ChatColor.GREEN + Zone2.getPlugin().getConfig().getString("thoseServerZones"));
-            for (ServerZone i : sendersZones) {
+            for (ServerZone i : serverZoneList) {
                 sender.sendMessage("   ID: " + ChatColor.GOLD + i.getId() + ChatColor.WHITE + "   Name: " + ChatColor.GOLD + i.getName());
             }
         }

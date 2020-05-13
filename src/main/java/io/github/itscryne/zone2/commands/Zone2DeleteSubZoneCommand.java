@@ -1,6 +1,7 @@
 package io.github.itscryne.zone2.commands;
 
 import io.github.itscryne.zone2.Zone2;
+import io.github.itscryne.zone2.config.ConfigReader;
 import io.github.itscryne.zone2.config.ConfigWriter;
 import io.github.itscryne.zone2.extensions.ZLocation;
 import io.github.itscryne.zone2.extensions.ZPlayer;
@@ -13,7 +14,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -32,7 +32,15 @@ public class Zone2DeleteSubZoneCommand implements CommandExecutor {
 
         ZPlayer senderZoneler = new ZPlayer((Player) sender);
 
-        List<SubZone> subZoneList = new ArrayList<>();
+        List<SubZone> subZoneList;
+        try {
+           subZoneList = ConfigReader.getInstance().getSubZoneList();
+        } catch (IOException e){
+            Zone2.getPlugin().getLogger().log(Level.SEVERE, e.getMessage(), e.getCause());
+            sender.sendMessage(ChatColor.DARK_RED + Zone2.getPlugin().getConfig().getString("oops"));
+            sender.sendMessage(ChatColor.RED + "Zone konnte nicht gelöscht werden");
+            return true;
+        }
         SubZone toDelete = null;
 
         int id;
@@ -44,6 +52,7 @@ public class Zone2DeleteSubZoneCommand implements CommandExecutor {
             return true;
         }
 
+        //FIXME
         for (SubZone zone : subZoneList) {
             if (zone.getId() == id) {
                 toDelete = zone;

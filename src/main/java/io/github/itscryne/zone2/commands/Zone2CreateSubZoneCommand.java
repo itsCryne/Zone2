@@ -26,7 +26,7 @@ public class Zone2CreateSubZoneCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) { // hx, lx, hy, ly,
-                                                                                                   // hz, lz
+        // hz, lz
         if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("onlyPlayersSubZones"));
             return true;
@@ -36,12 +36,12 @@ public class Zone2CreateSubZoneCommand implements CommandExecutor {
             return false;
         }
 
-        int hx = 0;
-        int lx = 0;
-        int hy = 256;
-        int ly = 0;
-        int hz = 0;
-        int lz = 0;
+        int hx;
+        int lx;
+        int hy;
+        int ly;
+        int hz;
+        int lz;
 
         try {
             hx = Integer.max(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
@@ -65,7 +65,7 @@ public class Zone2CreateSubZoneCommand implements CommandExecutor {
         }
 
         int priority = 1;
-        int id = 0;
+        int id;
         try {
             id = Zone.getNextId();
         } catch (IOException e) {
