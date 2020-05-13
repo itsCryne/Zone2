@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class Zone2DestroyTypeEvent implements Listener {
     @EventHandler
@@ -40,6 +41,19 @@ public class Zone2DestroyTypeEvent implements Listener {
             allowed = eventPlayer.isAllowed(eventLocation, PermissionType.DESTROY);
         }
         event.setCancelled(!allowed);
+
+        List<Material> specialNoBreakingMaterials = new ArrayList<>(Arrays.asList(
+                Material.STONE_SWORD,
+                Material.DIAMOND_SWORD,
+                Material.GOLDEN_SWORD,
+                Material.IRON_SWORD,
+                Material.WOODEN_SWORD,
+                Material.DEBUG_STICK
+        ));
+
+        if (specialNoBreakingMaterials.contains(event.getPlayer().getInventory().getItemInMainHand().getType())) {
+            event.setCancelled(true);
+        }
         if (!allowed) {
             eventPlayer.sendXPMessage(ChatColor.RED + Zone2.getPlugin().getConfig().getString("noPermission"), true);
         }
@@ -50,7 +64,7 @@ public class Zone2DestroyTypeEvent implements Listener {
         ZLocation eventLocation = new ZLocation(event.getEntity().getLocation());
         if (event.getRemover() instanceof Projectile) {
             if (((Projectile) event.getRemover()).getShooter() instanceof Player) {
-                ZPlayer eventPlayer = new ZPlayer((Player) ((Projectile) event.getRemover()).getShooter());
+                ZPlayer eventPlayer = new ZPlayer((Player) Objects.requireNonNull(((Projectile) event.getRemover()).getShooter()));
                 boolean allowed = eventPlayer.isAllowed(eventLocation, PermissionType.DESTROY);
 
                 event.setCancelled(!allowed);
