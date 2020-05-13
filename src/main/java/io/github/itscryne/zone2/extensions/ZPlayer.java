@@ -7,7 +7,10 @@ import io.github.itscryne.zone2.perms.PermissionType;
 import io.github.itscryne.zone2.spaces.PlayerZone;
 import io.github.itscryne.zone2.spaces.SubZone;
 import io.github.itscryne.zone2.spaces.Zone;
-import net.minecraft.server.v1_15_R1.*;
+import net.minecraft.server.v1_15_R1.ChatMessageType;
+import net.minecraft.server.v1_15_R1.IChatBaseComponent;
+import net.minecraft.server.v1_15_R1.PacketPlayOutChat;
+import net.minecraft.server.v1_15_R1.PlayerConnection;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
@@ -20,10 +23,6 @@ import java.util.*;
 
 public class ZPlayer extends CraftPlayer {
     static Set<UUID> noNotify;
-
-    public ZPlayer(CraftServer server, EntityPlayer entity) {
-        super(server, entity);
-    }
 
     public ZPlayer(Player p) {
         super((CraftServer) p.getServer(), ((CraftPlayer) p).getHandle()); // Does this work?
@@ -103,7 +102,7 @@ public class ZPlayer extends CraftPlayer {
 
     public void sendXPMessage(String message, boolean important) {
         if (noNotify == null) {
-            noNotify = new HashSet<UUID>();
+            noNotify = new HashSet<>();
         }
         if (noNotify.contains(this.getUniqueId())) {
             return;
