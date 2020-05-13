@@ -1,6 +1,5 @@
 package io.github.itscryne.zone2.spaces;
 
-import io.github.itscryne.zone2.extensions.ZLocation;
 import io.github.itscryne.zone2.perms.Permission;
 import org.bukkit.World;
 
@@ -30,20 +29,6 @@ public class PlayerZone extends Zone {
     public PlayerZone(int hx, int lx, int hy, int ly, int hz, int lz, World w, int priority, int id, String name,
             UUID playerUuid, List<Permission> perms) {
         super(hx, lx, hy, ly, hz, lz, w, priority, id, name, perms);
-        this.playerUuid = playerUuid;
-    }
-
-    /**
-     * @param l1         First Zonecation (higher coordinates)
-     * @param l2         Second Zonecation (lower coordinates)
-     * @param priority   Priority of the Zone
-     * @param id         ID of the Zone
-     * @param name       Name of the Zone
-     * @param playerUuid UUID of the creating player
-     */
-    public PlayerZone(ZLocation l1, ZLocation l2, int priority, int id, String name, UUID playerUuid,
-                      List<Permission> perms) {
-        super(l1, l2, priority, id, name, perms);
         this.playerUuid = playerUuid;
     }
 
