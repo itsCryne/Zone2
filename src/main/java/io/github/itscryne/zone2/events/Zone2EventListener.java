@@ -23,7 +23,7 @@ public class Zone2EventListener implements Listener {
 
         String message = "";
 
-        if (zoneList.isEmpty() || zoneList == null) {
+        if (zoneList.isEmpty()) {
             message = Zone2.getPlugin().getConfig().getString("noZoneHere");
         } else if (zoneList.size() == 1) {
             message = zoneList.get(0).getName();
