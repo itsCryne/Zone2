@@ -1,6 +1,5 @@
 package io.github.itscryne.zone2.spaces;
 
-import io.github.itscryne.zone2.extensions.ZLocation;
 import io.github.itscryne.zone2.perms.Permission;
 import org.bukkit.World;
 
@@ -10,20 +9,6 @@ import java.util.List;
  * @serial JSON
  */
 public class ServerZone extends Zone {
-
-    /**
-     * Constructor for Zonecations
-     *
-     * @param l1       First Zonecation (higher coordinates)
-     * @param l2       Second Zonecation (lower coordinates)
-     * @param priority Priority of the Zone
-     * @param id       ID of the Zone
-     * @param name     Name of the Zone
-     */
-    public ServerZone(ZLocation l1, ZLocation l2, int priority, int id, String name, List<Permission> perms) {
-        super(l1, l2, priority, id, name, perms);
-    }
-
     /**
      * Constructor for raw coordinates
      * 
