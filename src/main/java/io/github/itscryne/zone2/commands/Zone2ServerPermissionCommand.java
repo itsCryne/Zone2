@@ -48,10 +48,6 @@ public class Zone2ServerPermissionCommand implements CommandExecutor { // TODO: 
         OfflinePlayer who = Bukkit.getPlayer(args[1]);
         if (who == null) {
             who = Bukkit.getOfflinePlayer(args[1]);
-            if (who == null) {
-                sender.sendMessage(ChatColor.YELLOW + Zone2.getPlugin().getConfig().getString("unknownPlayer"));
-                return true;
-            }
         }
 
         List<String> enumValues = new ArrayList<>(Arrays
@@ -88,7 +84,7 @@ public class Zone2ServerPermissionCommand implements CommandExecutor { // TODO: 
                 return true;
             }
 
-            List<ServerZone> serverZoneList = new ArrayList<>();
+            List<ServerZone> serverZoneList;
             try {
                 serverZoneList = reader.getServerZoneList();
             } catch (IOException e) {
@@ -163,7 +159,7 @@ public class Zone2ServerPermissionCommand implements CommandExecutor { // TODO: 
                             + ChatColor.GREEN + Zone2.getPlugin().getConfig().getString("grant2") + ChatColor.DARK_GREEN
                             + args[2].toUpperCase(new Locale("de")) + ChatColor.GREEN + Zone2.getPlugin().getConfig().getString("grant3");
                 } else {
-                    message = ChatColor.GREEN + Zone2.getPlugin().getConfig().getString("grant1") + ChatColor.RESET + ((OfflinePlayer) who).getName()
+                    message = ChatColor.GREEN + Zone2.getPlugin().getConfig().getString("grant1") + ChatColor.RESET + who.getName()
                             + ChatColor.GREEN + Zone2.getPlugin().getConfig().getString("grant2") + ChatColor.DARK_GREEN
                             + args[2].toUpperCase(new Locale("de")) + ChatColor.GREEN + Zone2.getPlugin().getConfig().getString("grant3");
                 }
@@ -188,7 +184,7 @@ public class Zone2ServerPermissionCommand implements CommandExecutor { // TODO: 
                 return true;
             }
 
-            List<ServerZone> serverZoneList = new ArrayList<>();
+            List<ServerZone> serverZoneList;
             try {
                 serverZoneList = reader.getServerZoneList();
             } catch (IOException e) {
