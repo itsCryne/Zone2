@@ -64,8 +64,7 @@ public class Zone2TransportTypeEvent implements Listener {
                 Material.SPRUCE_BOAT, Material.OAK_BOAT, Material.SPRUCE_BOAT, Material.JUNGLE_BOAT, Material.MINECART,
                 Material.CHEST_MINECART, Material.FURNACE_MINECART, Material.HOPPER_MINECART));
 
-        if (event.getAction() != Action.RIGHT_CLICK_BLOCK || event.getClickedBlock().getLocation() == null
-                || !vehicles.contains(event.getMaterial())) {
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK || !vehicles.contains(event.getMaterial())) {
             return;
         }
 
