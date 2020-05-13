@@ -19,17 +19,12 @@ import java.util.List;
 public final class ConfigReader {
     private static ConfigReader instance;
 
-    private final String playerZonePath;
-    private final String serverZonePath;
-    private final String subZonePath;
-    private final Zone2 plugin;
-    private final File dataDir;
     private final File playerZonesFile;
     private final File serverZonesFile;
     private final File subZonesFile;
 
     /**
-     * ConfigReader constructor - access via {@link #getInstance(Zone2)} method.
+     * ConfigReader constructor - access via {@link #getInstance()} method.
      *
      * @throws IOException if it cant access the files et al
      */
@@ -37,23 +32,23 @@ public final class ConfigReader {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.setPrettyPrinting().create();
 
-        this.plugin = Zone2.getPlugin();
-        this.dataDir = this.plugin.getDataFolder();
+        Zone2 plugin = Zone2.getPlugin();
+        File dataDir = plugin.getDataFolder();
         dataDir.mkdir();
 
         String dataDirPath = dataDir.getAbsolutePath();
-        this.serverZonePath = dataDirPath.concat(File.separator).concat("serverZones.json");
-        this.playerZonePath = dataDirPath.concat(File.separator).concat("playerZones.json");
-        this.subZonePath = dataDirPath.concat(File.separator).concat("subZones.json");
+        String serverZonePath = dataDirPath.concat(File.separator).concat("serverZones.json");
+        String playerZonePath = dataDirPath.concat(File.separator).concat("playerZones.json");
+        String subZonePath = dataDirPath.concat(File.separator).concat("subZones.json");
 
         this.playerZonesFile = new File(playerZonePath);
         playerZonesFile.createNewFile();
         if (playerZonesFile.length() == 0) { // writing empty List<PlayerZone> to JSON file so we can access it later
             List<PlayerZone> playerZoneList = new ArrayList<>();
 
-            try (BufferedWriter fw = new BufferedWriter(new FileWriter(playerZonePath))){
-            gson.toJson(playerZoneList, fw);
-            fw.flush();
+            try (BufferedWriter fw = new BufferedWriter(new FileWriter(playerZonePath))) {
+                gson.toJson(playerZoneList, fw);
+                fw.flush();
             }
         }
 
@@ -100,9 +95,8 @@ public final class ConfigReader {
     }
 
     /**
-     *
      * @return a list of all PlayerZones saved in the json file
-     * @throws IOException
+     * @throws IOException when it can't acces the file
      */
     public List<PlayerZone> getPlayerZoneList() throws IOException {
         Gson gson = new Gson();
@@ -115,7 +109,7 @@ public final class ConfigReader {
         List<PlayerZone> pzl = gson.fromJson(playerZoneListReader, playerZoneListType);
 
         if (pzl == null) {
-            pzl = new ArrayList<PlayerZone>();
+            pzl = new ArrayList<>();
         }
 
         for (int i = 0; i < pzl.size(); i++) {
@@ -130,9 +124,8 @@ public final class ConfigReader {
     }
 
     /**
-     *
      * @return a list of all ServerZones saved in the json file
-     * @throws IOException
+     * @throws IOException when it can't access the file
      */
     public List<ServerZone> getServerZoneList() throws IOException {
         Gson gson = new Gson();
