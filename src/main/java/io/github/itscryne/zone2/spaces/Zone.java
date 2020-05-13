@@ -26,23 +26,6 @@ public class Zone extends Area {
     private List<Permission> perms;
 
     /**
-     * @param l1       First Zonecation (Higher Coordinates)
-     * @param l2       Second Zonecation (Lower Coordinates)
-     * @param priority Priority of the zone
-     * @param id       ID of the zone
-     * @param name     Name of the zone
-     * @param perms    Permissions of the zone
-     */
-    protected Zone(ZLocation l1, ZLocation l2, int priority, int id, String name, List<Permission> perms) {
-        super(l1, l2); // -> l1, l2
-        this.id = id;
-        this.priority = priority;
-        this.zoneUUID = UUID.randomUUID();
-        this.name = name;
-        this.perms = perms;
-    }
-
-    /**
      * @param hx       Hgher x coordinate
      * @param lx       Lower x coordinate
      * @param hy       Higher y coordinate
@@ -56,7 +39,7 @@ public class Zone extends Area {
      * @param perms    Permissions of the zone
      */
     protected Zone(int hx, int lx, int hy, int ly, int hz, int lz, World w, int priority, int id, String name,
-            List<Permission> perms) {
+                   List<Permission> perms) {
         super(hx, lx, hy, ly, hz, lz, w); // -> l1, l2
         this.id = id;
         this.priority = priority;
@@ -66,9 +49,40 @@ public class Zone extends Area {
     }
 
     /**
+     * Returns the next available ID
+     *
+     * @return the ID
+     * @throws IOException if it cant find a file et al
+     */
+    public static int getNextId() throws IOException {
+        ConfigReader reader = ConfigReader.getInstance();
+        List<ServerZone> serverZoneList = reader.getServerZoneList();
+        List<PlayerZone> playerZoneList = reader.getPlayerZoneList();
+        List<SubZone> subZoneList = reader.getSubZoneList();
+        if ((serverZoneList == null || serverZoneList.isEmpty()) && playerZoneList.isEmpty() && (subZoneList == null || subZoneList.isEmpty())) {
+            return 0;
+        }
+
+        List<Integer> zoneIds = new ArrayList<>();
+        if (serverZoneList != null && !serverZoneList.isEmpty()) {
+            serverZoneList.forEach(element -> zoneIds.add(element.getId()));
+        }
+        if (!playerZoneList.isEmpty()) {
+            playerZoneList.forEach(element -> zoneIds.add(element.getId()));
+        }
+        if (subZoneList != null && !subZoneList.isEmpty()) {
+            subZoneList.forEach(element -> zoneIds.add(element.getId()));
+        }
+
+        if (!zoneIds.isEmpty()) {
+            return Collections.max(zoneIds) + 1;
+        }
+        return 0;
+    }
+
+    /**
      * Checks wether the instance Zone collides with any other Zone
-     * 
-     * @param plugin the plugin
+     *
      * @return wether the instance collides
      * @throws IOException if it cant find a file et al
      */
@@ -77,7 +91,7 @@ public class Zone extends Area {
         List<PlayerZone> playerZoneList = reader.getPlayerZoneList();
         List<ServerZone> serverZoneList = reader.getServerZoneList();
 
-        if (playerZoneList != null && !playerZoneList.isEmpty()) {
+        if (!playerZoneList.isEmpty()) {
             for (PlayerZone i : playerZoneList) {
                 i.setL1(new ZLocation(Location.deserialize(i.getSerL1())));
                 i.setL2(new ZLocation(Location.deserialize(i.getSerL2())));
@@ -107,40 +121,6 @@ public class Zone extends Area {
             }
         }
         return false;
-    }
-
-    /**
-     * Returns the next available ID
-     * 
-     * @param plugin the plugin
-     * @return the ID
-     * @throws IOException if it cant find a file et al
-     */
-    public static int getNextId() throws IOException {
-        ConfigReader reader = ConfigReader.getInstance();
-        List<ServerZone> serverZoneList = reader.getServerZoneList();
-        List<PlayerZone> playerZoneList = reader.getPlayerZoneList();
-        List<SubZone> subZoneList = reader.getSubZoneList();
-        if ((serverZoneList == null || serverZoneList.isEmpty()) && (playerZoneList == null || playerZoneList.isEmpty())
-                && (subZoneList == null || subZoneList.isEmpty())) {
-            return 0;
-        }
-
-        List<Integer> zoneIds = new ArrayList<>();
-        if (serverZoneList != null && !serverZoneList.isEmpty()) {
-            serverZoneList.forEach(element -> zoneIds.add(element.getId()));
-        }
-        if (playerZoneList != null && !playerZoneList.isEmpty()) {
-            playerZoneList.forEach(element -> zoneIds.add(element.getId()));
-        }
-        if (subZoneList != null && !subZoneList.isEmpty()) {
-            subZoneList.forEach(element -> zoneIds.add(element.getId()));
-        }
-
-        if (!zoneIds.isEmpty()) {
-            return Collections.max(zoneIds) + 1;
-        }
-        return 0;
     }
 
     public List<SubZone> getSubZones() throws IOException {
