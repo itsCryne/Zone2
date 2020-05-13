@@ -32,30 +32,7 @@ public class Area implements Serializable {
     private transient ZLocation l2; //lower Location
 
     /**
-     * @param l1 First Location (higher coordinates)
-     * @param l2 Second Location (lower coordinates)
-     */
-    protected Area(ZLocation l1, ZLocation l2) {
-        this.l1 = l1;
-        this.l2 = l2;
-        this.serL1 = this.l1.serialize();
-        this.serL2 = this.l2.serialize();
-
-        if (!(this.l1.getWorld().equals(this.l2.getWorld()))) {
-            throw new RuntimeException("Worlds do not match");
-        }
-
-        if (this.l1.getBlockX() < this.l2.getBlockX()) {
-            throw new RuntimeException("l1 must contain the higher coordinates");
-        } else if (this.l1.getBlockY() < this.l1.getBlockY()) {
-            throw new RuntimeException("l1 must conatin the higher coordinates");
-        } else if (this.l1.getBlockZ() < this.l2.getBlockZ()) {
-            throw new RuntimeException("l1 must contain the higher coordinates");
-        }
-    }
-
-    /**
-     * @param hx Hgher x coordinate
+     * @param hx Higher x coordinate
      * @param lx Lower x coordinate
      * @param hy Higher y coordinate
      * @param ly Lower l coordinate
@@ -72,7 +49,7 @@ public class Area implements Serializable {
         if (this.l1.getBlockX() < this.l2.getBlockX()) {
             throw new RuntimeException("l1 must contain the higher coordinates");
         } else if (this.l1.getBlockY() < this.l2.getBlockY()) {
-            throw new RuntimeException("l1 must conatin the higher coordinates");
+            throw new RuntimeException("l1 must contain the higher coordinates");
         } else if (this.l1.getBlockZ() < this.l2.getBlockZ()) {
             throw new RuntimeException("l1 must contain the higher coordinates");
         }
@@ -80,7 +57,7 @@ public class Area implements Serializable {
 
     /**
      * @param l Location to test
-     * @return Wether the Zone object contains l
+     * @return Whether the Zone object contains l
      */
     public boolean contains(ZLocation l) {
         if (this.l1 == null) {
