@@ -20,23 +20,21 @@ public final class ConfigWriter {
     private final String playerZonePath;
     private final String serverZonePath;
     private final String subZonePath;
-    private Zone2 plugin;
-    private File dataDir;
-    private File playerZonesFile;
-    private File serverZonesFile;
-    private File subZonesFile;
+    private final File playerZonesFile;
+    private final File serverZonesFile;
+    private final File subZonesFile;
 
     /**
-     * ConfigWriter constructor - access via {@link #getInstance(Zone2)} method.
-     * 
+     * ConfigWriter constructor - access via {@link #getInstance()} method.
+     *
      * @throws IOException if it cant access the files et al
      */
     private ConfigWriter() throws IOException {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.setPrettyPrinting().create();
 
-        this.plugin = Zone2.getPlugin();
-        this.dataDir = this.plugin.getDataFolder();
+        Zone2 plugin = Zone2.getPlugin();
+        File dataDir = plugin.getDataFolder();
         dataDir.mkdir();
 
         String dataDirPath = dataDir.getAbsolutePath();
@@ -109,11 +107,7 @@ public final class ConfigWriter {
         playerZoneList.add(zone);
 
         Writer fw = new FileWriter(playerZonePath);
-        try {
-            gson.toJson(playerZoneList, fw);
-        } catch (StackOverflowError e) {
-            throw e;
-        }
+        gson.toJson(playerZoneList, fw);
         fw.flush();
         fw.close();
         fr.close();
