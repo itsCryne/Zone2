@@ -18,10 +18,6 @@ public class ZLocation extends Location {
         super(world, x, y, z);
     }
 
-    public ZLocation(World world, double x, double y, double z, float yaw, float pitch) {
-        super(world, x, y, z, yaw, pitch);
-    }
-
     public ZLocation(Location l) {
         super(l.getWorld(), l.getX(), l.getY(), l.getZ(), l.getYaw(), l.getPitch());
     }
