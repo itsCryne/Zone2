@@ -1,11 +1,11 @@
 package io.github.itscryne.zone2.commands;
 
+import com.sk89q.worldedit.WorldEditException;
 import io.github.itscryne.zone2.Zone2;
 import io.github.itscryne.zone2.config.ConfigWriter;
 import io.github.itscryne.zone2.perms.Permission;
 import io.github.itscryne.zone2.spaces.ServerZone;
 import io.github.itscryne.zone2.spaces.Zone;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -18,8 +18,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
-
-import com.sk89q.worldedit.WorldEditException;
 
 public class Zone2CreateServerZoneCommand implements CommandExecutor {
     /**
@@ -41,12 +39,7 @@ public class Zone2CreateServerZoneCommand implements CommandExecutor {
             return false;
         }
 
-        Integer hx = null;
-        Integer lx = null;
-        Integer hy = null;
-        Integer ly = null;
-        Integer hz = null;
-        Integer lz = null;
+        int hx, lx, hy, ly, hz, lz;
 
         try {
             hx = Integer.max(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
@@ -73,7 +66,7 @@ public class Zone2CreateServerZoneCommand implements CommandExecutor {
 
         int priority = Integer.parseInt(args[7]);
 
-        int id = 0;
+        int id;
         try {
             id = Zone.getNextId();
         } catch (IOException e) {
