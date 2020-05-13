@@ -1,34 +1,17 @@
 package io.github.itscryne.zone2;
 
-import io.github.itscryne.zone2.commands.Zone2CreateServerZoneCommand;
-import io.github.itscryne.zone2.commands.Zone2CreateSubZoneCommand;
-import io.github.itscryne.zone2.commands.Zone2DeleteSubZoneCommand;
-import io.github.itscryne.zone2.commands.Zone2InfoCommand;
-import io.github.itscryne.zone2.commands.Zone2CreatePlayerZoneCommand;
-import io.github.itscryne.zone2.commands.Zone2MyZonesCommand;
-import io.github.itscryne.zone2.commands.Zone2PermissionCommand;
-import io.github.itscryne.zone2.commands.Zone2ServerPermissionCommand;
+import io.github.itscryne.zone2.commands.*;
 import io.github.itscryne.zone2.config.ConfigReader;
-import io.github.itscryne.zone2.events.Zone2BuildTypeEvent;
-import io.github.itscryne.zone2.events.Zone2DestroyTypeEvent;
-import io.github.itscryne.zone2.events.Zone2DoorsTypeEvent;
-import io.github.itscryne.zone2.events.Zone2EntityTypeEvent;
-import io.github.itscryne.zone2.events.Zone2EventListener;
-import io.github.itscryne.zone2.events.Zone2InventoryTypeEvent;
-import io.github.itscryne.zone2.events.Zone2RedstoneTypeEvent;
-import io.github.itscryne.zone2.events.Zone2TransportTypeEvent;
+import io.github.itscryne.zone2.events.*;
 import io.github.itscryne.zone2.spaces.PlayerZone;
 import io.github.itscryne.zone2.spaces.ServerZone;
-
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.java.JavaPluginLoader;
 import org.dynmap.DynmapAPI;
 import org.dynmap.markers.MarkerSet;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.logging.Level;
@@ -41,14 +24,6 @@ public final class Zone2 extends JavaPlugin implements Serializable {
     private static Zone2 plugin;
     private static MarkerSet markers;
     private static MarkerSet serverMarkers;
-
-    public Zone2() {
-        super();
-    }
-
-    protected Zone2(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
-        super(loader, description, dataFolder, file);
-    }
 
     public static Zone2 getPlugin() {
         return plugin;
@@ -92,6 +67,10 @@ public final class Zone2 extends JavaPlugin implements Serializable {
         Bukkit.getPluginManager().registerEvents(new Zone2RedstoneTypeEvent(), this);
         Bukkit.getPluginManager().registerEvents(new Zone2TransportTypeEvent(), this);
 
+        this.getLogger().info("Enabling bStats. You can disable it in the bStats configuration file.");
+        final int pluginId = 7502;
+        Metrics metrics = new Metrics(this, pluginId);
+
         if (getServer().getPluginManager().getPlugin("dynmap") == null) {
             this.getLogger().warning("Dynmap not found. Not enabling compat");
             return;
@@ -99,6 +78,11 @@ public final class Zone2 extends JavaPlugin implements Serializable {
         this.getLogger().warning("Dynmap found, Zones will be displayed on it");
         Plugin dynmap = getServer().getPluginManager().getPlugin("dynmap");
         DynmapAPI api = (DynmapAPI) dynmap;
+
+        if (api == null) {
+            this.getLogger().severe("Something went wrong while initializing Dynmap compat. Disabling compat.");
+            return;
+        }
 
         markers = api.getMarkerAPI().createMarkerSet("zonen", "Zonen", null, false);
         serverMarkers = api.getMarkerAPI().createMarkerSet("serverzonen", "Serverzonen", null, false);
