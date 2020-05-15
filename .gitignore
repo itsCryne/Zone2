@@ -1,9 +1,9 @@
 target/
 .idea/
-pom.xml
 .project
 .classpath
 .settings
 .vscode
 events.txt
 Zone2.iml
+dependency-reduced-pom.xml
